@@ -5,12 +5,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MenuDBUtil{
 
     Connection con = null;
     ResultSet rs = null;
     PreparedStatement psmt = null;
+
+    //bean 파일
+    MenuBean mbean = new MenuBean();
 
     public MenuDBUtil(){
         try {
@@ -31,41 +35,16 @@ public class MenuDBUtil{
             System.out.println("DB연결 실패  fail");
             e.printStackTrace();
         }
-
-        // 기본 형태
-        // try {
-        //     String sql = "SELECT * FROM DATETIME_DB_PYD";
-
-        //     psmt = con.prepareStatement(sql);
-
-        //     rs = psmt.executeQuery();
-
-        //     while(rs.next()){
-        //         String hour = rs.getString("LOG_HOUR");
-        //         String min = rs.getString("LOG_MIN");
-        //         String ynyn = rs.getString("MATCH_YN");
-
-        //         System.out.println("시간 : " + hour + "분 : " + min + "Y or N : " + ynyn);
-        //     }
-
-        // } catch (Exception e) {
-        //     // TODO: handle exception
-        // }
     }
     // 여기까지가 생성자 abst
 
 
-    //돌리기 둘렀을경우 실행되는 method
-    //돌려돌려 돌림판
-    public String spinSpinWheel(){
-        
-        String Menu = null;
+    //단순 메뉴 리스트 뽑아오기용
+    public String todayLunchList(){
+        String menuList = "";
 
-        //HashSet hset = new HashSet();
-        ArrayList<String> arraylist = new ArrayList<String>();
-        
         try {
-            String sql = "SELECT * FROM DATETIME_DB_PYD";
+            String sql = "SELECT MENU_NAME FROM TODAYLUNCH_MENU";
 
             psmt = con.prepareStatement(sql);
 
@@ -73,29 +52,74 @@ public class MenuDBUtil{
 
             //메뉴들 넣기
             while(rs.next()){
-                String hour = rs.getString("LOG_HOUR");
-                String min = rs.getString("LOG_MIN");
-                String ynyn = rs.getString("MATCH_YN");
-
-                //arraylist.add(Menu);
-                arraylist.add(rs.getString("LOG_HOUR"));
-
-                System.out.println("시간 : " + hour + "분 : " + min + "Y or N : " + ynyn);
+                //칼럼데이터 받아서 넣기
+                menuList += rs.getString("MENU_NAME")+"\n";
+                
             }
-            
-            //랜덤값 뽑아오기 ㅎ
-            Menu = arraylist.get((int)(Math.random() * arraylist.size())+1);
 
             System.out.println("********************");
-            System.out.println("Menu : " + Menu);
+            System.out.println("오늘의 메뉴 : " + menuList);
             System.out.println("********************");
 
         } catch (Exception e) {
             // TODO: handle exception
         }
-        return Menu;
+        
 
+        return menuList;
     }
 
+    //돌리기 둘렀을경우 실행되는 method
+    //돌려돌려 돌림판
+    public MenuBean spinSpinWheel(){
+        
+        //String Menu = null;
 
+        //HashSet hset = new HashSet();
+        ArrayList<MenuBean> arraylist = new ArrayList<MenuBean>();
+        
+        try {
+            String sql = "SELECT * FROM TODAYLUNCH_MENU";
+
+            psmt = con.prepareStatement(sql);
+
+            rs = psmt.executeQuery();
+
+            //메뉴들 넣기
+            while(rs.next()){
+
+                mbean = new MenuBean();
+
+                mbean.setMENU_NAME(rs.getString("MENU_NAME"));
+                mbean.setMENU_STORENAME(rs.getString("MENU_STORENAME"));
+                mbean.setMENU_CATE(rs.getString("MENU_CATE"));
+                mbean.setMENU_ADDRESS(rs.getString("MENU_ADDRESS"));
+                mbean.setMENU_SELECT_COUNT(rs.getInt("MENU_SELECT_COUNT"));
+                mbean.setMENU_INTRODUCTION(rs.getString("MENU_INTRODUCTION"));
+
+                //칼럼데이터 받아서 넣기
+                //Menu = rs.getString("MENU_NAME");
+                //System.out.println(rs.getString("MENU_NAME"));
+
+                //칼럼데이터 ArrayList에 넣어주기
+                arraylist.add(mbean);
+            }
+
+            
+            //랜덤값 뽑아오기 ㅎ
+            //mbean = arraylist.get((int)(Math.random() * arraylist.size())+1);
+            mbean = arraylist.get((int)(Math.random() * arraylist.size())+1);
+
+            System.out.println(arraylist.get((int)(Math.random() * arraylist.size())+1).getMENU_NAME());
+
+            //System.out.println("********************");
+            //System.out.println("List size : " + arraylist.size());
+            //System.out.println("오늘의 메뉴 : " + Menu);
+            //System.out.println("********************");
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return mbean;
+    }
 }
