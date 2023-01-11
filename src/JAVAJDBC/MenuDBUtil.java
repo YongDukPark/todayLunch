@@ -12,7 +12,7 @@ public class MenuDBUtil{
     ResultSet rs = null;
     PreparedStatement psmt = null;
 
-    MenuDBUtil(){
+    public MenuDBUtil(){
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             String url = "jdbc:mariadb://192.168.0.74:3307/youngriabase";
@@ -77,13 +77,18 @@ public class MenuDBUtil{
                 String min = rs.getString("LOG_MIN");
                 String ynyn = rs.getString("MATCH_YN");
 
-                arraylist.add(Menu);
+                //arraylist.add(Menu);
+                arraylist.add(rs.getString("LOG_HOUR"));
 
                 System.out.println("½Ã°£ : " + hour + "ºÐ : " + min + "Y or N : " + ynyn);
             }
             
             //·£´ý°ª »Ì¾Æ¿À±â ¤¾
-            arraylist.get((int)(Math.random() * arraylist.size())+1);
+            Menu = arraylist.get((int)(Math.random() * arraylist.size())+1);
+
+            System.out.println("********************");
+            System.out.println("Menu : " + Menu);
+            System.out.println("********************");
 
         } catch (Exception e) {
             // TODO: handle exception
