@@ -1,0 +1,19 @@
+/build/
+
+
+
+#추가추가
+#.gitignore
+build.xml
+manifest.mf
+nbproject/
+
+
+#특정 파일들
+src/**/*.class
+
+src/**/*.form
+
+src/todaylunch/FORM.form
+
+
