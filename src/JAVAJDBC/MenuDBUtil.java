@@ -128,4 +128,31 @@ public class MenuDBUtil{
         }
         return mbean;
     }
+    
+    //insert ÁøÇà½Ã
+    public int menuInsert(MenuBean mbean){
+        try {
+            String sql = "Insert into TODAYLUNCH_MENU"
+                    + "(MENU_NAME,MENU_STORENAME,MENU_ADDRESS,MENU_CATE,MENU_INTRODUCTION) values "
+                    + "(?,?,?,?,?)";
+
+            psmt = con.prepareStatement(sql);
+            
+            psmt.setString(1, mbean.getMENU_NAME());
+            psmt.setString(2,mbean.getMENU_STORENAME());
+            psmt.setString(3,mbean.getMENU_CATE());
+            psmt.setString(4,mbean.getMENU_ADDRESS());
+            psmt.setString(5,mbean.getMENU_INTRODUCTION());
+            
+            rs = psmt.executeQuery();
+            System.out.println("count : " + rs);
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
+        
+        return 0;
+    }
+    
 }

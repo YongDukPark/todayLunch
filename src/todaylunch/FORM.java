@@ -19,8 +19,9 @@ public class FORM extends javax.swing.JFrame {
      */
     
     //DB 뽑아오기용도
-    MenuDBUtil menudbutill = new MenuDBUtil();
-
+    //MenuDBUtil menudbutill = new MenuDBUtil();
+    MenuDBUtil MenuDBUtil = new MenuDBUtil();
+    ADD_MENU addmenu;
     public FORM() {
         initComponents();
     }
@@ -129,7 +130,7 @@ public class FORM extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("굴림", 1, 12)); // NOI18N
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = menudbutill.todayLunchList();
+            String[] strings = MenuDBUtil.todayLunchList();
             //String[] strings = { "test","2222" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
@@ -275,15 +276,27 @@ public class FORM extends javax.swing.JFrame {
     //
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        System.out.println("testtest@@@");
+        //System.out.println("testtest@@@");
+        
+        
+        System.out.println(evt.getActionCommand()); //메뉴추가 retrun
+        System.out.println(evt.getModifiers()); //16 return
+        
+        
+        for(int i=0 ; i < 1 ; i++){
+            //addmenu = ADD_MENU.getInstance();
+        }
+        
+        addmenu = ADD_MENU.getInstance();
+        
     }//GEN-LAST:event_jMenuItem1ActionPerformed
     
     //돌려돌려돌림판 누르면 Action
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        menudbutill = new MenuDBUtil();
+        MenuDBUtil = new MenuDBUtil();
         MenuBean mbean = new MenuBean();
-        mbean = menudbutill.spinSpinWheel();
+        mbean = MenuDBUtil.spinSpinWheel();
         
         //메뉴이름
         jLabel1.setText(mbean.getMENU_NAME());
