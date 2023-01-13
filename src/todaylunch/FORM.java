@@ -7,6 +7,8 @@ package todaylunch;
 
 import JAVAJDBC.MenuBean;
 import JAVAJDBC.MenuDBUtil;
+import Material.Alert;
+import Material.Confirm;
 
 /**
  *
@@ -41,6 +43,7 @@ public class FORM extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jPanel3 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
+        jDialog1 = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -94,6 +97,17 @@ public class FORM extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setToolTipText("");
@@ -136,6 +150,14 @@ public class FORM extends javax.swing.JFrame {
             public String getElementAt(int i) { return strings[i]; }
         });
         jList1.setToolTipText("");
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jList1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jList1MouseExited(evt);
+            }
+        });
         jScrollPane2.setViewportView(jList1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -237,6 +259,11 @@ public class FORM extends javax.swing.JFrame {
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("메뉴 삭제");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
@@ -276,16 +303,6 @@ public class FORM extends javax.swing.JFrame {
     //
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        //System.out.println("testtest@@@");
-        
-        
-        System.out.println(evt.getActionCommand()); //메뉴추가 retrun
-        System.out.println(evt.getModifiers()); //16 return
-        
-        
-        for(int i=0 ; i < 1 ; i++){
-            //addmenu = ADD_MENU.getInstance();
-        }
         
         addmenu = ADD_MENU.getInstance();
         
@@ -311,7 +328,33 @@ public class FORM extends javax.swing.JFrame {
         //선택횟수
         //int to String
         jLabel12.setText(String.valueOf(mbean.getMENU_SELECT_COUNT()));
+        
+        Alert alert = new Alert();
+        
+        Confirm.getInstance("오늘 메뉴는 이거로 하시겠습니까?");
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        System.out.println("testtest2222");
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    private void jList1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseEntered
+        // TODO add your handling code here:
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = MenuDBUtil.todayLunchList();
+            //String[] strings = { "test","2222" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+    }//GEN-LAST:event_jList1MouseEntered
+    private void jList1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseExited
+        // TODO add your handling code here:
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = MenuDBUtil.todayLunchList();
+            //String[] strings = { "test","2222" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+    }//GEN-LAST:event_jList1MouseExited
 
 
    
@@ -355,6 +398,7 @@ public class FORM extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

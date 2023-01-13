@@ -74,7 +74,7 @@ public class ADD_MENU extends javax.swing.JFrame {
             new com.arisystem.beans.boundarypanel.BoundaryCell("C_C_2_4",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
             new com.arisystem.beans.boundarypanel.BoundaryCell("C_C_2_5",new com.arisystem.beans.boundarypanel.CellInfo(1,4),new com.arisystem.beans.boundarypanel.CellInfo(1,4),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         }));
-        boundaryPanel1.setCellBackColor(new java.awt.Color(240, 240, 240));
+        boundaryPanel1.setCellBackColor(new java.awt.Color(204, 204, 204));
         boundaryPanel1.setColumnCount(2);
         boundaryPanel1.setColumnWidths(new int[] {100, 232});
         boundaryPanel1.setRowCount(5);
