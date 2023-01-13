@@ -40,21 +40,27 @@ public class MenuDBUtil{
 
 
     //단순 메뉴 리스트 뽑아오기용
-    public String todayLunchList(){
-        String menuList = "";
+    public String[] todayLunchList(){
+        String[] menuList = new String[0];
+        int i =0;
+        ArrayList<String> list = new ArrayList<String>();
 
         try {
             String sql = "SELECT MENU_NAME FROM TODAYLUNCH_MENU";
 
             psmt = con.prepareStatement(sql);
-
             rs = psmt.executeQuery();
-
+            
             //메뉴들 넣기
             while(rs.next()){
                 //칼럼데이터 받아서 넣기
-                menuList += rs.getString("MENU_NAME")+"\n";
-                
+                list.add(rs.getString("MENU_NAME"));
+            }
+
+            menuList = new String[list.size()];
+
+            for(i = 0 ; i <= list.size() ; i++){
+                menuList[i] = list.get(i);
             }
 
             System.out.println("********************");
