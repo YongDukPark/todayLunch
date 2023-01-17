@@ -156,4 +156,19 @@ public class MenuDBUtil{
         return 0;
     }
     
+    public void menuDelete(String MENU_NO){
+        try {
+            String sql = "DELETE FROM TODAYLUNCH_MENU WHERE MENU_NO = ?";
+
+            psmt = con.prepareStatement(sql);
+            
+            psmt.setString(1, MENU_NO);
+            
+            rs = psmt.executeQuery();
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+    
 }

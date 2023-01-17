@@ -1,10 +1,12 @@
 package todaylunch;
 
+import JAVAJDBC.MenuDBUtil;
 import java.util.ArrayList;
 
 public class DELETE_MENU extends javax.swing.JFrame {
     
-    ArrayList<Object> arraylist = new ArrayList<>();;
+    ArrayList<Object> arraylist = new ArrayList<>();
+    MenuDBUtil MenuDBUtil = new MenuDBUtil();
     int rowCount = 0;
     
     private static DELETE_MENU DELETE_MENU;
@@ -27,7 +29,16 @@ public class DELETE_MENU extends javax.swing.JFrame {
         }
         return DELETE_MENU;
     }
-    
+    public void refresh(){
+        try{
+            //dataSource 셋팅
+            dWCombineTable2.setDataSource("MariaDB_Youngria");
+            dWCombineTable2.select("http", "192.168.0.20", 8080);
+            rowCount = dWCombineTable2.selectTotalRowCount("http", "192.168.0.20", 8080);
+        }catch(Exception e){
+            System.err.println(e);
+        } 
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -180,18 +191,16 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         
         //System.out.println(rowCount);
         for(int i = 0 ; i < arraylist.size() ; i++){
-            System.out.println("삭제할녀석 : " + arraylist.get(i));
+            //System.out.println("삭제할녀석 : " + arraylist.get(i));
+            MenuDBUtil.menuDelete(String.valueOf(arraylist.get(i)));
         }
+        
+        //refresh;
+        refresh();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try{
-            //dataSource 셋팅
-            dWCombineTable2.setDataSource("MariaDB_Youngria");
-            dWCombineTable2.select("http", "192.168.0.20", 8080);
-        }catch(Exception e){
-            System.err.println(e);
-        } 
+        refresh();
         //DELETE_MENU = new DELETE_MENU();
         //dWCombineTable2.repaint();
         //dWCombineTable2.
