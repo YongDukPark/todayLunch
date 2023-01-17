@@ -329,8 +329,6 @@ public class FORM extends javax.swing.JFrame {
         //int to String
         jLabel12.setText(String.valueOf(mbean.getMENU_SELECT_COUNT()));
         
-        Alert alert = new Alert();
-        
         Confirm.getInstance("오늘 메뉴는 이거로 하시겠습니까?");
     }//GEN-LAST:event_jButton1ActionPerformed
 
