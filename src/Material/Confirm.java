@@ -5,6 +5,8 @@
  */
 package Material;
 
+import JAVAJDBC.Material_Action;
+
 /**
  *
  * @author dydej
@@ -14,22 +16,25 @@ public class Confirm extends javax.swing.JFrame {
     /**
      * Creates new form confirm
      */
-    String test = null;
+    String message = null;
    
+    Material_Action m_action;
+    
     private static Confirm confirm;
     
     private Confirm(String message) {
-        test = "testasfdasdf";
-        
+        //저기 getInstance에서는 바로 넣을수가 없다. 그러니 이쪽으로 와서 돌려준거다.
+        this.message = message;
         
         initComponents();
     }
     
     //해당 메소드 실행시키기
     public static Confirm getInstance(String message){
-        
         confirm = new Confirm(message);
         if (! confirm.isVisible()){
+            
+            //jLabel2.setText(message);
             confirm.setVisible(true);
             
             
@@ -49,6 +54,8 @@ public class Confirm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addMouseWheelListener(new java.awt.event.MouseWheelListener() {
@@ -62,33 +69,55 @@ public class Confirm extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("굴림", 1, 18)); // NOI18N
-        jLabel1.setText(test);
+        jLabel1.setFont(new java.awt.Font("굴림", 1, 14)); // NOI18N
+        jLabel1.setText(message);
 
         jLabel2.setText("알림");
+
+        jButton1.setText("넹");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionY(evt);
+            }
+        });
+
+        jButton2.setText("이건 진짜아니야");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActionN(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel2))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 32, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(54, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addGap(28, 28, 28)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -103,44 +132,25 @@ public class Confirm extends javax.swing.JFrame {
         // TODO add your handling code here:
         confirm.setVisible(false);
     }//GEN-LAST:event_closeConfirm
+    
+    //
+    private void jButton1ActionY(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionY
+        m_action = new Material_Action();
+        
+        m_action.LunchSelectUpCount("test");
+        
+        //메뉴 선택창 올리기
+        
+    }//GEN-LAST:event_jButton1ActionY
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Confirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Confirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Confirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Confirm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new Confirm().setVisible(true);
-//            }
-//        });
-//    }
+    private void jButtonActionN(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionN
+        confirm.setVisible(false);
+    }//GEN-LAST:event_jButtonActionN
 
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
