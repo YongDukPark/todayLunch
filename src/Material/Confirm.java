@@ -1,23 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Material;
 
 import JAVAJDBC.Material_Action;
 
-/**
- *
- * @author dydej
- */
 public class Confirm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form confirm
-     */
     String message = null;
-    
     String temp = null;
     
     Material_Action m_action;
@@ -128,16 +115,14 @@ public class Confirm extends javax.swing.JFrame {
     //메뉴 확정
     private void jButton1ActionY(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionY
         m_action = new Material_Action();
+        //선택된 횟수 올리기
         m_action.LunchSelectUpCount(temp);
         
         confirm.setVisible(false);
-        //메뉴 선택창 올리기
-        
     }//GEN-LAST:event_jButton1ActionY
 
     private void jButtonActionN(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionN
         confirm.setVisible(false);
-        System.out.println(temp);
     }//GEN-LAST:event_jButtonActionN
 
  

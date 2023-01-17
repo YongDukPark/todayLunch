@@ -328,13 +328,18 @@ public class FORM extends javax.swing.JFrame {
         //선택횟수
         //int to String
         jLabel12.setText(String.valueOf(mbean.getMENU_SELECT_COUNT()));
-        System.out.println(mbean.getMENU_NO());
+        
+        //confirm 문구 및 메뉴 고유번호 넘기기
         Confirm.getInstance("오늘 메뉴는 이거로 하시겠습니까?", mbean.getMENU_NO());
         
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    //메뉴 삭제
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         System.out.println("testtest2222");
+        DELETE_MENU DELETE_MENU = new DELETE_MENU();
+        
+        DELETE_MENU.getInstance();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
     private void jList1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseEntered
         // TODO add your handling code here:
