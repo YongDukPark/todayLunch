@@ -41,15 +41,14 @@ public class Material_Action {
     // 여기까지가 생성자 abst
 
 
-    public void LunchSelectUpCount(String Menu){
-        
+    public void LunchSelectUpCount(String MENU_NO){
 
         try {
-            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_SELECT_COUNT = MENU_SELECT_COUNT+1 where MENU_SELECT_COUNT = ?";
+            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_SELECT_COUNT = MENU_SELECT_COUNT+1 where MENU_NO = ?";
             
             psmt = con.prepareStatement(sql);
-            
-            psmt.setString(1, Menu);
+            System.out.println(MENU_NO);
+            psmt.setString(1, MENU_NO);
             
             rs = psmt.executeQuery();
            

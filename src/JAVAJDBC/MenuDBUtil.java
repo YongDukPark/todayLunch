@@ -102,7 +102,8 @@ public class MenuDBUtil{
                 mbean.setMENU_ADDRESS(rs.getString("MENU_ADDRESS"));
                 mbean.setMENU_SELECT_COUNT(rs.getInt("MENU_SELECT_COUNT"));
                 mbean.setMENU_INTRODUCTION(rs.getString("MENU_INTRODUCTION"));
-
+                mbean.setMENU_NO(rs.getString("MENU_NO"));
+                
                 //칼럼데이터 받아서 넣기
                 //Menu = rs.getString("MENU_NAME");
                 //System.out.println(rs.getString("MENU_NAME"));
@@ -133,8 +134,8 @@ public class MenuDBUtil{
     public int menuInsert(MenuBean mbean){
         try {
             String sql = "Insert into TODAYLUNCH_MENU"
-                    + "(MENU_NAME,MENU_STORENAME,MENU_ADDRESS,MENU_CATE,MENU_INTRODUCTION) values "
-                    + "(?,?,?,?,?)";
+                    + "(MENU_NO, MENU_NAME,MENU_STORENAME,MENU_ADDRESS,MENU_CATE,MENU_INTRODUCTION) values "
+                    + "(NEXTVAL(TODAYLUNCH_MENU_SEQ),?,?,?,?,?)";
 
             psmt = con.prepareStatement(sql);
             

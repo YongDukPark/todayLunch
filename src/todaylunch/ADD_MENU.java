@@ -144,7 +144,7 @@ public class ADD_MENU extends javax.swing.JFrame {
         if(evt.getActionCommand().equals("insert")){
             System.out.println("insert 진행");
             //bean 객체에 정보 담기
-            mbean = new MenuBean(dWFCTextField1.getText(),dWFCTextField2.getText(),dWFCTextField3.getText(),dWFCTextField4.getText(),0,dWFCTextField5.getText());
+            mbean = new MenuBean(dWFCTextField1.getText(),dWFCTextField2.getText(),dWFCTextField3.getText(),dWFCTextField4.getText(),0,dWFCTextField5.getText(),"0");
             
             //Insert 진행
             menudbutill.menuInsert(mbean);

@@ -17,21 +17,23 @@ public class Confirm extends javax.swing.JFrame {
      * Creates new form confirm
      */
     String message = null;
-   
+    
+    String temp = null;
+    
     Material_Action m_action;
     
     private static Confirm confirm;
     
-    private Confirm(String message) {
+    private Confirm(String message, String MENU_NO) {
         //저기 getInstance에서는 바로 넣을수가 없다. 그러니 이쪽으로 와서 돌려준거다.
         this.message = message;
-        
+        this.temp = MENU_NO;
         initComponents();
     }
     
     //해당 메소드 실행시키기
-    public static Confirm getInstance(String message){
-        confirm = new Confirm(message);
+    public static Confirm getInstance(String message, String MENU_NO){
+        confirm = new Confirm(message, MENU_NO);
         if (! confirm.isVisible()){
             confirm.setVisible(true);
         }
@@ -123,18 +125,19 @@ public class Confirm extends javax.swing.JFrame {
         confirm.setVisible(false);
     }//GEN-LAST:event_closeConfirm
     
-    //
+    //메뉴 확정
     private void jButton1ActionY(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionY
         m_action = new Material_Action();
+        m_action.LunchSelectUpCount(temp);
         
-        m_action.LunchSelectUpCount("test");
-        
+        confirm.setVisible(false);
         //메뉴 선택창 올리기
         
     }//GEN-LAST:event_jButton1ActionY
 
     private void jButtonActionN(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionN
         confirm.setVisible(false);
+        System.out.println(temp);
     }//GEN-LAST:event_jButtonActionN
 
  
