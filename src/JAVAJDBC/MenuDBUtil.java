@@ -46,7 +46,7 @@ public class MenuDBUtil{
         ArrayList<String> list = new ArrayList<String>();
 
         try {
-            String sql = "SELECT MENU_NAME FROM TODAYLUNCH_MENU";
+            String sql = "SELECT * FROM TODAYLUNCH_MENU";
 
             psmt = con.prepareStatement(sql);
             rs = psmt.executeQuery();
@@ -54,7 +54,7 @@ public class MenuDBUtil{
             //메뉴들 넣기
             while(rs.next()){
                 //칼럼데이터 받아서 넣기
-                list.add(rs.getString("MENU_NAME"));
+                list.add(rs.getString("MENU_NAME") + "(" + rs.getString("MENU_SELECT_COUNT") + ")");
             }
 
             menuList = new String[list.size()];

@@ -113,7 +113,6 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
     public void combineTableVerScrolled(com.arisystem.beans.combinetable.TableBodyEvent evt) {
     }
     public void combineTableBodyMouseClick(com.arisystem.beans.combinetable.TableBodyEvent evt) {
-        dWCombineTable2CombineTableBodyMouseClick(evt);
     }
     public void combineTableBodyMouseEnter(com.arisystem.beans.combinetable.TableBodyEvent evt) {
     }
@@ -135,23 +134,26 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
     });
 
     jButton1.setText("삭제");
+    jButton1.setActionCommand("delete");
     jButton1.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
+            buttonClickAction(evt);
         }
     });
 
     jButton2.setText("새로고침");
+    jButton2.setActionCommand("refresh");
     jButton2.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton2ActionPerformed(evt);
+            buttonClickAction(evt);
         }
     });
 
     jButton3.setText("나가기");
+    jButton3.setActionCommand("exit");
     jButton3.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton3ActionPerformed(evt);
+            buttonClickAction(evt);
         }
     });
 
@@ -187,9 +189,11 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    
+    //버튼 눌렀을경우 실행되는 method
+    private void buttonClickAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonClickAction
+        
+        if(evt.getActionCommand().equals("delete")){ //첫번째 삭제 눌렀을경우
 //        for(int i = 0 ; i < dWCombineTable2.getFocusListeners().length ; i++){
 //            System.out.println(dWCombineTable2.getFocusListeners());
 //            System.out.println(dWCombineTable2.getFocusListeners().length);
@@ -201,52 +205,34 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
 //        System.out.println(dWCombineTable2.getGroupByCombineFieldNames().length);
 //        System.out.println(dWCombineTable2.getMultipleSelectedRow().length);
 //        System.out.println(dWCombineTable2.getKeyListeners().length);
-        
-        //System.out.println(rowCount);
-        
-        for(int i = 0 ; i < arraylist.size() ; i++){
-            //System.out.println("삭제할녀석 : " + arraylist.get(i));
-            MenuDBUtil.menuDelete(String.valueOf(arraylist.get(i)));
-            deleteCount++;
+//        System.out.println(rowCount);
+            for(int i = 0 ; i < arraylist.size() ; i++){
+                System.out.println("삭제할녀석 : " + arraylist.get(i));
+                //MenuDBUtil.menuDelete(String.valueOf(arraylist.get(i)));
+                deleteCount++;
+            }
+
+            //alert창 띄우기
+            Alert.getInstance(deleteCount + "개의 메뉴가 삭제되었습니다.");
+
+            //초기화 작업
+            arraylist.clear();
+            deleteCount = 0;
+
+            //삭제 후 refresh
+            refresh();
+        } else if (evt.getActionCommand().equals("refresh")){ // 새로고침 눌렀을경우
+            refresh();
+        } else if (evt.getActionCommand().equals("exit")){ // 나가기 눌렀을경우
+            DELETE_MENU.setVisible(false);
         }
-        
-        //alert창 띄우기
-        Alert.getInstance(deleteCount + "개의 메뉴가 삭제되었습니다.");
-        
-        //초기화 작업
-        deleteCount = 0;
-        
-        //삭제 후 refresh
-        refresh();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        refresh();
-        //DELETE_MENU = new DELETE_MENU();
-        //dWCombineTable2.repaint();
-        //dWCombineTable2.
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void dWCombineTable2CombineTableBodyMouseClick(com.arisystem.beans.combinetable.TableBodyEvent evt) {//GEN-FIRST:event_dWCombineTable2CombineTableBodyMouseClick
-//        evt.getRowIndex();
-//        evt.getCombineCellName();
-        System.out.println(evt.getRowIndex());
-        //System.out.println(evt.getCombineCellName());
-        //System.out.println(dWCombineTable2.getValue(evt.getRowIndex(), evt.getCombineCellName()));
-//        dWCombineTable2.getValue(evt.getRowIndex(), evt.getCombineCellName());
-        
-        //arraylist.add("1");
-        //arraylist.
-    }//GEN-LAST:event_dWCombineTable2CombineTableBodyMouseClick
+    }//GEN-LAST:event_buttonClickAction
     
     //value 가 바뀌었을경우 실질적으로 이친구를 활용함
     private void dWCombineTable2CombineTableBodyValueChanged(com.arisystem.beans.combinetable.TableBodyEvent evt) {//GEN-FIRST:event_dWCombineTable2CombineTableBodyValueChanged
-        // TODO add your handling code here:
 //        System.out.println(evt.getRowIndex());
 //        System.out.println(evt.getCombineCellName());
 //        System.out.println(dWCombineTable2.getValue(evt.getRowIndex(), evt.getCombineCellName()));
-        
 
         //체크박스 로직1 단일체크
         if(String.valueOf(dWCombineTable2.getValue(evt.getRowIndex(), evt.getCombineCellName())).contains("false")){
@@ -261,17 +247,12 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
     }//GEN-LAST:event_dWCombineTable2CombineTableBodyValueChanged
 
     private void dWCombineTable2CombineTableHeaderMouseClick(com.arisystem.beans.combinetable.TableHeaderEvent evt) {//GEN-FIRST:event_dWCombineTable2CombineTableHeaderMouseClick
-        // TODO add your handling code here:
-        
         //System.out.println(evt.getCombineCellName());
         //System.out.println(evt.getCombineCellPainter());
-        
         
         //System.out.println(evt.getButton());
         //System.out.println(dWCombineTable2.getHeaderRowCount());
         //System.out.println(dWCombineTable2.getHeaderTitleValue("__ROW_STATUS__"));
-        
-        
         
         //체크박스 로직2 단체체크
         //눌렀을때 true였을경우
@@ -292,10 +273,6 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         
         //System.out.println(dWCombineTable2.getHeaderCombineCell("__ROW_STATUS__"));
     }//GEN-LAST:event_dWCombineTable2CombineTableHeaderMouseClick
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        DELETE_MENU.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.arisystem.beans.combinetable.DWCombineTable dWCombineTable2;

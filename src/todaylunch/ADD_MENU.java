@@ -1,22 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package todaylunch;
 
 import JAVAJDBC.MenuBean;
 import JAVAJDBC.MenuDBUtil;
 
-/**
- *
- * @author dydej
- */
 public class ADD_MENU extends javax.swing.JFrame {
-
-    /**
-     * Creates new form ADD_MENU
-     */
     
     private static ADD_MENU addmenu;
     MenuBean mbean;
@@ -28,15 +15,12 @@ public class ADD_MENU extends javax.swing.JFrame {
     
     //해당 메소드 실행시키기
     public static ADD_MENU getInstance(){
-        
         addmenu = new ADD_MENU();
         if (! addmenu.isVisible()){
             addmenu.setVisible(true);
         }
-        
         return addmenu;
     }
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -78,7 +62,6 @@ public class ADD_MENU extends javax.swing.JFrame {
         boundaryPanel1.setColumnCount(2);
         boundaryPanel1.setColumnWidths(new int[] {100, 232});
         boundaryPanel1.setRowCount(5);
-        boundaryPanel1.setRowHeights(new int[] {25, 25, 25, 25, 25});
 
         dWFCTextField1.setTableFieldName("");
         boundaryPanel1.add(dWFCTextField1);
@@ -87,12 +70,6 @@ public class ADD_MENU extends javax.swing.JFrame {
         dWFCTextField2.setBounds(140, 50, 8, 19);
         boundaryPanel1.add(dWFCTextField3);
         dWFCTextField3.setBounds(130, 90, 8, 19);
-
-        dWFCTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dWFCTextField4ActionPerformed(evt);
-            }
-        });
         boundaryPanel1.add(dWFCTextField4);
         dWFCTextField4.setBounds(130, 100, 8, 19);
         boundaryPanel1.add(dWFCTextField5);
@@ -135,13 +112,10 @@ public class ADD_MENU extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //button 눌렀을경우 action
     private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionPerformed
-        // TODO add your handling code here:
-        
-        //System.out.println(evt.getActionCommand());
-        
-        if(evt.getActionCommand().equals("insert")){
+        if(evt.getActionCommand().equals("insert")){ //생성
             System.out.println("insert 진행");
             //bean 객체에 정보 담기
             mbean = new MenuBean(dWFCTextField1.getText(),dWFCTextField2.getText(),dWFCTextField3.getText(),dWFCTextField4.getText(),0,dWFCTextField5.getText(),"0");
@@ -152,17 +126,12 @@ public class ADD_MENU extends javax.swing.JFrame {
             //창 없애기
             addmenu.setVisible(false);
             
-            //메뉴 다시 돌리기
-        } else if(evt.getActionCommand().equals("cansel")){
+        } else if(evt.getActionCommand().equals("cansel")){ //삭제
             System.out.println("cansel");
             addmenu.setVisible(false);
         }
         
     }//GEN-LAST:event_jButtonActionPerformed
-
-    private void dWFCTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dWFCTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dWFCTextField4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
