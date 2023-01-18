@@ -5,10 +5,9 @@
  */
 package todaylunch;
 
-import JAVAJDBC.MenuBean;
 import JAVAJDBC.MenuDBUtil;
-import Material.Alert;
 import Material.Confirm;
+import TableBean.TODAYLUNCH_MENU_BEAN;
 
 /**
  *
@@ -306,7 +305,7 @@ public class FORM extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         MenuDBUtil = new MenuDBUtil();
-        MenuBean mbean = new MenuBean();
+        TODAYLUNCH_MENU_BEAN mbean = new TODAYLUNCH_MENU_BEAN();
         mbean = MenuDBUtil.spinSpinWheel();
         
         //메뉴이름

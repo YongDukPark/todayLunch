@@ -5,6 +5,7 @@
  */
 package JAVAJDBC;
 
+import TableBean.TODAYLUNCH_MENU_BEAN;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,7 +17,7 @@ public class Material_Action {
     PreparedStatement psmt = null;
 
     //bean ÆÄÀÏ
-    MenuBean mbean = new MenuBean();
+    TODAYLUNCH_MENU_BEAN TODAYLUNCH_MENU_BEAN = new TODAYLUNCH_MENU_BEAN();
 
     public Material_Action(){
         try {

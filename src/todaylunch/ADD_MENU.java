@@ -1,12 +1,12 @@
 package todaylunch;
 
-import JAVAJDBC.MenuBean;
 import JAVAJDBC.MenuDBUtil;
+import TableBean.TODAYLUNCH_MENU_BEAN;
 
 public class ADD_MENU extends javax.swing.JFrame {
     
     private static ADD_MENU addmenu;
-    MenuBean mbean;
+    TODAYLUNCH_MENU_BEAN mbean;
     MenuDBUtil menudbutill = new MenuDBUtil();
     
     private ADD_MENU() {
@@ -118,7 +118,7 @@ public class ADD_MENU extends javax.swing.JFrame {
         if(evt.getActionCommand().equals("insert")){ //생성
             System.out.println("insert 진행");
             //bean 객체에 정보 담기
-            mbean = new MenuBean(dWFCTextField1.getText(),dWFCTextField2.getText(),dWFCTextField3.getText(),dWFCTextField4.getText(),0,dWFCTextField5.getText(),"0");
+            mbean = new TODAYLUNCH_MENU_BEAN(dWFCTextField1.getText(),dWFCTextField2.getText(),dWFCTextField3.getText(),dWFCTextField4.getText(),0,dWFCTextField5.getText(),"0",0);
             
             //Insert 진행
             menudbutill.menuInsert(mbean);

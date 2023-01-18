@@ -1,11 +1,11 @@
 package JAVAJDBC;
 
+import TableBean.TODAYLUNCH_MENU_BEAN;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MenuDBUtil{
 
@@ -14,7 +14,7 @@ public class MenuDBUtil{
     PreparedStatement psmt = null;
 
     //bean 파일
-    MenuBean mbean = new MenuBean();
+    TODAYLUNCH_MENU_BEAN mbean = new TODAYLUNCH_MENU_BEAN();
 
     public MenuDBUtil(){
         try {
@@ -77,12 +77,12 @@ public class MenuDBUtil{
 
     //돌리기 둘렀을경우 실행되는 method
     //돌려돌려 돌림판
-    public MenuBean spinSpinWheel(){
+    public TODAYLUNCH_MENU_BEAN spinSpinWheel(){
         
         //String Menu = null;
 
         //HashSet hset = new HashSet();
-        ArrayList<MenuBean> arraylist = new ArrayList<MenuBean>();
+        ArrayList<TODAYLUNCH_MENU_BEAN> arraylist = new ArrayList<TODAYLUNCH_MENU_BEAN>();
         
         try {
             String sql = "SELECT * FROM TODAYLUNCH_MENU";
@@ -94,7 +94,7 @@ public class MenuDBUtil{
             //메뉴들 넣기
             while(rs.next()){
 
-                mbean = new MenuBean();
+                mbean = new TODAYLUNCH_MENU_BEAN();
 
                 mbean.setMENU_NAME(rs.getString("MENU_NAME"));
                 mbean.setMENU_STORENAME(rs.getString("MENU_STORENAME"));
@@ -113,25 +113,16 @@ public class MenuDBUtil{
             }
 
             
-            //랜덤값 뽑아오기 ㅎ
-            //mbean = arraylist.get((int)(Math.random() * arraylist.size())+1);
             mbean = arraylist.get((int)(Math.random() * arraylist.size())+1);
 
             System.out.println(arraylist.get((int)(Math.random() * arraylist.size())+1).getMENU_NAME());
-
-            //System.out.println("********************");
-            //System.out.println("List size : " + arraylist.size());
-            //System.out.println("오늘의 메뉴 : " + Menu);
-            //System.out.println("********************");
-
         } catch (Exception e) {
-            // TODO: handle exception
         }
         return mbean;
     }
     
     //insert 진행시
-    public int menuInsert(MenuBean mbean){
+    public int menuInsert(TODAYLUNCH_MENU_BEAN mbean){
         try {
             String sql = "Insert into TODAYLUNCH_MENU"
                     + "(MENU_NO, MENU_NAME,MENU_STORENAME,MENU_ADDRESS,MENU_CATE,MENU_INTRODUCTION) values "
@@ -149,7 +140,6 @@ public class MenuDBUtil{
             System.out.println("count : " + rs);
             
         } catch (Exception e) {
-            // TODO: handle exception
         }
         
         
@@ -167,7 +157,6 @@ public class MenuDBUtil{
             rs = psmt.executeQuery();
             
         } catch (Exception e) {
-            // TODO: handle exception
         }
     }
     
