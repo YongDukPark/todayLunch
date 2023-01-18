@@ -8,6 +8,7 @@ package todaylunch;
 import JAVAJDBC.MenuDBUtil;
 import Material.Confirm;
 import TableBean.TODAYLUNCH_MENU_BEAN;
+import Material.Alert;
 
 /**
  *
@@ -303,28 +304,38 @@ public class FORM extends javax.swing.JFrame {
     
     //돌려돌려돌림판 누르면 Action
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        MenuDBUtil = new MenuDBUtil();
-        TODAYLUNCH_MENU_BEAN mbean = new TODAYLUNCH_MENU_BEAN();
-        mbean = MenuDBUtil.spinSpinWheel();
         
-        //메뉴이름
-        jLabel1.setText(mbean.getMENU_NAME());
-        //가게이름
-        jLabel4.setText(mbean.getMENU_STORENAME());
-        //주소
-        jLabel6.setText(mbean.getMENU_ADDRESS());
-        //메모
-        jLabel8.setText(mbean.getMENU_INTRODUCTION());
-        //카테고리
-        jLabel10.setText(mbean.getMENU_CATE());
-        //선택횟수
-        //int to String
-        jLabel12.setText(String.valueOf(mbean.getMENU_SELECT_COUNT()));
-        
-        //confirm 문구 및 메뉴 고유번호 넘기기
-        Confirm.getInstance("오늘 메뉴는 이거로 하시겠습니까?", mbean.getMENU_NO());
-        
+        //오늘 확정을 지었는지 확인하는 용도
+        if(MenuDBUtil.checkYN().equals("Y")){
+            Alert.getInstance("오늘 메뉴는 정해졌습니다 ㅎ");
+        } else {
+            MenuDBUtil = new MenuDBUtil();
+            TODAYLUNCH_MENU_BEAN mbean = new TODAYLUNCH_MENU_BEAN();
+            mbean = MenuDBUtil.spinSpinWheel();
+
+            //log 남기는용도
+            MenuDBUtil.insertLog(mbean.getMENU_NO(), mbean.getMENU_NAME());
+            //시도횟수 +1
+            //버튼 누르면 거기서 update로 최근 데이터 수정함
+            MenuDBUtil.upCount(mbean.getMENU_NO(), mbean.getMENU_NAME());
+
+            //메뉴이름
+            jLabel1.setText(mbean.getMENU_NAME());
+            //가게이름
+            jLabel4.setText(mbean.getMENU_STORENAME());
+            //주소
+            jLabel6.setText(mbean.getMENU_ADDRESS());
+            //메모
+            jLabel8.setText(mbean.getMENU_INTRODUCTION());
+            //카테고리
+            jLabel10.setText(mbean.getMENU_CATE());
+            //선택횟수
+            //int to String
+            jLabel12.setText(String.valueOf(mbean.getMENU_SELECT_COUNT()));
+
+            //confirm 문구 및 메뉴 고유번호 넘기기
+            Confirm.getInstance("오늘 메뉴는 이거로 하시겠습니까?", mbean.getMENU_NO());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
     
     //마우스 들어왔을경우 refresh 시키기 용도

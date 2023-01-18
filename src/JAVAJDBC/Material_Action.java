@@ -43,7 +43,6 @@ public class Material_Action {
 
 
     public void LunchSelectUpCount(String MENU_NO){
-
         try {
             String sql = "UPDATE TODAYLUNCH_MENU SET MENU_SELECT_COUNT = MENU_SELECT_COUNT+1 where MENU_NO = ?";
             
@@ -52,11 +51,39 @@ public class Material_Action {
             psmt.setString(1, MENU_NO);
             
             rs = psmt.executeQuery();
-           
-
         } catch (Exception e) {
-            // TODO: handle exception
         }
-        
+    }
+    
+    public void LunchNotSelectUpCount(String MENU_NO){
+        try {
+            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_CANSLE_COUNT = MENU_CANSLE_COUNT+1 where MENU_NO = ?";
+            
+            psmt = con.prepareStatement(sql);
+            System.out.println(MENU_NO);
+            psmt.setString(1, MENU_NO);
+            
+            rs = psmt.executeQuery();
+        } catch (Exception e) {
+        }
+    }
+    
+    public void logSelectUpdate(String MENU_NO){
+        try {
+            String sql1 = "UPDATE TODAYLUNCH_LOG SET"
+                        + " MENU_SELECT = 'Y'"
+                        + " where LAST_START_TIME = (SELECT LAST_START_TIME FROM TODAYLUNCH_LOG ORDER BY LAST_START_TIME DESC LIMIT 1)";
+
+            String sql2 = "UPDATE TODAYLUNCH_TODAY_SELECT SET"
+                        + " MENU_SELECT = 'Y'"
+                        + " where LAST_START_TIME = (SELECT LAST_START_TIME FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1)";
+            
+            psmt = con.prepareStatement(sql1);
+            rs = psmt.executeQuery();
+            
+            psmt = con.prepareStatement(sql2);
+            rs = psmt.executeQuery();
+        } catch (Exception e) {
+        }
     }
 }

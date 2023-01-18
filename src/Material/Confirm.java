@@ -117,11 +117,17 @@ public class Confirm extends javax.swing.JFrame {
         m_action = new Material_Action();
         //선택된 횟수 올리기
         m_action.LunchSelectUpCount(temp);
+        m_action.logSelectUpdate(temp);
         
         confirm.setVisible(false);
     }//GEN-LAST:event_jButton1ActionY
-
+    
+    //메뉴 확정x
     private void jButtonActionN(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionN
+        m_action = new Material_Action();
+        //선택되지 못한 횟수 올리기
+        m_action.LunchNotSelectUpCount(temp);
+        
         confirm.setVisible(false);
     }//GEN-LAST:event_jButtonActionN
 

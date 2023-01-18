@@ -54,7 +54,7 @@ public class MenuDBUtil{
             //메뉴들 넣기
             while(rs.next()){
                 //칼럼데이터 받아서 넣기
-                list.add(rs.getString("MENU_NAME") + "(" + rs.getString("MENU_SELECT_COUNT") + ")");
+                list.add(rs.getString("MENU_NAME") + "[" + rs.getString("MENU_SELECT_COUNT") + "/" + rs.getString("MENU_CANSLE_COUNT") +"]");
             }
 
             menuList = new String[list.size()];
@@ -78,15 +78,11 @@ public class MenuDBUtil{
     //돌리기 둘렀을경우 실행되는 method
     //돌려돌려 돌림판
     public TODAYLUNCH_MENU_BEAN spinSpinWheel(){
-        
-        //String Menu = null;
-
-        //HashSet hset = new HashSet();
         ArrayList<TODAYLUNCH_MENU_BEAN> arraylist = new ArrayList<TODAYLUNCH_MENU_BEAN>();
         
         try {
             String sql = "SELECT * FROM TODAYLUNCH_MENU";
-
+            
             psmt = con.prepareStatement(sql);
 
             rs = psmt.executeQuery();
@@ -120,6 +116,61 @@ public class MenuDBUtil{
         }
         return mbean;
     }
+    
+    public String checkYN(){
+        String checkYN = null;
+        try {
+            String sql = "SELECT MENU_SELECT FROM TODAYLUNCH_TODAY_SELECT WHERE LAST_START_TIME = (SELECT LAST_START_TIME FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1)";
+
+            psmt = con.prepareStatement(sql);
+            
+            rs = psmt.executeQuery();
+            
+            while(rs.next()){
+                checkYN = rs.getString("MENU_SELECT");
+            }
+            
+        } catch (Exception e) {
+        }
+        
+        return checkYN;
+    }
+    
+    //돌려돌려 돌림판시 같이 진행됨
+    public void insertLog(String MENU_NO, String MENU_NAME){
+        try {
+            String sql = "INSERT INTO TODAYLUNCH_LOG "
+                    + "(MENU_NO, MENU_NAME) "
+                    + "VALUES (?,?)";
+
+            psmt = con.prepareStatement(sql);
+            
+            psmt.setString(1, MENU_NO);
+            psmt.setString(2, MENU_NAME);
+            
+            
+            rs = psmt.executeQuery();
+            
+        } catch (Exception e) {
+        }
+    }
+    public void upCount(String MENU_NO, String MENU_NAME){
+        try {
+            String sql = "UPDATE TODAYLUNCH_TODAY_SELECT SET"
+                    + " MENU_NO = ? , MENU_NAME = ? , MENU_SELECT_TOTALCOUNT = MENU_SELECT_TOTALCOUNT+1"
+                    + " where LAST_START_TIME = (SELECT LAST_START_TIME FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1)";
+            
+            psmt = con.prepareStatement(sql);
+            
+            psmt.setString(1, MENU_NO);
+            psmt.setString(2, MENU_NAME);
+            
+            rs = psmt.executeQuery();
+            
+        } catch (Exception e) {
+        }
+    }
+    
     
     //insert 진행시
     public int menuInsert(TODAYLUNCH_MENU_BEAN mbean){
