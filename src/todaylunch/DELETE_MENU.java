@@ -1,6 +1,7 @@
 package todaylunch;
 
 import JAVAJDBC.MenuDBUtil;
+import Material.Alert;
 import java.util.ArrayList;
 
 public class DELETE_MENU extends javax.swing.JFrame {
@@ -8,6 +9,7 @@ public class DELETE_MENU extends javax.swing.JFrame {
     ArrayList<Object> arraylist = new ArrayList<>();
     MenuDBUtil MenuDBUtil = new MenuDBUtil();
     int rowCount = 0;
+    int deleteCount = 0;
     
     private static DELETE_MENU DELETE_MENU;
     
@@ -50,6 +52,7 @@ public class DELETE_MENU extends javax.swing.JFrame {
         dWCombineTable2 = new com.arisystem.beans.combinetable.DWCombineTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -145,6 +148,13 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         }
     });
 
+    jButton3.setText("나가기");
+    jButton3.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton3ActionPerformed(evt);
+        }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -158,6 +168,8 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             .addComponent(jButton2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jButton1)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -165,9 +177,10 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addComponent(jButton2))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(dWCombineTable2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(14, 14, 14))
     );
@@ -190,12 +203,20 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
 //        System.out.println(dWCombineTable2.getKeyListeners().length);
         
         //System.out.println(rowCount);
+        
         for(int i = 0 ; i < arraylist.size() ; i++){
             //System.out.println("삭제할녀석 : " + arraylist.get(i));
             MenuDBUtil.menuDelete(String.valueOf(arraylist.get(i)));
+            deleteCount++;
         }
         
-        //refresh;
+        //alert창 띄우기
+        Alert.getInstance(deleteCount + "개의 메뉴가 삭제되었습니다.");
+        
+        //초기화 작업
+        deleteCount = 0;
+        
+        //삭제 후 refresh
         refresh();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -272,10 +293,15 @@ dWCombineTable2.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         //System.out.println(dWCombineTable2.getHeaderCombineCell("__ROW_STATUS__"));
     }//GEN-LAST:event_dWCombineTable2CombineTableHeaderMouseClick
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        DELETE_MENU.setVisible(false);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.arisystem.beans.combinetable.DWCombineTable dWCombineTable2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
