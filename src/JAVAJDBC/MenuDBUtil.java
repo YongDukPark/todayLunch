@@ -77,13 +77,58 @@ public class MenuDBUtil{
 
     //돌리기 둘렀을경우 실행되는 method
     //돌려돌려 돌림판
+    //230119 중복제거 쿼리문 수정 및 준비된 메뉴들 전부 소진시 resetCount+1 시키고 초기화
     public TODAYLUNCH_MENU_BEAN spinSpinWheel(){
         ArrayList<TODAYLUNCH_MENU_BEAN> arraylist = new ArrayList<TODAYLUNCH_MENU_BEAN>();
-        
+        String sql1, sql2, sql3 = null;
+        String count = null;
         try {
-            String sql = "SELECT * FROM TODAYLUNCH_MENU";
+            //row 갯수 가져오기
+            sql1 = "SELECT "
+                    + "COUNT(*) COUNT "
+                    + "FROM TODAYLUNCH_MENU TL_MENU LEFT JOIN "
+                    + "(SELECT "
+                    + "TL_LOG.MENU_NO , "
+                    + "TL_LOG.MENU_NAME "
+                    + "FROM TODAYLUNCH_LOG TL_LOG LEFT OUTER JOIN TODAYLUNCH_TODAY_SELECT TL_SELECT "
+                    + "ON TL_LOG.MENU_RESET_COUNT = TL_SELECT.MENU_RESET_COUNT "
+                    + "WHERE TL_LOG.LAST_START_TIME > SUBTIME(NOW(), TIMEDIFF(NOW(), CAST(DATE(NOW()) AS DATETIME))) "
+                    + "AND TL_LOG.MENU_RESET_COUNT = (SELECT MENU_RESET_COUNT FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1) "
+                    + ") TL_JOIN "
+                    + "ON TL_MENU.MENU_NO = TL_JOIN.MENU_NO "
+                    + "where TL_JOIN.MENU_NO IS NULL";
+            psmt = con.prepareStatement(sql1);
+
+            rs = psmt.executeQuery();
+
+            while(rs.next()){
+                count = rs.getString("COUNT");
+            }
             
-            psmt = con.prepareStatement(sql);
+            //만약 row없으면 update시켜서 count+1 시켜야 메뉴들이 나온다.
+            if(count.equals("0") || count.equals(null)){
+                sql2 = "UPDATE TODAYLUNCH_TODAY_SELECT SET MENU_RESET_COUNT = MENU_RESET_COUNT+1";
+                psmt = con.prepareStatement(sql2);
+                rs = psmt.executeQuery();
+            }
+            //이전
+            //String sql = "SELECT * FROM TODAYLUNCH_MENU";
+            
+            sql3 = "SELECT "
+                    + "TL_MENU.* "
+                    + "FROM TODAYLUNCH_MENU TL_MENU LEFT JOIN "
+                    + "(SELECT "
+                    + "TL_LOG.MENU_NO , "
+                    + "TL_LOG.MENU_NAME "
+                    + "FROM TODAYLUNCH_LOG TL_LOG LEFT OUTER JOIN TODAYLUNCH_TODAY_SELECT TL_SELECT "
+                    + "ON TL_LOG.MENU_RESET_COUNT = TL_SELECT.MENU_RESET_COUNT "
+                    + "WHERE TL_LOG.LAST_START_TIME > SUBTIME(NOW(), TIMEDIFF(NOW(), CAST(DATE(NOW()) AS DATETIME))) "
+                    + "AND TL_LOG.MENU_RESET_COUNT = (SELECT MENU_RESET_COUNT FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1) "
+                    + ") TL_JOIN "
+                    + "ON TL_MENU.MENU_NO = TL_JOIN.MENU_NO "
+                    + "where TL_JOIN.MENU_NO IS NULL";
+            
+            psmt = con.prepareStatement(sql3);
 
             rs = psmt.executeQuery();
 
@@ -107,7 +152,7 @@ public class MenuDBUtil{
                 //칼럼데이터 ArrayList에 넣어주기
                 arraylist.add(mbean);
             }
-
+            
             
             mbean = arraylist.get((int)(Math.random() * arraylist.size())+1);
 
@@ -138,16 +183,26 @@ public class MenuDBUtil{
     
     //돌려돌려 돌림판시 같이 진행됨
     public void insertLog(String MENU_NO, String MENU_NAME){
+        String MENU_RESET_COUNT = null;
         try {
-            String sql = "INSERT INTO TODAYLUNCH_LOG "
-                    + "(MENU_NO, MENU_NAME) "
-                    + "VALUES (?,?)";
+            String sql1 = "SELECT MENU_RESET_COUNT FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1";
+            psmt = con.prepareStatement(sql1);
+            rs = psmt.executeQuery();
+            
+            while (rs.next()) {
+                MENU_RESET_COUNT = rs.getString("MENU_RESET_COUNT");
+            }
+            
+            
+            String sql2 = "INSERT INTO TODAYLUNCH_LOG "
+                    + "(MENU_NO, MENU_NAME, MENU_RESET_COUNT) "
+                    + "VALUES (?,?,?)";
 
-            psmt = con.prepareStatement(sql);
+            psmt = con.prepareStatement(sql2);
             
             psmt.setString(1, MENU_NO);
             psmt.setString(2, MENU_NAME);
-            
+            psmt.setString(3, MENU_RESET_COUNT);
             
             rs = psmt.executeQuery();
             
