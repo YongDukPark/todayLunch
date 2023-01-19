@@ -107,7 +107,9 @@ public class MenuDBUtil{
             
             //만약 row없으면 update시켜서 count+1 시켜야 메뉴들이 나온다.
             if(count.equals("0") || count.equals(null)){
-                sql2 = "UPDATE TODAYLUNCH_TODAY_SELECT SET MENU_RESET_COUNT = MENU_RESET_COUNT+1";
+                System.out.println("으에에에엑으에에에엑으에에에엑으에에에엑으에에에엑\n으에에에엑으에에에엑으에에에엑으에에에엑");
+                sql2 = "UPDATE TODAYLUNCH_TODAY_SELECT SET MENU_RESET_COUNT = MENU_RESET_COUNT+1 "
+                        + "WHERE LAST_START_TIME = (SELECT LAST_START_TIME FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1)";
                 psmt = con.prepareStatement(sql2);
                 rs = psmt.executeQuery();
             }

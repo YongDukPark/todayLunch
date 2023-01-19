@@ -285,7 +285,8 @@ public class FORM extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem5);
 
-        jMenuItem6.setText("jMenuItem6");
+        jMenuItem6.setText("로그보기");
+        jMenuItem6.setActionCommand("logcheck");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemClickAction_Edit(evt);
@@ -392,8 +393,8 @@ public class FORM extends javax.swing.JFrame {
                 Alert.getInstance("룰렛먼저 돌려주세요");
             }
                 
-        } else if(evt.getActionCommand().equals("")){
-            
+        } else if(evt.getActionCommand().equals("logcheck")){
+            LOGCHECK.getInstance();
         }
     }//GEN-LAST:event_menuItemClickAction_Edit
 
