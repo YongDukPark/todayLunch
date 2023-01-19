@@ -5,22 +5,25 @@ import JAVAJDBC.Material_Action;
 public class Confirm extends javax.swing.JFrame {
 
     String message = null;
-    String temp = null;
+    String evtCommand = null;
+    Object temp = null;
+    
     
     Material_Action m_action;
     
     private static Confirm confirm;
     
-    private Confirm(String message, String MENU_NO) {
+    private Confirm(String message, String evtCommand, Object temp) {
         //저기 getInstance에서는 바로 넣을수가 없다. 그러니 이쪽으로 와서 돌려준거다.
         this.message = message;
-        this.temp = MENU_NO;
+        this.evtCommand = evtCommand;
+        this.temp = temp;
         initComponents();
     }
     
     //해당 메소드 실행시키기
-    public static Confirm getInstance(String message, String MENU_NO){
-        confirm = new Confirm(message, MENU_NO);
+    public static Confirm getInstance(String message, String evtCommand, Object temp){
+        confirm = new Confirm(message, evtCommand, temp);
         if (! confirm.isVisible()){
             confirm.setVisible(true);
         }
@@ -112,23 +115,37 @@ public class Confirm extends javax.swing.JFrame {
         confirm.setVisible(false);
     }//GEN-LAST:event_closeConfirm
     
-    //메뉴 확정
+    
     private void jButton1ActionY(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionY
-        m_action = new Material_Action();
-        //선택된 횟수 올리기
-        m_action.LunchSelectUpCount(temp);
-        m_action.logSelectUpdate(temp);
-        
-        confirm.setVisible(false);
+        if(evtCommand.equals("MenuSelectUpCount")){ //메뉴 확정
+            m_action = new Material_Action();
+            //선택된 횟수 올리기
+            m_action.LunchSelectUpCount((String)temp);
+            m_action.logSelectUpdate((String)temp);
+
+            confirm.setVisible(false);
+        } else if(evtCommand.equals("todaySelectReset")){ //오늘 메뉴 다시고르기 > Y
+            //System.out.println("test");
+            m_action = new Material_Action();
+            int count = m_action.todaySelectReset();
+            System.out.println(count);
+            confirm.setVisible(false);
+            Alert.getInstance("이번에는 좋은 결과 나오길 바래요 :D");
+        }
     }//GEN-LAST:event_jButton1ActionY
     
-    //메뉴 확정x
+    
     private void jButtonActionN(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionN
-        m_action = new Material_Action();
-        //선택되지 못한 횟수 올리기
-        m_action.LunchNotSelectUpCount(temp);
-        
-        confirm.setVisible(false);
+        if(evtCommand.equals("MenuSelectUpCount")){ //메뉴 확정x
+            m_action = new Material_Action();
+            //선택되지 못한 횟수 올리기
+            m_action.LunchNotSelectUpCount((String)temp);
+
+            confirm.setVisible(false);
+        } else if(evtCommand.equals("todaySelectReset")){ //오늘 메뉴 다시고르기 > N
+            //m_action = new Material_Action();
+            confirm.setVisible(false);
+        }
     }//GEN-LAST:event_jButtonActionN
 
  

@@ -41,7 +41,7 @@ public class Material_Action {
     }
     // 여기까지가 생성자 abst
 
-
+    //룰렛 돌리고 메뉴 선택했을경우1
     public void LunchSelectUpCount(String MENU_NO){
         try {
             String sql = "UPDATE TODAYLUNCH_MENU SET MENU_SELECT_COUNT = MENU_SELECT_COUNT+1 where MENU_NO = ?";
@@ -55,19 +55,7 @@ public class Material_Action {
         }
     }
     
-    public void LunchNotSelectUpCount(String MENU_NO){
-        try {
-            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_CANSLE_COUNT = MENU_CANSLE_COUNT+1 where MENU_NO = ?";
-            
-            psmt = con.prepareStatement(sql);
-            System.out.println(MENU_NO);
-            psmt.setString(1, MENU_NO);
-            
-            rs = psmt.executeQuery();
-        } catch (Exception e) {
-        }
-    }
-    
+    //룰렛 돌리고 메뉴 선택했을경우2
     public void logSelectUpdate(String MENU_NO){
         try {
             String sql1 = "UPDATE TODAYLUNCH_LOG SET"
@@ -85,5 +73,36 @@ public class Material_Action {
             rs = psmt.executeQuery();
         } catch (Exception e) {
         }
+    }
+    
+    //룰렛 돌리고 메뉴 선택하지 않았을경우
+    public void LunchNotSelectUpCount(String MENU_NO){
+        try {
+            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_CANSLE_COUNT = MENU_CANSLE_COUNT+1 where MENU_NO = ?";
+            
+            psmt = con.prepareStatement(sql);
+            System.out.println(MENU_NO);
+            psmt.setString(1, MENU_NO);
+            
+            rs = psmt.executeQuery();
+        } catch (Exception e) {
+        }
+    }
+    
+    //상단바 오늘 메뉴 다시정하기 눌렀을경우 실행
+    public int todaySelectReset(){
+        int count = 0;
+        try {
+            String sql = "UPDATE TODAYLUNCH_TODAY_SELECT SET MENU_SELECT = 'N', MENU_RESET_COUNT = MENU_RESET_COUNT+1"
+                    + " WHERE LAST_START_TIME = (SELECT LAST_START_TIME FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1)";
+            
+            psmt = con.prepareStatement(sql);
+            count = psmt.executeUpdate();
+            
+            System.out.println("count : " + count);
+        } catch(Exception e){
+            
+        }
+        return count;
     }
 }

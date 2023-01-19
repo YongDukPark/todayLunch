@@ -46,7 +46,7 @@ public class MenuDBUtil{
         ArrayList<String> list = new ArrayList<String>();
 
         try {
-            String sql = "SELECT * FROM TODAYLUNCH_MENU";
+            String sql = "SELECT * FROM TODAYLUNCH_MENU ORDER BY MENU_SELECT_COUNT DESC";
 
             psmt = con.prepareStatement(sql);
             rs = psmt.executeQuery();
