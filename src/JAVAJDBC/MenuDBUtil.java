@@ -85,18 +85,18 @@ public class MenuDBUtil{
         try {
             //row 갯수 가져오기
             sql1 = "SELECT "
-                    + "COUNT(*) COUNT "
-                    + "FROM TODAYLUNCH_MENU TL_MENU LEFT JOIN "
+                        + "COUNT(*) COUNT "
+                        + "FROM TODAYLUNCH_MENU TL_MENU LEFT JOIN "
                     + "(SELECT "
-                    + "TL_LOG.MENU_NO , "
-                    + "TL_LOG.MENU_NAME "
-                    + "FROM TODAYLUNCH_LOG TL_LOG LEFT OUTER JOIN TODAYLUNCH_TODAY_SELECT TL_SELECT "
-                    + "ON TL_LOG.MENU_RESET_COUNT = TL_SELECT.MENU_RESET_COUNT "
-                    + "WHERE TL_LOG.LAST_START_TIME > SUBTIME(NOW(), TIMEDIFF(NOW(), CAST(DATE(NOW()) AS DATETIME))) "
-                    + "AND TL_LOG.MENU_RESET_COUNT = (SELECT MENU_RESET_COUNT FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1) "
+                        + "TL_LOG.MENU_NO , "
+                        + "TL_LOG.MENU_NAME "
+                        + "FROM TODAYLUNCH_LOG TL_LOG LEFT OUTER JOIN TODAYLUNCH_TODAY_SELECT TL_SELECT "
+                        + "ON TL_LOG.MENU_RESET_COUNT = TL_SELECT.MENU_RESET_COUNT "
+                        + "WHERE TL_LOG.LAST_START_TIME > SUBTIME(NOW(), TIMEDIFF(NOW(), CAST(DATE(NOW()) AS DATETIME))) "
+                        + "AND TL_LOG.MENU_RESET_COUNT = (SELECT MENU_RESET_COUNT FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1) "
                     + ") TL_JOIN "
-                    + "ON TL_MENU.MENU_NO = TL_JOIN.MENU_NO "
-                    + "where TL_JOIN.MENU_NO IS NULL";
+                        + "ON TL_MENU.MENU_NO = TL_JOIN.MENU_NO "
+                        + "where TL_JOIN.MENU_NO IS NULL";
             psmt = con.prepareStatement(sql1);
 
             rs = psmt.executeQuery();
@@ -107,7 +107,7 @@ public class MenuDBUtil{
             
             //만약 row없으면 update시켜서 count+1 시켜야 메뉴들이 나온다.
             if(count.equals("0") || count.equals(null)){
-                System.out.println("으에에에엑으에에에엑으에에에엑으에에에엑으에에에엑\n으에에에엑으에에에엑으에에에엑으에에에엑");
+                //System.out.println("으에에에엑으에에에엑으에에에엑으에에에엑으에에에엑\n으에에에엑으에에에엑으에에에엑으에에에엑");
                 sql2 = "UPDATE TODAYLUNCH_TODAY_SELECT SET MENU_RESET_COUNT = MENU_RESET_COUNT+1 "
                         + "WHERE LAST_START_TIME = (SELECT LAST_START_TIME FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1)";
                 psmt = con.prepareStatement(sql2);
@@ -117,18 +117,18 @@ public class MenuDBUtil{
             //String sql = "SELECT * FROM TODAYLUNCH_MENU";
             
             sql3 = "SELECT "
-                    + "TL_MENU.* "
-                    + "FROM TODAYLUNCH_MENU TL_MENU LEFT JOIN "
+                        + "TL_MENU.* "
+                        + "FROM TODAYLUNCH_MENU TL_MENU LEFT JOIN "
                     + "(SELECT "
-                    + "TL_LOG.MENU_NO , "
-                    + "TL_LOG.MENU_NAME "
-                    + "FROM TODAYLUNCH_LOG TL_LOG LEFT OUTER JOIN TODAYLUNCH_TODAY_SELECT TL_SELECT "
-                    + "ON TL_LOG.MENU_RESET_COUNT = TL_SELECT.MENU_RESET_COUNT "
-                    + "WHERE TL_LOG.LAST_START_TIME > SUBTIME(NOW(), TIMEDIFF(NOW(), CAST(DATE(NOW()) AS DATETIME))) "
-                    + "AND TL_LOG.MENU_RESET_COUNT = (SELECT MENU_RESET_COUNT FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1) "
+                        + "TL_LOG.MENU_NO , "
+                        + "TL_LOG.MENU_NAME "
+                        + "FROM TODAYLUNCH_LOG TL_LOG LEFT OUTER JOIN TODAYLUNCH_TODAY_SELECT TL_SELECT "
+                        + "ON TL_LOG.MENU_RESET_COUNT = TL_SELECT.MENU_RESET_COUNT "
+                        + "WHERE TL_LOG.LAST_START_TIME > SUBTIME(NOW(), TIMEDIFF(NOW(), CAST(DATE(NOW()) AS DATETIME))) "
+                        + "AND TL_LOG.MENU_RESET_COUNT = (SELECT MENU_RESET_COUNT FROM TODAYLUNCH_TODAY_SELECT ORDER BY LAST_START_TIME DESC LIMIT 1) "
                     + ") TL_JOIN "
-                    + "ON TL_MENU.MENU_NO = TL_JOIN.MENU_NO "
-                    + "where TL_JOIN.MENU_NO IS NULL";
+                        + "ON TL_MENU.MENU_NO = TL_JOIN.MENU_NO "
+                        + "where TL_JOIN.MENU_NO IS NULL";
             
             psmt = con.prepareStatement(sql3);
 
