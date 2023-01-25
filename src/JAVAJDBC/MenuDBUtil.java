@@ -268,4 +268,40 @@ public class MenuDBUtil{
         }
     }
     
+    //Menu insert
+    public void insertRow(TODAYLUNCH_MENU_BEAN bean){
+        try{
+            String sql = "INSERT INTO TODAYLUNCH_MENU (MENU_NO , MENU_NAME, MENU_STORENAME, MENU_CATE, MENU_INTRODUCTION) VALUES "
+                    + "(NEXTVAL(TODAYLUNCH_MENU_SEQ),?,?,?,?)";
+            
+            psmt = con.prepareStatement(sql);
+            psmt.setString(1, bean.getMENU_NAME());
+            psmt.setString(2, bean.getMENU_STORENAME());
+            psmt.setString(3, bean.getMENU_CATE());
+            psmt.setString(4, bean.getMENU_INTRODUCTION());
+            psmt.executeUpdate();
+        }catch(Exception e){
+            
+        }
+    }
+    
+    //Menu ¼öÁ¤
+    public void updateRow(TODAYLUNCH_MENU_BEAN bean){
+        try{
+            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_NAME = ?, MENU_STORENAME = ?, MENU_CATE = ?, MENU_INTRODUCTION = ? "
+                    + "WHERE MENU_NO = ?";
+            
+            psmt = con.prepareStatement(sql);
+            psmt.setString(1, bean.getMENU_NAME());
+            psmt.setString(2, bean.getMENU_STORENAME());
+            psmt.setString(3, bean.getMENU_CATE());
+            psmt.setString(4, bean.getMENU_INTRODUCTION());
+            psmt.setString(5, bean.getMENU_NO());
+            psmt.executeUpdate();
+        }catch(Exception e){
+            
+        }
+    }
+    
+    
 }

@@ -102,10 +102,9 @@ dWCombineTable1.addTableHeaderListener(new com.arisystem.beans.combinetable.Tabl
     
     //주목적 정렬
     private void dWCombineTable1CombineTableHeaderMouseClick(com.arisystem.beans.combinetable.TableHeaderEvent evt) {//GEN-FIRST:event_dWCombineTable1CombineTableHeaderMouseClick
-        //System.out.println(evt.getClickCount());
-        //System.out.println(evt.getCombineCellName());
-        //System.out.println(dWCombineTable1.setHeaderTitleValue(evt.getCombineCellName());
-        //
+        //System.out.println(evt.getClickCount()); // 클릭한 횟수 불러옴
+        //System.out.println(evt.getCombineCellName()); // 그 LAST_START_TIME 요런 value값 불러옴
+        //System.out.println(dWCombineTable1.setHeaderTitleValue(evt.getCombineCellName()); // 텍스트 이름 넣은거 불러옴
         if(evt.getClickCount() > 0){
             try {
                 if(evt.getCombineCellName().equals("LAST_START_TIME")){ //로그생성시간

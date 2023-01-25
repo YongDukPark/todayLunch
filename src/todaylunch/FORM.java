@@ -277,7 +277,8 @@ public class FORM extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem4);
 
-        jMenuItem5.setText("jMenuItem5");
+        jMenuItem5.setText("메뉴 수정");
+        jMenuItem5.setActionCommand("menuupdate");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemClickAction_Edit(evt);
@@ -393,6 +394,9 @@ public class FORM extends javax.swing.JFrame {
                 Alert.getInstance("룰렛먼저 돌려주세요");
             }
                 
+        } else if(evt.getActionCommand().equals("menuupdate")){
+            MENUUPDATE.getInstance();
+            
         } else if(evt.getActionCommand().equals("logcheck")){
             LOGCHECK.getInstance();
         }

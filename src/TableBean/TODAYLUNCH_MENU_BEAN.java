@@ -9,6 +9,7 @@ public class TODAYLUNCH_MENU_BEAN {
     private String MENU_INTRODUCTION;
     private String MENU_NO;
     private int MENU_CANSLE_COUNT;
+    private String MENU_UPDATE_DAY;
 
     public TODAYLUNCH_MENU_BEAN() {
     }
@@ -88,5 +89,12 @@ public class TODAYLUNCH_MENU_BEAN {
         this.MENU_CANSLE_COUNT = MENU_CANSLE_COUNT;
     }
     
+    public String getMENU_UPDATE_DAY() {
+        return MENU_UPDATE_DAY;
+    }
+
+    public void setMENU_UPDATE_DAY(String MENU_UPDATE_DAY) {
+        this.MENU_UPDATE_DAY = MENU_UPDATE_DAY;
+    }
     
 }
