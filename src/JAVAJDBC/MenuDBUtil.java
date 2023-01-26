@@ -288,7 +288,7 @@ public class MenuDBUtil{
     //Menu ¼öÁ¤
     public void updateRow(TODAYLUNCH_MENU_BEAN bean){
         try{
-            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_NAME = ?, MENU_STORENAME = ?, MENU_CATE = ?, MENU_INTRODUCTION = ? "
+            String sql = "UPDATE TODAYLUNCH_MENU SET MENU_NAME = ?, MENU_STORENAME = ?, MENU_CATE = ?, MENU_INTRODUCTION = ?, MENU_ADDRESS = ? "
                     + "WHERE MENU_NO = ?";
             
             psmt = con.prepareStatement(sql);
@@ -296,7 +296,8 @@ public class MenuDBUtil{
             psmt.setString(2, bean.getMENU_STORENAME());
             psmt.setString(3, bean.getMENU_CATE());
             psmt.setString(4, bean.getMENU_INTRODUCTION());
-            psmt.setString(5, bean.getMENU_NO());
+            psmt.setString(5, bean.getMENU_ADDRESS());
+            psmt.setString(6, bean.getMENU_NO());
             psmt.executeUpdate();
         }catch(Exception e){
             

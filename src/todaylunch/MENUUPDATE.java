@@ -12,10 +12,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author dydej
- */
 public class MENUUPDATE extends javax.swing.JFrame {
 
     private static MENUUPDATE menuCheck;
@@ -83,21 +79,20 @@ public class MENUUPDATE extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         dWCombineTable1.setBodyRenderer(new com.arisystem.beans.combinetable.BodyRenderer( new com.arisystem.beans.combinetable.BodyCombineCell[] {
             new com.arisystem.beans.combinetable.BodyCombineCell("__ROW_STATUS__", new com.arisystem.beans.combinetable.CellInfo(0,0), new com.arisystem.beans.combinetable.CellInfo(0,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.datawizard.DWStatusCombineCellEditor", "com.arisystem.beans.datawizard.DWStatusCombineCellPainter",null),
             new com.arisystem.beans.combinetable.BodyCombineCell("MENU_NO", new com.arisystem.beans.combinetable.CellInfo(1,0), new com.arisystem.beans.combinetable.CellInfo(1,0), "new", com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "", "",null),
             new com.arisystem.beans.combinetable.BodyCombineCell("MENU_NAME", new com.arisystem.beans.combinetable.CellInfo(2,0), new com.arisystem.beans.combinetable.CellInfo(2,0), null, com.arisystem.beans.combinetable.CombineCell.LEFT_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.StringCombineCellEditor", "",null),
             new com.arisystem.beans.combinetable.BodyCombineCell("MENU_STORENAME", new com.arisystem.beans.combinetable.CellInfo(3,0), new com.arisystem.beans.combinetable.CellInfo(3,0), null, com.arisystem.beans.combinetable.CombineCell.LEFT_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.StringCombineCellEditor", "",null),
-            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_SELECT_COUNT", new com.arisystem.beans.combinetable.CellInfo(4,0), new com.arisystem.beans.combinetable.CellInfo(4,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "", "",null),
-            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_CATE", new com.arisystem.beans.combinetable.CellInfo(6,0), new com.arisystem.beans.combinetable.CellInfo(6,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.StringCombineCellEditor", "",null),
-            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_UPDATE_DAY", new com.arisystem.beans.combinetable.CellInfo(8,0), new com.arisystem.beans.combinetable.CellInfo(8,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.DateCombineCellEditor", "com.arisystem.beans.combinetable.DateCombineCellPainter",null),
-            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_CANSLE_COUNT", new com.arisystem.beans.combinetable.CellInfo(5,0), new com.arisystem.beans.combinetable.CellInfo(5,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "", "com.arisystem.beans.combinetable.NumberCombineCellPainter",null),
-            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_INTRODUCTION", new com.arisystem.beans.combinetable.CellInfo(7,0), new com.arisystem.beans.combinetable.CellInfo(7,0), null, com.arisystem.beans.combinetable.CombineCell.LEFT_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.StringCombineCellEditor", "",null),
+            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_SELECT_COUNT", new com.arisystem.beans.combinetable.CellInfo(5,0), new com.arisystem.beans.combinetable.CellInfo(5,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "", "",null),
+            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_CATE", new com.arisystem.beans.combinetable.CellInfo(7,0), new com.arisystem.beans.combinetable.CellInfo(7,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.StringCombineCellEditor", "",null),
+            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_UPDATE_DAY", new com.arisystem.beans.combinetable.CellInfo(9,0), new com.arisystem.beans.combinetable.CellInfo(9,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.DateCombineCellEditor", "com.arisystem.beans.combinetable.DateCombineCellPainter",null),
+            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_CANSLE_COUNT", new com.arisystem.beans.combinetable.CellInfo(6,0), new com.arisystem.beans.combinetable.CellInfo(6,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "", "com.arisystem.beans.combinetable.NumberCombineCellPainter",null),
+            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_INTRODUCTION", new com.arisystem.beans.combinetable.CellInfo(8,0), new com.arisystem.beans.combinetable.CellInfo(8,0), null, com.arisystem.beans.combinetable.CombineCell.LEFT_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.StringCombineCellEditor", "",null),
+            new com.arisystem.beans.combinetable.BodyCombineCell("MENU_ADDRESS", new com.arisystem.beans.combinetable.CellInfo(4,0), new com.arisystem.beans.combinetable.CellInfo(4,0), null, com.arisystem.beans.combinetable.CombineCell.LEFT_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.combinetable.StringCombineCellEditor", "",null),
         }));
-        dWCombineTable1.setCellCount(9);
-        dWCombineTable1.setCellWidths(new int[] {27, 29, 178, 109, 38, 36, 44, 233, 100});
+        dWCombineTable1.setCellCount(10);
+        dWCombineTable1.setCellWidths(new int[] {24, 26, 158, 97, 89, 34, 32, 39, 207, 88});
         dWCombineTable1.setErdObjectLocations(new com.arisystem.beans.datawizard.DWErdObjectLocation[]{new com.arisystem.beans.datawizard.DWErdObjectLocation("TODAYLUNCH_MENU",30,0)});
         dWCombineTable1.setGroupBy("");
         dWCombineTable1.setHeaderRenderer(new com.arisystem.beans.combinetable.HeaderRenderer( new com.arisystem.beans.combinetable.HeaderCombineCell[] {
@@ -105,11 +100,12 @@ public class MENUUPDATE extends javax.swing.JFrame {
             new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_NO",new com.arisystem.beans.combinetable.CellInfo(1,0),new com.arisystem.beans.combinetable.CellInfo(1,0),"번호",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
             new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_NAME",new com.arisystem.beans.combinetable.CellInfo(2,0),new com.arisystem.beans.combinetable.CellInfo(2,0),"메뉴명",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
             new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_STORENAME",new com.arisystem.beans.combinetable.CellInfo(3,0),new com.arisystem.beans.combinetable.CellInfo(3,0),"가게명",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
-            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_SELECT_COUNT",new com.arisystem.beans.combinetable.CellInfo(4,0),new com.arisystem.beans.combinetable.CellInfo(4,0),"선택",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
-            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_CATE",new com.arisystem.beans.combinetable.CellInfo(6,0),new com.arisystem.beans.combinetable.CellInfo(6,0),"카테",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
-            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_UPDATE_DAY",new com.arisystem.beans.combinetable.CellInfo(8,0),new com.arisystem.beans.combinetable.CellInfo(8,0),"수정날짜",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
-            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_CANSLE_COUNT",new com.arisystem.beans.combinetable.CellInfo(5,0),new com.arisystem.beans.combinetable.CellInfo(5,0),"거절",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
-            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_INTRODUCTION",new com.arisystem.beans.combinetable.CellInfo(7,0),new com.arisystem.beans.combinetable.CellInfo(7,0),"한줄평",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
+            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_SELECT_COUNT",new com.arisystem.beans.combinetable.CellInfo(5,0),new com.arisystem.beans.combinetable.CellInfo(5,0),"선택",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
+            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_CATE",new com.arisystem.beans.combinetable.CellInfo(7,0),new com.arisystem.beans.combinetable.CellInfo(7,0),"카테",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
+            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_UPDATE_DAY",new com.arisystem.beans.combinetable.CellInfo(9,0),new com.arisystem.beans.combinetable.CellInfo(9,0),"수정날짜",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
+            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_CANSLE_COUNT",new com.arisystem.beans.combinetable.CellInfo(6,0),new com.arisystem.beans.combinetable.CellInfo(6,0),"거절",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
+            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_INTRODUCTION",new com.arisystem.beans.combinetable.CellInfo(8,0),new com.arisystem.beans.combinetable.CellInfo(8,0),"한줄평",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
+            new com.arisystem.beans.combinetable.HeaderCombineCell("MENU_ADDRESS",new com.arisystem.beans.combinetable.CellInfo(4,0),new com.arisystem.beans.combinetable.CellInfo(4,0),"위치",com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT,com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null,null,null,"",null),
         }));
         dWCombineTable1.setJoinConditions(new com.arisystem.beans.datawizard.DWJoinCondition[] {
             new com.arisystem.beans.datawizard.DWNotJoinCondition(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"))});
@@ -123,7 +119,8 @@ public class MENUUPDATE extends javax.swing.JFrame {
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"),"MENU_CATE",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_CATE") ,
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"),"MENU_UPDATE_DAY",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_UPDATE_DAY") ,
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"),"MENU_CANSLE_COUNT",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_CANSLE_COUNT") ,
-        new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"),"MENU_INTRODUCTION",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_INTRODUCTION") });
+        new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"),"MENU_INTRODUCTION",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_INTRODUCTION") ,
+        new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"),"MENU_ADDRESS",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_ADDRESS") });
 dWCombineTable1.setWhereContition(new com.arisystem.beans.datawizard.DWWhereCondition(""));
 dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableBodyListener() {
     public void combineTableBodyActionEditCell(com.arisystem.beans.combinetable.TableBodyEvent evt) {
@@ -258,7 +255,7 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             //로우의 값이 없을경우 insert 만약 있으면 update진행을 changeRow의 길이만큼 반복시킨다.
             //keyvalue값으로 진행해야겠고 HashMap 형태로 키값에는 그걸 넣고 객체 형태로 넣어야겠구나
             //빈형태로 넣어줘야함
-            MenuDBUtil = new MenuDBUtil();
+            //MenuDBUtil = new MenuDBUtil();
             for(int i = 0 ; i < changeRow.size() ; i++){
                 System.out.println(changeRow.get(i).getMENU_NO());
 
@@ -267,8 +264,6 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
                 } else {
                     MenuDBUtil.updateRow(changeRow.get(i));
                 }
-                
-
             }
             //삭제 로직
 //            for(int i = 0 ; i < deletelist.size() ; i++){
@@ -283,8 +278,11 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             changeRow.clear();
             map.clear();
             
-            //deleteList
+            //삭제 관련 초기화 작업
+            arraylist.clear();
             deletelist.clear();
+            deleteListIndex.clear();
+            deleteCount = 0;
         }
     }//GEN-LAST:event_buttonClickEvent
     
@@ -302,7 +300,6 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
                         
                     }else {
                         arraylist.add(dWCombineTable1.getValue(i, "MENU_NO"));
-                        
                         //230125 추가된 사항 인덱스 정보를 받아 지우기 위함
                         deleteListIndex.add(i);
                     }
@@ -342,10 +339,12 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         }
         bean.setMENU_NAME((String)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_NAME"));
         bean.setMENU_STORENAME((String)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_STORENAME"));
-        //bean.setMENU_SELECT_COUNT((int)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_SELECT_COUNT"));
-        //bean.setMENU_CANSLE_COUNT((int)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_CANSLE_COUNT"));
+        bean.setMENU_ADDRESS((String)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_ADDRESS"));
         bean.setMENU_CATE((String)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_CATE"));
         bean.setMENU_INTRODUCTION((String)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_INTRODUCTION"));
+        
+        //bean.setMENU_SELECT_COUNT((int)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_SELECT_COUNT"));
+        //bean.setMENU_CANSLE_COUNT((int)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_CANSLE_COUNT"));
         //bean.setMENU_UPDATE_DAY((String)dWCombineTable1.getValue(evt.getRowIndex(), "MENU_UPDATE_DAY"));
         
         //객체정보 HashMap에 Key Value 형태로 담아주기
