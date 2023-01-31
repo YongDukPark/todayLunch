@@ -7,10 +7,12 @@ package todaylunch;
 
 import JAVAJDBC.MenuDBUtil;
 import TableBean.TODAYLUNCH_MENU_BEAN;
+import com.arisystem.beans.datawizard.DWWhereCondition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class MENUUPDATE extends javax.swing.JFrame {
 
@@ -42,12 +44,8 @@ public class MENUUPDATE extends javax.swing.JFrame {
     
     private MENUUPDATE() {
         initComponents();
-         try {
-            dWCombineTable1.setDataSource("MariaDB_Youngria");
-            dWCombineTable1.setOrderBy("MENU_SELECT_COUNT DESC");
-            dWCombineTable1.select("http", "192.168.0.20", 8080);
-        } catch (Exception e) {
-        }
+        refresh();
+        clearExit();
     }
     
     public static MENUUPDATE getInstance(){
@@ -59,7 +57,38 @@ public class MENUUPDATE extends javax.swing.JFrame {
     }
     
     public void refresh(){
+        Vector params = new Vector();
+        DWWhereCondition SearchSelect;
+        String searchType = null;
+        String coulmnsType = null;
         try{
+            if(!jTextField1.getText().equals("") && jComboBox1.getSelectedIndex() != 0){
+                params.clear();
+                
+                if(jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("메뉴명")){
+                    coulmnsType = "MENU_NAME like ?";
+                } else if (jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("가게명")){
+                    coulmnsType = "MENU_STORENAME like ?";
+                } else if (jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("카테고리")){
+                    coulmnsType = "MENU_CATE like ?";
+                } else if (jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("주소")){
+                    coulmnsType = "MENU_ADDRESS like ?";
+                }
+                
+                params.add("%"+jTextField1.getText()+"%");
+                SearchSelect = new DWWhereCondition(coulmnsType, params);
+
+                dWCombineTable1.setWhereContition(SearchSelect);
+            } else if(jTextField1.getText().equals("") || jComboBox1.getSelectedIndex() == 0) {
+                params.clear();
+                jTextField1.setText("");
+                params.add("%"+""+"%");
+                SearchSelect = new DWWhereCondition("MENU_NAME like ?", params);
+
+                dWCombineTable1.setWhereContition(SearchSelect);
+            }
+            
+            
             dWCombineTable1.setDataSource("MariaDB_Youngria");
             dWCombineTable1.setOrderBy("MENU_SELECT_COUNT DESC");
             dWCombineTable1.select("http", "192.168.0.20", 8080);
@@ -70,6 +99,16 @@ public class MENUUPDATE extends javax.swing.JFrame {
         } 
     }
     
+    public void clearExit(){
+        rowCount = 0;
+        deleteCount = 0;
+        arraylist.clear();
+        deleteListIndex.clear();
+        deletelist.clear();
+        map.clear();
+        changeRow.clear();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -78,6 +117,9 @@ public class MENUUPDATE extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        btn_SearchSelect = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jTextField1 = new javax.swing.JTextField();
 
         dWCombineTable1.setBodyRenderer(new com.arisystem.beans.combinetable.BodyRenderer( new com.arisystem.beans.combinetable.BodyCombineCell[] {
             new com.arisystem.beans.combinetable.BodyCombineCell("__ROW_STATUS__", new com.arisystem.beans.combinetable.CellInfo(0,0), new com.arisystem.beans.combinetable.CellInfo(0,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "com.arisystem.beans.datawizard.DWStatusCombineCellEditor", "com.arisystem.beans.datawizard.DWStatusCombineCellPainter",null),
@@ -183,16 +225,32 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         }
     });
 
+    btn_SearchSelect.setText("검색");
+    btn_SearchSelect.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            buttonClickEvent(evt);
+        }
+    });
+
+    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "선택(기본)", "메뉴명", "가게명", "카테고리", "주소" }));
+
+    jTextField1.setToolTipText("검색어 입력");
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                 .addComponent(dWCombineTable1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(0, 787, Short.MAX_VALUE)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(btn_SearchSelect)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 426, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,7 +265,10 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jButton1)
                 .addComponent(jButton2)
-                .addComponent(jButton3))
+                .addComponent(jButton3)
+                .addComponent(btn_SearchSelect)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(dWCombineTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
             .addContainerGap())
@@ -283,6 +344,8 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             deletelist.clear();
             deleteListIndex.clear();
             deleteCount = 0;
+        } else if (evt.getSource() == btn_SearchSelect) {
+            refresh();
         }
     }//GEN-LAST:event_buttonClickEvent
     
@@ -383,9 +446,12 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_SearchSelect;
     private com.arisystem.beans.combinetable.DWCombineTable dWCombineTable1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
