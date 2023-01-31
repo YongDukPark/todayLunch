@@ -271,17 +271,23 @@ public class MenuDBUtil{
     //Menu insert
     public void insertRow(TODAYLUNCH_MENU_BEAN bean){
         try{
-            String sql = "INSERT INTO TODAYLUNCH_MENU (MENU_NO , MENU_NAME, MENU_STORENAME, MENU_CATE, MENU_INTRODUCTION) VALUES "
-                    + "(NEXTVAL(TODAYLUNCH_MENU_SEQ),?,?,?,?)";
+            String sql = "INSERT INTO TODAYLUNCH_MENU (MENU_NO , MENU_NAME, MENU_STORENAME, MENU_CATE, MENU_INTRODUCTION, MENU_ADDRESS) VALUES "
+                    + "(NEXTVAL(TODAYLUNCH_MENU_SEQ),?,?,?,?,?)";
             
             psmt = con.prepareStatement(sql);
+            System.out.println("test t t t ÈÄ·Ö±æ ÈÄ·Ö±æ " + bean.getMENU_NAME());
             psmt.setString(1, bean.getMENU_NAME());
+            System.out.println("test t t t ÈÄ·Ö±æ ÈÄ·Ö±æ " + bean.getMENU_STORENAME());
             psmt.setString(2, bean.getMENU_STORENAME());
+            System.out.println("test t t t ÈÄ·Ö±æ ÈÄ·Ö±æ " + bean.getMENU_CATE());
             psmt.setString(3, bean.getMENU_CATE());
+            System.out.println("test t t t ÈÄ·Ö±æ ÈÄ·Ö±æ " + bean.getMENU_INTRODUCTION());
             psmt.setString(4, bean.getMENU_INTRODUCTION());
+            System.out.println("test t t t ÈÄ·Ö±æ ÈÄ·Ö±æ " + bean.getMENU_ADDRESS());
+            psmt.setString(5, bean.getMENU_ADDRESS());
             psmt.executeUpdate();
         }catch(Exception e){
-            
+            System.err.println(e);
         }
     }
     
