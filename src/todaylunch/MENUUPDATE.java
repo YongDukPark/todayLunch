@@ -66,7 +66,7 @@ public class MENUUPDATE extends javax.swing.JFrame {
         
         String coulmnsType = null;
         try{
-            if(!jTextField1.getText().equals("") && jComboBox1.getSelectedIndex() != 0){
+            if(!jTextField1.getText().equals("") && jComboBox1.getSelectedIndex() != 0){ //검색조건 선택하고 검색했을경우
                 params.clear();
                 
                 if(jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("메뉴명")){
@@ -86,11 +86,10 @@ public class MENUUPDATE extends javax.swing.JFrame {
                 }
                 Query += ")";
                 
-                //params.add("%"+jTextField1.getText()+"%");
                 SearchSelect = new DWWhereCondition(Query, params);
 
                 dWCombineTable1.setWhereContition(SearchSelect);
-            } else if(jTextField1.getText().equals("") || jComboBox1.getSelectedIndex() == 0) {
+            } else if(jTextField1.getText().equals("") || jComboBox1.getSelectedIndex() == 0) { //검색조건 없을경우
                 params.clear();
                 jTextField1.setText("");
                 params.add("%"+""+"%");
@@ -99,13 +98,10 @@ public class MENUUPDATE extends javax.swing.JFrame {
                 dWCombineTable1.setWhereContition(SearchSelect);
             }
             
-            
             dWCombineTable1.setDataSource("MariaDB_Youngria");
             dWCombineTable1.setOrderBy("MENU_SELECT_COUNT DESC");
             dWCombineTable1.select("http", "192.168.0.20", 8080);
             this.rowCount = dWCombineTable1.selectTotalRowCount("http", "192.168.0.20", 8080);
-            
-            System.out.println(rowCount);
             
         }catch(Exception e){
             System.err.println(e);
