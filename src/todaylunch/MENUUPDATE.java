@@ -60,24 +60,34 @@ public class MENUUPDATE extends javax.swing.JFrame {
     public void refresh(){
         Vector params = new Vector();
         DWWhereCondition SearchSelect;
-        String searchType = null;
+        
+        String[] testttt = jTextField1.getText().replaceAll(" ", "").split("");
+        String Query = " 1 = 1 AND( 1 = 1 ";
+        
         String coulmnsType = null;
         try{
             if(!jTextField1.getText().equals("") && jComboBox1.getSelectedIndex() != 0){
                 params.clear();
                 
                 if(jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("메뉴명")){
-                    coulmnsType = "MENU_NAME like ?";
+                    coulmnsType = "MENU_NAME";
                 } else if (jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("가게명")){
-                    coulmnsType = "MENU_STORENAME like ?";
+                    coulmnsType = "MENU_STORENAME";
                 } else if (jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("카테고리")){
-                    coulmnsType = "MENU_CATE like ?";
+                    coulmnsType = "MENU_CATE";
                 } else if (jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).equals("주소")){
-                    coulmnsType = "MENU_ADDRESS like ?";
+                    coulmnsType = "MENU_ADDRESS";
                 }
+                for(int i = 0 ; i < testttt.length ; i++){
+                    params.add("%"+testttt[i]+"%");
+                }
+                for(int i = 0 ; i < testttt.length ; i++){
+                    Query += "AND "+coulmnsType+" LIKE ? ";
+                }
+                Query += ")";
                 
-                params.add("%"+jTextField1.getText()+"%");
-                SearchSelect = new DWWhereCondition(coulmnsType, params);
+                //params.add("%"+jTextField1.getText()+"%");
+                SearchSelect = new DWWhereCondition(Query, params);
 
                 dWCombineTable1.setWhereContition(SearchSelect);
             } else if(jTextField1.getText().equals("") || jComboBox1.getSelectedIndex() == 0) {
