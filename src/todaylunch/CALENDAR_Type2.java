@@ -17,6 +17,9 @@ import java.util.Vector;
 
 public class CALENDAR_Type2 extends javax.swing.JFrame {
     ArrayList<BoundaryPanel> arraylist = new ArrayList<>();
+    //셀에 마우스 올렸을경우 변경되는 색상
+    Color color = new Color(232, 237, 255);
+    
     
     private static CALENDAR_Type2 CALENDAR_Type2;
     
@@ -249,6 +252,7 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         dWMultiRowsObject1.setErdObjectLocations(new com.arisystem.beans.datawizard.DWErdObjectLocation[]{new com.arisystem.beans.datawizard.DWErdObjectLocation("TODAYLUNCH_TODAY_SELECT",30,0)});
         dWMultiRowsObject1.setJoinConditions(new com.arisystem.beans.datawizard.DWJoinCondition[] {
@@ -321,6 +325,17 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     boundaryPanel1.setColumnWidths(new int[] {90, 125, 125, 125, 125, 125, 90});
     boundaryPanel1.setRowCount(7);
     boundaryPanel1.setRowHeights(new int[] {25, 105, 105, 105, 105, 105, 105});
+    boundaryPanel1.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
 
     BOUNDARY_1.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
     BOUNDARY_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
@@ -414,6 +429,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_2.setColumnWidths(new int[] {40, 85});
     BOUNDARY_2.setRowCount(4);
     BOUNDARY_2.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_2.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_2.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -436,6 +463,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_9.setColumnWidths(new int[] {40, 85});
     BOUNDARY_9.setRowCount(4);
     BOUNDARY_9.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_9.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_9.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -458,6 +497,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_16.setColumnWidths(new int[] {40, 85});
     BOUNDARY_16.setRowCount(4);
     BOUNDARY_16.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_16.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_16.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -480,6 +531,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_23.setColumnWidths(new int[] {40, 85});
     BOUNDARY_23.setRowCount(4);
     BOUNDARY_23.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_23.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_23.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -502,6 +565,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_30.setColumnWidths(new int[] {40, 85});
     BOUNDARY_30.setRowCount(4);
     BOUNDARY_30.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_30.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_30.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -524,6 +599,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_37.setColumnWidths(new int[] {40, 85});
     BOUNDARY_37.setRowCount(4);
     BOUNDARY_37.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_37.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_37.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -546,6 +633,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_3.setColumnWidths(new int[] {40, 85});
     BOUNDARY_3.setRowCount(4);
     BOUNDARY_3.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_3.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_3.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -568,6 +667,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_10.setColumnWidths(new int[] {39, 85});
     BOUNDARY_10.setRowCount(4);
     BOUNDARY_10.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_10.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_10.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -590,6 +701,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_17.setColumnWidths(new int[] {40, 85});
     BOUNDARY_17.setRowCount(4);
     BOUNDARY_17.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_17.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_17.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -612,6 +735,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_24.setColumnWidths(new int[] {40, 85});
     BOUNDARY_24.setRowCount(4);
     BOUNDARY_24.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_24.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_24.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -634,6 +769,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_31.setColumnWidths(new int[] {40, 85});
     BOUNDARY_31.setRowCount(4);
     BOUNDARY_31.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_31.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_31.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -656,6 +803,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_38.setColumnWidths(new int[] {40, 85});
     BOUNDARY_38.setRowCount(4);
     BOUNDARY_38.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_38.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_38.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -678,6 +837,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_4.setColumnWidths(new int[] {40, 85});
     BOUNDARY_4.setRowCount(4);
     BOUNDARY_4.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_4.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_4.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -700,6 +871,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_11.setColumnWidths(new int[] {40, 85});
     BOUNDARY_11.setRowCount(4);
     BOUNDARY_11.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_11.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_11.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -722,6 +905,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_18.setColumnWidths(new int[] {40, 85});
     BOUNDARY_18.setRowCount(4);
     BOUNDARY_18.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_18.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_18.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -744,6 +939,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_25.setColumnWidths(new int[] {40, 85});
     BOUNDARY_25.setRowCount(4);
     BOUNDARY_25.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_25.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_25.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -766,6 +973,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_32.setColumnWidths(new int[] {40, 85});
     BOUNDARY_32.setRowCount(4);
     BOUNDARY_32.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_32.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_32.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -788,6 +1007,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_39.setColumnWidths(new int[] {40, 85});
     BOUNDARY_39.setRowCount(4);
     BOUNDARY_39.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_39.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_39.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -810,6 +1041,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_5.setColumnWidths(new int[] {40, 85});
     BOUNDARY_5.setRowCount(4);
     BOUNDARY_5.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_5.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_5.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -832,6 +1075,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_12.setColumnWidths(new int[] {40, 85});
     BOUNDARY_12.setRowCount(4);
     BOUNDARY_12.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_12.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_12.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -854,6 +1109,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_19.setColumnWidths(new int[] {40, 85});
     BOUNDARY_19.setRowCount(4);
     BOUNDARY_19.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_19.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_19.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -876,6 +1143,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_26.setColumnWidths(new int[] {40, 85});
     BOUNDARY_26.setRowCount(4);
     BOUNDARY_26.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_26.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_26.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -898,6 +1177,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_33.setColumnWidths(new int[] {40, 85});
     BOUNDARY_33.setRowCount(4);
     BOUNDARY_33.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_33.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_33.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -920,6 +1211,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_40.setColumnWidths(new int[] {40, 85});
     BOUNDARY_40.setRowCount(4);
     BOUNDARY_40.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_40.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_40.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -943,6 +1246,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_6.setColumnWidths(new int[] {40, 85});
     BOUNDARY_6.setRowCount(4);
     BOUNDARY_6.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_6.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_6.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -965,6 +1280,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_13.setColumnWidths(new int[] {40, 85});
     BOUNDARY_13.setRowCount(4);
     BOUNDARY_13.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_13.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_13.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -987,6 +1314,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_20.setColumnWidths(new int[] {40, 85});
     BOUNDARY_20.setRowCount(4);
     BOUNDARY_20.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_20.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_20.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -1009,6 +1348,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_27.setColumnWidths(new int[] {40, 85});
     BOUNDARY_27.setRowCount(4);
     BOUNDARY_27.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_27.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_27.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -1031,6 +1382,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_34.setColumnWidths(new int[] {40, 85});
     BOUNDARY_34.setRowCount(4);
     BOUNDARY_34.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_34.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_34.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -1053,6 +1416,18 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_41.setColumnWidths(new int[] {40, 85});
     BOUNDARY_41.setRowCount(4);
     BOUNDARY_41.setRowHeights(new int[] {27, 26, 26, 26});
+    BOUNDARY_41.addBoundaryPanelListener(new com.arisystem.beans.boundarypanel.BoundaryPanelListener() {
+        public void boundaryCellMouseClick(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+        public void boundaryCellMouseEnter(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseEnterBOUNDARY(evt);
+        }
+        public void boundaryCellMouseExit(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+            mouseExitBOUNDARY(evt);
+        }
+        public void boundaryCellBeforePaintCell(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {
+        }
+    });
     BOUNDARY_41.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             mouseClickBOUNDARY(evt);
@@ -1152,6 +1527,8 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     jLabel2.setFont(new java.awt.Font("맑은 고딕 Semilight", 1, 24)); // NOI18N
     jLabel2.setText("12월");
 
+    jLabel3.setText("※더블클릭시 Row확인");
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -1166,6 +1543,8 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
                     .addComponent(jLabel1)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jLabel2)
+                    .addGap(33, 33, 33)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
@@ -1184,7 +1563,8 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)))
+                    .addComponent(jButton1))
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGap(20, 20, 20)
             .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(30, 30, 30))
@@ -1205,6 +1585,7 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
                 if(evt.getSource() == arraylist.get(i)){
                     System.out.println("나나나 그거야 그거 "+i+"번째놈" );
                     arraylist.get(i).getBoundaryRenderer().getBoundaryCell("DAY").getTitleValue();
+                    //arraylist.get(i).setBoundaryLineColor(Color.yellow);
                     jLabel1.getText();
                     jLabel2.getText();
                     LOGCHECK.getInstance(jLabel1.getText().replaceAll("년", ""), jLabel2.getText().replaceAll("월", ""), String.valueOf(arraylist.get(i).getBoundaryRenderer().getBoundaryCell("DAY").getTitleValue()));
@@ -1212,6 +1593,27 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
             }
         }
     }//GEN-LAST:event_mouseClickBOUNDARY
+
+    private void mouseEnterBOUNDARY(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {//GEN-FIRST:event_mouseEnterBOUNDARY
+        //System.out.println(evt.getBoundaryCellName());
+        //boundaryPanel1.getBoundaryRenderer().getBoundaryCell(evt.getBoundaryCellName()).setGradientColor(Color.red);
+        //boundaryPanel1.getBoundaryRenderer().getBoundaryCell(evt.getBoundaryCellName()).
+        for(int i = 0 ; i < arraylist.size() ; i++){
+            if(evt.getSource() == arraylist.get(i)){
+                arraylist.get(i).setBoundaryLineColor(color);
+                arraylist.get(i).setBackground(color);
+            }
+        }
+    }//GEN-LAST:event_mouseEnterBOUNDARY
+
+    private void mouseExitBOUNDARY(com.arisystem.beans.boundarypanel.BoundaryPanelEvent evt) {//GEN-FIRST:event_mouseExitBOUNDARY
+        for(int i = 0 ; i < arraylist.size() ; i++){
+            if(evt.getSource() == arraylist.get(i)){
+                arraylist.get(i).setBoundaryLineColor(Color.WHITE);
+                arraylist.get(i).setBackground(Color.WHITE);
+            }
+        }
+    }//GEN-LAST:event_mouseExitBOUNDARY
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1271,5 +1673,6 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }
