@@ -18,25 +18,26 @@ import java.util.Vector;
 public class CALENDAR_Type2 extends javax.swing.JFrame {
     ArrayList<BoundaryPanel> arraylist = new ArrayList<>();
     
-    public CALENDAR_Type2() {
+    private static CALENDAR_Type2 CALENDAR_Type2;
+    
+    public static CALENDAR_Type2 getInstance(String message){
+        CALENDAR_Type2 = new CALENDAR_Type2();
+        if (! CALENDAR_Type2.isVisible()){
+            CALENDAR_Type2.setVisible(true);
+        }
+        return CALENDAR_Type2;
+    }
+    
+    private CALENDAR_Type2() {
         initComponents();
-        //row갯수 가져오는놈
-        System.out.println(BOUNDARY_3.getRowCount());
-        //System.out.println(MON_7.getFixedRows()[0]);
-        //이름은 이놈으로 가져오면 된다.
-        //System.out.println(TUE_1.getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").setValue(SAT_1));
-        //TUE_1.getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").setValue("testtest");
-        //TUE_1.getBoundaryRenderer().get
-        
-        //이놈으로 지우면 된다.
-        //TUE_1.getBoundaryRenderer().removeBoundaryCell("BoundaryCell_14");
-        test2();
-        test();
+        setComboBox();
+        addBounDary();
+        getCalendar();
         
     }
     
     //BoundaryPanel을 ArrayList에 담아서 이후 호출시키기 편하게 만든다.
-    public void test2(){
+    public void addBounDary(){
         arraylist.add(BOUNDARY_1); arraylist.add(BOUNDARY_2); arraylist.add(BOUNDARY_3); arraylist.add(BOUNDARY_4);
         arraylist.add(BOUNDARY_5); arraylist.add(BOUNDARY_6); arraylist.add(BOUNDARY_7); arraylist.add(BOUNDARY_8);
         arraylist.add(BOUNDARY_9); arraylist.add(BOUNDARY_10); arraylist.add(BOUNDARY_11); arraylist.add(BOUNDARY_12);
@@ -50,11 +51,23 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         arraylist.add(BOUNDARY_41); arraylist.add(BOUNDARY_42);
     }
     
+    //comboBox data set
+    public void setComboBox(){
+        jComboBox1.addItem("년도");
+        jComboBox2.addItem("월");
+        //년도
+        for(int i = 2020 ; i <= 2023 ; i++){
+            jComboBox1.addItem(String.valueOf(i));
+        }
+        //월
+        for(int i = 1 ; i <= 12 ; i++){
+            jComboBox2.addItem(String.valueOf(i));
+        }
+    }
+    
     //흠 로직을 생각하자 로직로오오오직
-    
-    
-    //데이터 재료들
-    public void test(){
+    //캘린더 데이터 만들어지는 영역
+    public void getCalendar(){
         //where절 사용할때 필요한애들
         Vector params = new Vector();
         DWWhereCondition SearchSelect;
@@ -77,31 +90,21 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         boolean dataCheck = true;
         
         try {
-            //where절 사용할때 필요한 애들
-            jComboBox1.removeAllItems();
-            jComboBox1.removeAllItems();
-            jComboBox1.addItem("년도");
-            jComboBox2.addItem("월");
-            //년도
-            for(int i = 1900 ; i <= 2023 ; i++){
-                jComboBox1.addItem(String.valueOf(i));
-            }
-            //월
-            for(int i = 1 ; i <= 12 ; i++){
-                jComboBox2.addItem(String.valueOf(i));
-            }
-            
-            System.out.println("년도 : " + jComboBox1.getSelectedItem());
-            System.out.println("월 : " + jComboBox2.getSelectedItem());
-            jComboBox1.getSelectedIndex();
-            jComboBox2.getSelectedIndex();
-            
             if(jComboBox1.getSelectedIndex() == 0 || jComboBox2.getSelectedIndex() == 0){
                 params.add("2023");
+                jLabel1.setText("2023년");
                 params.add("01");
+                jLabel2.setText("01월");
             } else {
                 params.add(jComboBox1.getSelectedItem());
-                params.add(jComboBox2.getSelectedItem());
+                jLabel1.setText((String)jComboBox1.getSelectedItem()+"년");
+                if(jComboBox2.getSelectedItem().toString().length() == 1){
+                    params.add("0"+jComboBox2.getSelectedItem());
+                    jLabel2.setText("0"+jComboBox2.getSelectedItem()+"월");
+                } else {
+                    params.add(jComboBox2.getSelectedItem());
+                    jLabel2.setText(jComboBox2.getSelectedItem()+"월");
+                }
             }
             
             //월
@@ -115,6 +118,7 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
             
             //요일 구하는 로직 (년,월,일) int형태로 들어간다.
             date = LocalDate.of(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH")), 1);
+            
             dayOfWeek = date.getDayOfWeek();
             // 시작요일 월1 일7
             startWeek = dayOfWeek.getValue();
@@ -132,9 +136,6 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
             //날짜 넣는 구간
             //i가 dayOfWeek 즉 요일첫번째부터 시작된다. 위에서 만약 7일 경우 값은 0이된다.
             for(int i = startWeek ; i < startWeek + cal.getActualMaximum(Calendar.DAY_OF_MONTH) ; i++){
-                System.out.println("i" + i);
-                System.out.println("rowCount" + rowCount);
-                System.out.println("setDay" + setDay);
                 if(rowCount >= seseset.getRowCount()){
                     dataCheck = false;
                 }
@@ -168,6 +169,27 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
             System.err.println(e);
         }
     }
+    
+    //여기서 데이터들을 한번 다 지워준다.
+    public void resetAll(){
+        for(int i = 0 ; i < arraylist.size() ; i++){
+            if(arraylist.get(i).getBoundaryRenderer().getBoundaryCell("WEEKEND") == null){
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("DAY").setTitleValue("");
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").setTitleValue("");
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("BoundaryCell_18").setTitleValue("");
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("BoundaryCell_21").setTitleValue("");
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("MENU_NAME").setTitleValue("");
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("MENU_SELECT_COUNT").setTitleValue("");
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("MENU_RESET_COUNT").setTitleValue("");
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("MENU_NAME").setFontColor(Color.BLACK);
+            } else {
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("DAY").setTitleValue("");
+            }
+        }
+        //이녀석으로 새로고침을 해줘야한다.
+        boundaryPanel1.updateUI();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -219,6 +241,8 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         dWMultiRowsObject1.setErdObjectLocations(new com.arisystem.beans.datawizard.DWErdObjectLocation[]{new com.arisystem.beans.datawizard.DWErdObjectLocation("TODAYLUNCH_TODAY_SELECT",30,0)});
         dWMultiRowsObject1.setJoinConditions(new com.arisystem.beans.datawizard.DWJoinCondition[] {
@@ -961,6 +985,17 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     BOUNDARY_42.setBounds(50, 150, 91, 106);
 
     jButton1.setText("조회");
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
+        }
+    });
+
+    jLabel1.setFont(new java.awt.Font("굴림", 1, 36)); // NOI18N
+    jLabel1.setText("2023년");
+
+    jLabel2.setFont(new java.awt.Font("굴림", 1, 36)); // NOI18N
+    jLabel2.setText("8월");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -968,32 +1003,46 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 18, 18)
-            .addComponent(jButton1)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jLabel1)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel2)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(jButton1))
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
             .addContainerGap())
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(30, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton1))
-            .addGap(27, 27, 27)
+            .addContainerGap(14, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)))
+            .addGap(20, 20, 20)
             .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
     );
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        resetAll();
+        getCalendar();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1051,5 +1100,7 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
