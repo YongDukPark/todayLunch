@@ -13,9 +13,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-public class CALENDAR extends javax.swing.JFrame {
+public class CALENDAR_Type2 extends javax.swing.JFrame {
 
-    public CALENDAR() {
+    public CALENDAR_Type2() {
         initComponents();
         //row갯수 가져오는놈
         System.out.println(TUE_1.getRowCount());
@@ -28,6 +28,7 @@ public class CALENDAR extends javax.swing.JFrame {
         //이놈으로 지우면 된다.
         //TUE_1.getBoundaryRenderer().removeBoundaryCell("BoundaryCell_14");
         test();
+        
     }
     
     //흠 로직을 생각하자 로직로오오오직
@@ -102,37 +103,37 @@ public class CALENDAR extends javax.swing.JFrame {
                 } else if ( i == 1){
                     DAY_2.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        MON_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        MON_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        MON_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    MON_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    MON_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    MON_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 2){
                     DAY_3.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        TUE_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        TUE_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        TUE_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    TUE_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    TUE_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    TUE_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 3){
                     DAY_4.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        WED_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        WED_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        WED_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    WED_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    WED_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    WED_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 4){
                     DAY_5.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        THU_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        THU_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        THU_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    THU_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    THU_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    THU_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 5){
                     DAY_6.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        FRI_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        FRI_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        FRI_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    FRI_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    FRI_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    FRI_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 6){ //주말
                     DAY_7.setText(String.valueOf(setDay));
@@ -141,37 +142,37 @@ public class CALENDAR extends javax.swing.JFrame {
                 } else if ( i == 8){
                     DAY_9.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        MON_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        MON_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        MON_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    MON_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    MON_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    MON_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 9){
                     DAY_10.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        TUE_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        TUE_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        TUE_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    TUE_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    TUE_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    TUE_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 10){
                     DAY_11.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        WED_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        WED_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        WED_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    WED_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    WED_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    WED_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 11){
                     DAY_12.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        THU_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        THU_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        THU_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    THU_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    THU_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    THU_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 12){
                     DAY_13.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        FRI_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        FRI_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        FRI_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    FRI_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    FRI_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    FRI_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 13){ //주말
                     DAY_14.setText(String.valueOf(setDay));
@@ -180,37 +181,37 @@ public class CALENDAR extends javax.swing.JFrame {
                 } else if ( i == 15){
                     DAY_16.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        MON_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        MON_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        MON_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    MON_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    MON_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    MON_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 16){
                     DAY_17.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        TUE_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        TUE_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        TUE_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    TUE_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    TUE_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    TUE_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 17){
                     DAY_18.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        WED_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        WED_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        WED_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    WED_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    WED_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    WED_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 18){
                     DAY_19.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        THU_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        THU_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        THU_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    THU_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    THU_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    THU_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 19){
                     DAY_20.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        FRI_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        FRI_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        FRI_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    FRI_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    FRI_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    FRI_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 20){ //주말
                     DAY_21.setText(String.valueOf(setDay));
@@ -219,37 +220,37 @@ public class CALENDAR extends javax.swing.JFrame {
                 } else if ( i == 22){
                     DAY_23.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        MON_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        MON_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        MON_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    MON_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    MON_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    MON_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 23){
                     DAY_24.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        TUE_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        TUE_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        TUE_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    TUE_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    TUE_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    TUE_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 24){
                     DAY_25.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        WED_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        WED_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        WED_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    WED_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    WED_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    WED_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 25){
                     DAY_26.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        THU_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        THU_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        THU_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    THU_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    THU_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    THU_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 26){
                     DAY_27.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        FRI_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        FRI_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        FRI_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    FRI_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    FRI_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    FRI_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 27){ //주말
                     DAY_28.setText(String.valueOf(setDay));
@@ -258,37 +259,37 @@ public class CALENDAR extends javax.swing.JFrame {
                 } else if ( i == 29){
                     DAY_30.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        MON_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        MON_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        MON_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    MON_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    MON_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    MON_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 30){
                     DAY_31.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        TUE_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        TUE_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        TUE_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    TUE_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    TUE_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    TUE_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 31){
                     DAY_32.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        WED_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        WED_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        WED_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    WED_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    WED_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    WED_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 32){
                     DAY_33.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        THU_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        THU_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        THU_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    THU_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    THU_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    THU_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 33){
                     DAY_34.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        FRI_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        FRI_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        FRI_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    FRI_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    FRI_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    FRI_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 34){ //주말
                     DAY_35.setText(String.valueOf(setDay));
@@ -297,37 +298,37 @@ public class CALENDAR extends javax.swing.JFrame {
                 } else if ( i == 36){
                     DAY_37.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        MON_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        MON_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        MON_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    MON_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    MON_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    MON_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 37){
                     DAY_38.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        TUE_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        TUE_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        TUE_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    TUE_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    TUE_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    TUE_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 38){
                     DAY_39.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        WED_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        WED_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        WED_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    WED_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    WED_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    WED_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 39){
                     DAY_40.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        THU_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        THU_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        THU_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    THU_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    THU_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    THU_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 40){
                     DAY_41.setText(String.valueOf(setDay));
                     if(dataCheck){
-                        FRI_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                        FRI_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                        FRI_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                    FRI_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
+                    FRI_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
+                    FRI_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
                     }
                 } else if ( i == 41){ //주말
                     DAY_42.setText(String.valueOf(setDay));
@@ -520,9 +521,6 @@ public class CALENDAR extends javax.swing.JFrame {
         DAY_35 = new javax.swing.JLabel();
         SAT_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
         DAY_42 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
 
         dWMultiRowsObject1.setErdObjectLocations(new com.arisystem.beans.datawizard.DWErdObjectLocation[]{new com.arisystem.beans.datawizard.DWErdObjectLocation("TODAYLUNCH_TODAY_SELECT",30,0)});
         dWMultiRowsObject1.setJoinConditions(new com.arisystem.beans.datawizard.DWJoinCondition[] {
@@ -1569,12 +1567,6 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     boundaryPanel1.add(SAT_6);
     SAT_6.setBounds(50, 150, 91, 106);
 
-    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "월" }));
-
-    jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "년도" }));
-
-    jButton1.setText("검색");
-
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -1583,24 +1575,11 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
             .addContainerGap()
             .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(29, 29, 29)
-            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(29, 29, 29)
-            .addComponent(jButton1)
-            .addContainerGap())
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(28, 28, 28)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton1))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+            .addContainerGap(82, Short.MAX_VALUE)
             .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
     );
@@ -1611,7 +1590,7 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CALENDAR().setVisible(true);
+                new CALENDAR_Type2().setVisible(true);
             }
         });
     }
@@ -1793,8 +1772,5 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     private javax.swing.JLabel WED_MENU_SELECT_COUNT_6;
     private com.arisystem.beans.boundarypanel.BoundaryPanel boundaryPanel1;
     private com.arisystem.beans.datawizard.DWMultiRowsObject dWMultiRowsObject1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     // End of variables declaration//GEN-END:variables
 }
