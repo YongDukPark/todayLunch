@@ -94,7 +94,7 @@ public class CALENDAR extends javax.swing.JFrame {
             //날짜 넣는 구간
             //i가 dayOfWeek 즉 요일첫번째부터 시작된다. 위에서 만약 7일 경우 값은 0이된다.
             for(int i = startWeek ; i < startWeek + cal.getActualMaximum(Calendar.DAY_OF_MONTH) ; i++){
-                if(rowCount > seseset.getRowCount()){
+                if(rowCount >= seseset.getRowCount()){
                     dataCheck = false;
                 }
                 if(i == 0){ //주말

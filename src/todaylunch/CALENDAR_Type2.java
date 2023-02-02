@@ -5,20 +5,23 @@
  */
 package todaylunch;
 
+import com.arisystem.beans.boundarypanel.BoundaryPanel;
 import com.arisystem.beans.datawizard.DWWhereCondition;
 import com.arisystem.beans.framebuilder.FBRowSet;
+import java.awt.Color;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Vector;
 
 public class CALENDAR_Type2 extends javax.swing.JFrame {
-
+    ArrayList<BoundaryPanel> arraylist = new ArrayList<>();
+    
     public CALENDAR_Type2() {
         initComponents();
         //row갯수 가져오는놈
-        System.out.println(TUE_1.getRowCount());
+        System.out.println(BOUNDARY_3.getRowCount());
         //System.out.println(MON_7.getFixedRows()[0]);
         //이름은 이놈으로 가져오면 된다.
         //System.out.println(TUE_1.getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").setValue(SAT_1));
@@ -27,8 +30,24 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         
         //이놈으로 지우면 된다.
         //TUE_1.getBoundaryRenderer().removeBoundaryCell("BoundaryCell_14");
+        test2();
         test();
         
+    }
+    
+    //BoundaryPanel을 ArrayList에 담아서 이후 호출시키기 편하게 만든다.
+    public void test2(){
+        arraylist.add(BOUNDARY_1); arraylist.add(BOUNDARY_2); arraylist.add(BOUNDARY_3); arraylist.add(BOUNDARY_4);
+        arraylist.add(BOUNDARY_5); arraylist.add(BOUNDARY_6); arraylist.add(BOUNDARY_7); arraylist.add(BOUNDARY_8);
+        arraylist.add(BOUNDARY_9); arraylist.add(BOUNDARY_10); arraylist.add(BOUNDARY_11); arraylist.add(BOUNDARY_12);
+        arraylist.add(BOUNDARY_13); arraylist.add(BOUNDARY_14); arraylist.add(BOUNDARY_15); arraylist.add(BOUNDARY_16);
+        arraylist.add(BOUNDARY_17); arraylist.add(BOUNDARY_18); arraylist.add(BOUNDARY_19); arraylist.add(BOUNDARY_20);
+        arraylist.add(BOUNDARY_21); arraylist.add(BOUNDARY_22); arraylist.add(BOUNDARY_23); arraylist.add(BOUNDARY_24);
+        arraylist.add(BOUNDARY_25); arraylist.add(BOUNDARY_26); arraylist.add(BOUNDARY_27); arraylist.add(BOUNDARY_28);
+        arraylist.add(BOUNDARY_29); arraylist.add(BOUNDARY_30); arraylist.add(BOUNDARY_31); arraylist.add(BOUNDARY_32);
+        arraylist.add(BOUNDARY_33); arraylist.add(BOUNDARY_34); arraylist.add(BOUNDARY_35); arraylist.add(BOUNDARY_36);
+        arraylist.add(BOUNDARY_37); arraylist.add(BOUNDARY_38); arraylist.add(BOUNDARY_39); arraylist.add(BOUNDARY_40);
+        arraylist.add(BOUNDARY_41); arraylist.add(BOUNDARY_42);
     }
     
     //흠 로직을 생각하자 로직로오오오직
@@ -46,296 +65,104 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         DayOfWeek dayOfWeek;
         Calendar cal = Calendar.getInstance();
         
-        int startWeek = 0;
-        int rowCount = 0;
+        //날짜 넣기용도로 사용하며 이후 적용시킨 월의 가장 마지막 일자를 return한다.
         int setDay = 1;
+        //시작하는 요일 숫자
+        int startWeek = 0;
+        //DB에서 가져온 가장 낮은일자 후에 length에서 사용해서 -1처리 후에 해줌
+        int startDay = 0;
+        //DB데이터를 가져올때 사용한다.
+        int rowCount = 0;
+        //DB데이터가 rowCount와  .getRowCount값을 비교해서 만약 rowCount가 .getRowCount보다 크거나 같을경우 false를 찍는다.
         boolean dataCheck = true;
         
         try {
             //where절 사용할때 필요한 애들
-            params.add("01");
-            SearchSelect = new DWWhereCondition("SELECT_YEAR = '2023' AND SELECT_MONTH = ?", params);
+            jComboBox1.removeAllItems();
+            jComboBox1.removeAllItems();
+            jComboBox1.addItem("년도");
+            jComboBox2.addItem("월");
+            //년도
+            for(int i = 1900 ; i <= 2023 ; i++){
+                jComboBox1.addItem(String.valueOf(i));
+            }
+            //월
+            for(int i = 1 ; i <= 12 ; i++){
+                jComboBox2.addItem(String.valueOf(i));
+            }
+            
+            System.out.println("년도 : " + jComboBox1.getSelectedItem());
+            System.out.println("월 : " + jComboBox2.getSelectedItem());
+            jComboBox1.getSelectedIndex();
+            jComboBox2.getSelectedIndex();
+            
+            if(jComboBox1.getSelectedIndex() == 0 || jComboBox2.getSelectedIndex() == 0){
+                params.add("2023");
+                params.add("01");
+            } else {
+                params.add(jComboBox1.getSelectedItem());
+                params.add(jComboBox2.getSelectedItem());
+            }
+            
+            //월
+            SearchSelect = new DWWhereCondition("SELECT_YEAR = ? AND SELECT_MONTH = ?", params);
             dWMultiRowsObject1.setWhereContition(SearchSelect);
             
             dWMultiRowsObject1.setDataSource("MariaDB_Youngria");
             dWMultiRowsObject1.setOrderBy("SELECT_DAY");
             seseset = dWMultiRowsObject1.select("http", "192.168.0.20", 8080);
             
-            for(int i = 0 ; i < seseset.getRowCount() ; i++){
-                System.out.println(seseset.getValue(i, "MENU_NAME"));
-            }
-            
-            System.out.println(seseset.getValue(0, "SELECT_YEAR"));
-            System.out.println(seseset.getValue(0, "SELECT_MONTH"));
-            System.out.println(seseset.getValue(0, "SELECT_DAY"));
-            System.out.println(TUE_1.getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").getValue());
-            System.out.println(TUE_1.getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").getName());
-            System.out.println("?????? : "+boundaryPanel1.getBoundaryRenderer().getBoundaryCell("C_C_3_1").getCellList()[0]);
             
             //요일 구하는 로직 (년,월,일) int형태로 들어간다.
-            date = LocalDate.of(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH")), Integer.parseInt((String)seseset.getValue(0, "SELECT_DAY")));
+            date = LocalDate.of(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH")), 1);
             dayOfWeek = date.getDayOfWeek();
             // 시작요일 월1 일7
             startWeek = dayOfWeek.getValue();
+            
             //만약 일요일일 경우 0부터 시작하도록
             if(startWeek == 7){
                 startWeek = 0;
             }
+            startDay = Integer.parseInt((String)seseset.getValue(0, "SELECT_DAY"))-1;
+            
             // 해당 월의 마지막일 구하기 (년,월,일) int 형태로 들어간다.
             cal.set(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH"))-1, Integer.parseInt((String)seseset.getValue(0, "SELECT_DAY")));
-            System.out.println(cal.getActualMaximum(Calendar.DAY_OF_MONTH));
             
-            System.out.println("********************");
-            System.out.println(seseset.getRowCount());
-            System.out.println("********************");
-//            if(seseset.getValue(12, "MENU_NAME") == "null"){
-//                System.out.println("없음");
-//            }
             
             //날짜 넣는 구간
             //i가 dayOfWeek 즉 요일첫번째부터 시작된다. 위에서 만약 7일 경우 값은 0이된다.
             for(int i = startWeek ; i < startWeek + cal.getActualMaximum(Calendar.DAY_OF_MONTH) ; i++){
-                if(rowCount > seseset.getRowCount()){
+                System.out.println("i" + i);
+                System.out.println("rowCount" + rowCount);
+                System.out.println("setDay" + setDay);
+                if(rowCount >= seseset.getRowCount()){
                     dataCheck = false;
                 }
-                if(i == 0){ //주말
-                    DAY_1.setText(String.valueOf(setDay));
-                } else if ( i == 1){
-                    DAY_2.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    MON_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    MON_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    MON_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
+                arraylist.get(i).getBoundaryRenderer().getBoundaryCell("DAY").setTitleValue(setDay);
+                if(dataCheck){
+                    if(arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("WEEKEND") == null){
+                        if(seseset.getValue(rowCount, "MENU_SELECT").equals("N")){
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").setTitleValue("메뉴");
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("BoundaryCell_18").setTitleValue("시도");
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("BoundaryCell_21").setTitleValue("초기화");
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("MENU_NAME").setTitleValue("선택X");
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("MENU_NAME").setFontColor(Color.RED);
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("MENU_SELECT_COUNT").setTitleValue(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT"));
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("MENU_RESET_COUNT").setTitleValue(seseset.getValue(rowCount, "MENU_RESET_COUNT"));
+                        } else {
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("BoundaryCell_14").setTitleValue("메뉴");
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("BoundaryCell_18").setTitleValue("시도");
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("BoundaryCell_21").setTitleValue("초기화");
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("MENU_NAME").setTitleValue(seseset.getValue(rowCount, "MENU_NAME"));
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("MENU_SELECT_COUNT").setTitleValue(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT"));
+                            arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("MENU_RESET_COUNT").setTitleValue(seseset.getValue(rowCount, "MENU_RESET_COUNT"));
+                        }
+                        //DB data를 가져오는 rowCount를 증가시킨다.
+                        rowCount++;
                     }
-                } else if ( i == 2){
-                    DAY_3.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    TUE_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    TUE_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    TUE_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 3){
-                    DAY_4.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    WED_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    WED_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    WED_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 4){
-                    DAY_5.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    THU_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    THU_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    THU_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 5){
-                    DAY_6.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    FRI_MENU_NAME_1.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    FRI_MENU_SELECT_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    FRI_MENU_RESET_COUNT_1.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 6){ //주말
-                    DAY_7.setText(String.valueOf(setDay));
-                } else if ( i == 7){ //주말
-                    DAY_8.setText(String.valueOf(setDay));
-                } else if ( i == 8){
-                    DAY_9.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    MON_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    MON_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    MON_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 9){
-                    DAY_10.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    TUE_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    TUE_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    TUE_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 10){
-                    DAY_11.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    WED_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    WED_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    WED_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 11){
-                    DAY_12.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    THU_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    THU_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    THU_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 12){
-                    DAY_13.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    FRI_MENU_NAME_2.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    FRI_MENU_SELECT_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    FRI_MENU_RESET_COUNT_2.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 13){ //주말
-                    DAY_14.setText(String.valueOf(setDay));
-                } else if ( i == 14){ //주말
-                    DAY_15.setText(String.valueOf(setDay));
-                } else if ( i == 15){
-                    DAY_16.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    MON_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    MON_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    MON_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 16){
-                    DAY_17.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    TUE_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    TUE_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    TUE_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 17){
-                    DAY_18.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    WED_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    WED_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    WED_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 18){
-                    DAY_19.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    THU_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    THU_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    THU_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 19){
-                    DAY_20.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    FRI_MENU_NAME_3.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    FRI_MENU_SELECT_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    FRI_MENU_RESET_COUNT_3.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 20){ //주말
-                    DAY_21.setText(String.valueOf(setDay));
-                } else if ( i == 21){ //주말
-                    DAY_22.setText(String.valueOf(setDay));
-                } else if ( i == 22){
-                    DAY_23.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    MON_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    MON_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    MON_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 23){
-                    DAY_24.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    TUE_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    TUE_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    TUE_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 24){
-                    DAY_25.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    WED_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    WED_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    WED_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 25){
-                    DAY_26.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    THU_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    THU_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    THU_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 26){
-                    DAY_27.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    FRI_MENU_NAME_4.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    FRI_MENU_SELECT_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    FRI_MENU_RESET_COUNT_4.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 27){ //주말
-                    DAY_28.setText(String.valueOf(setDay));
-                } else if ( i == 28){ //주말
-                    DAY_29.setText(String.valueOf(setDay));
-                } else if ( i == 29){
-                    DAY_30.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    MON_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    MON_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    MON_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 30){
-                    DAY_31.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    TUE_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    TUE_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    TUE_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 31){
-                    DAY_32.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    WED_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    WED_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    WED_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 32){
-                    DAY_33.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    THU_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    THU_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    THU_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 33){
-                    DAY_34.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    FRI_MENU_NAME_5.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    FRI_MENU_SELECT_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    FRI_MENU_RESET_COUNT_5.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 34){ //주말
-                    DAY_35.setText(String.valueOf(setDay));
-                } else if ( i == 35){ //주말
-                    DAY_36.setText(String.valueOf(setDay));
-                } else if ( i == 36){
-                    DAY_37.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    MON_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    MON_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    MON_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 37){
-                    DAY_38.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    TUE_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    TUE_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    TUE_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 38){
-                    DAY_39.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    WED_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    WED_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    WED_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 39){
-                    DAY_40.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    THU_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    THU_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    THU_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 40){
-                    DAY_41.setText(String.valueOf(setDay));
-                    if(dataCheck){
-                    FRI_MENU_NAME_6.setText((String)seseset.getValue(rowCount, "MENU_NAME"));
-                    FRI_MENU_SELECT_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_SELECT_TOTALCOUNT")));
-                    FRI_MENU_RESET_COUNT_6.setText(String.valueOf(seseset.getValue(rowCount, "MENU_RESET_COUNT")));
-                    }
-                } else if ( i == 41){ //주말
-                    DAY_42.setText(String.valueOf(setDay));
                 }
-                //날짜와 DB data를 가져오는 rowCount를 증가시킨다.
+                //날짜를 증가시킨다.
                 setDay++;
-                rowCount++;
             }
         } catch (Exception e) {
             System.err.println(e);
@@ -347,180 +174,51 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
 
         dWMultiRowsObject1 = new com.arisystem.beans.datawizard.DWMultiRowsObject();
         boundaryPanel1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        SUN_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_1 = new javax.swing.JLabel();
-        SUN_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_8 = new javax.swing.JLabel();
-        SUN_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_15 = new javax.swing.JLabel();
-        SUN_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_22 = new javax.swing.JLabel();
-        SUN_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_29 = new javax.swing.JLabel();
-        SUN_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_36 = new javax.swing.JLabel();
-        MON_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_2 = new javax.swing.JLabel();
-        MON_MENU_NAME_1 = new javax.swing.JLabel();
-        MON_MENU_SELECT_COUNT_1 = new javax.swing.JLabel();
-        MON_MENU_RESET_COUNT_1 = new javax.swing.JLabel();
-        MON_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_9 = new javax.swing.JLabel();
-        MON_MENU_NAME_2 = new javax.swing.JLabel();
-        MON_MENU_SELECT_COUNT_2 = new javax.swing.JLabel();
-        MON_MENU_RESET_COUNT_2 = new javax.swing.JLabel();
-        MON_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_16 = new javax.swing.JLabel();
-        MON_MENU_NAME_3 = new javax.swing.JLabel();
-        MON_MENU_SELECT_COUNT_3 = new javax.swing.JLabel();
-        MON_MENU_RESET_COUNT_3 = new javax.swing.JLabel();
-        MON_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_23 = new javax.swing.JLabel();
-        MON_MENU_NAME_4 = new javax.swing.JLabel();
-        MON_MENU_SELECT_COUNT_4 = new javax.swing.JLabel();
-        MON_MENU_RESET_COUNT_4 = new javax.swing.JLabel();
-        MON_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_30 = new javax.swing.JLabel();
-        MON_MENU_NAME_5 = new javax.swing.JLabel();
-        MON_MENU_SELECT_COUNT_5 = new javax.swing.JLabel();
-        MON_MENU_RESET_COUNT_5 = new javax.swing.JLabel();
-        MON_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_37 = new javax.swing.JLabel();
-        MON_MENU_NAME_6 = new javax.swing.JLabel();
-        MON_MENU_SELECT_COUNT_6 = new javax.swing.JLabel();
-        MON_MENU_RESET_COUNT_6 = new javax.swing.JLabel();
-        TUE_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_3 = new javax.swing.JLabel();
-        TUE_MENU_NAME_1 = new javax.swing.JLabel();
-        TUE_MENU_SELECT_COUNT_1 = new javax.swing.JLabel();
-        TUE_MENU_RESET_COUNT_1 = new javax.swing.JLabel();
-        TUE_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_10 = new javax.swing.JLabel();
-        TUE_MENU_NAME_2 = new javax.swing.JLabel();
-        TUE_MENU_SELECT_COUNT_2 = new javax.swing.JLabel();
-        TUE_MENU_RESET_COUNT_2 = new javax.swing.JLabel();
-        TUE_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_17 = new javax.swing.JLabel();
-        TUE_MENU_NAME_3 = new javax.swing.JLabel();
-        TUE_MENU_SELECT_COUNT_3 = new javax.swing.JLabel();
-        TUE_MENU_RESET_COUNT_3 = new javax.swing.JLabel();
-        TUE_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_24 = new javax.swing.JLabel();
-        TUE_MENU_NAME_4 = new javax.swing.JLabel();
-        TUE_MENU_SELECT_COUNT_4 = new javax.swing.JLabel();
-        TUE_MENU_RESET_COUNT_4 = new javax.swing.JLabel();
-        TUE_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_31 = new javax.swing.JLabel();
-        TUE_MENU_NAME_5 = new javax.swing.JLabel();
-        TUE_MENU_SELECT_COUNT_5 = new javax.swing.JLabel();
-        TUE_MENU_RESET_COUNT_5 = new javax.swing.JLabel();
-        TUE_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_38 = new javax.swing.JLabel();
-        TUE_MENU_NAME_6 = new javax.swing.JLabel();
-        TUE_MENU_SELECT_COUNT_6 = new javax.swing.JLabel();
-        TUE_MENU_RESET_COUNT_6 = new javax.swing.JLabel();
-        WED_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_4 = new javax.swing.JLabel();
-        WED_MENU_NAME_1 = new javax.swing.JLabel();
-        WED_MENU_SELECT_COUNT_1 = new javax.swing.JLabel();
-        WED_MENU_RESET_COUNT_1 = new javax.swing.JLabel();
-        WED_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_11 = new javax.swing.JLabel();
-        WED_MENU_NAME_2 = new javax.swing.JLabel();
-        WED_MENU_SELECT_COUNT_2 = new javax.swing.JLabel();
-        WED_MENU_RESET_COUNT_2 = new javax.swing.JLabel();
-        WED_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_18 = new javax.swing.JLabel();
-        WED_MENU_NAME_3 = new javax.swing.JLabel();
-        WED_MENU_SELECT_COUNT_3 = new javax.swing.JLabel();
-        WED_MENU_RESET_COUNT_3 = new javax.swing.JLabel();
-        WED_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_25 = new javax.swing.JLabel();
-        WED_MENU_NAME_4 = new javax.swing.JLabel();
-        WED_MENU_SELECT_COUNT_4 = new javax.swing.JLabel();
-        WED_MENU_RESET_COUNT_4 = new javax.swing.JLabel();
-        WED_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_32 = new javax.swing.JLabel();
-        WED_MENU_NAME_5 = new javax.swing.JLabel();
-        WED_MENU_SELECT_COUNT_5 = new javax.swing.JLabel();
-        WED_MENU_RESET_COUNT_5 = new javax.swing.JLabel();
-        WED_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_39 = new javax.swing.JLabel();
-        WED_MENU_NAME_6 = new javax.swing.JLabel();
-        WED_MENU_SELECT_COUNT_6 = new javax.swing.JLabel();
-        WED_MENU_RESET_COUNT_6 = new javax.swing.JLabel();
-        THU_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_5 = new javax.swing.JLabel();
-        THU_MENU_NAME_1 = new javax.swing.JLabel();
-        THU_MENU_SELECT_COUNT_1 = new javax.swing.JLabel();
-        THU_MENU_RESET_COUNT_1 = new javax.swing.JLabel();
-        THU_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_12 = new javax.swing.JLabel();
-        THU_MENU_NAME_2 = new javax.swing.JLabel();
-        THU_MENU_SELECT_COUNT_2 = new javax.swing.JLabel();
-        THU_MENU_RESET_COUNT_2 = new javax.swing.JLabel();
-        THU_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_19 = new javax.swing.JLabel();
-        THU_MENU_NAME_3 = new javax.swing.JLabel();
-        THU_MENU_SELECT_COUNT_3 = new javax.swing.JLabel();
-        THU_MENU_RESET_COUNT_3 = new javax.swing.JLabel();
-        THU_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_26 = new javax.swing.JLabel();
-        THU_MENU_NAME_4 = new javax.swing.JLabel();
-        THU_MENU_SELECT_COUNT_4 = new javax.swing.JLabel();
-        THU_MENU_RESET_COUNT_4 = new javax.swing.JLabel();
-        THU_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_33 = new javax.swing.JLabel();
-        THU_MENU_NAME_5 = new javax.swing.JLabel();
-        THU_MENU_SELECT_COUNT_5 = new javax.swing.JLabel();
-        THU_MENU_RESET_COUNT_5 = new javax.swing.JLabel();
-        THU_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_40 = new javax.swing.JLabel();
-        THU_MENU_NAME_6 = new javax.swing.JLabel();
-        THU_MENU_SELECT_COUNT_6 = new javax.swing.JLabel();
-        THU_MENU_RESET_COUNT_6 = new javax.swing.JLabel();
-        FRI_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_6 = new javax.swing.JLabel();
-        FRI_MENU_NAME_1 = new javax.swing.JLabel();
-        FRI_MENU_SELECT_COUNT_1 = new javax.swing.JLabel();
-        FRI_MENU_RESET_COUNT_1 = new javax.swing.JLabel();
-        FRI_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_13 = new javax.swing.JLabel();
-        FRI_MENU_NAME_2 = new javax.swing.JLabel();
-        FRI_MENU_SELECT_COUNT_2 = new javax.swing.JLabel();
-        FRI_MENU_RESET_COUNT_2 = new javax.swing.JLabel();
-        FRI_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_20 = new javax.swing.JLabel();
-        FRI_MENU_NAME_3 = new javax.swing.JLabel();
-        FRI_MENU_SELECT_COUNT_3 = new javax.swing.JLabel();
-        FRI_MENU_RESET_COUNT_3 = new javax.swing.JLabel();
-        FRI_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_27 = new javax.swing.JLabel();
-        FRI_MENU_NAME_4 = new javax.swing.JLabel();
-        FRI_MENU_SELECT_COUNT_4 = new javax.swing.JLabel();
-        FRI_MENU_RESET_COUNT_4 = new javax.swing.JLabel();
-        FRI_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_34 = new javax.swing.JLabel();
-        FRI_MENU_NAME_5 = new javax.swing.JLabel();
-        FRI_MENU_SELECT_COUNT_5 = new javax.swing.JLabel();
-        FRI_MENU_RESET_COUNT_5 = new javax.swing.JLabel();
-        FRI_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_41 = new javax.swing.JLabel();
-        FRI_MENU_NAME_6 = new javax.swing.JLabel();
-        FRI_MENU_SELECT_COUNT_6 = new javax.swing.JLabel();
-        FRI_MENU_RESET_COUNT_6 = new javax.swing.JLabel();
-        SAT_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_7 = new javax.swing.JLabel();
-        SAT_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_14 = new javax.swing.JLabel();
-        SAT_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_21 = new javax.swing.JLabel();
-        SAT_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_28 = new javax.swing.JLabel();
-        SAT_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_35 = new javax.swing.JLabel();
-        SAT_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
-        DAY_42 = new javax.swing.JLabel();
+        BOUNDARY_1 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_8 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_15 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_22 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_29 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_36 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_2 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_9 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_16 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_23 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_30 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_37 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_3 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_10 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_17 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_24 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_31 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_38 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_4 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_11 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_18 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_25 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_32 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_39 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_5 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_12 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_19 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_26 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_33 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_40 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_6 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_13 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_20 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_27 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_34 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_41 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_7 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_14 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_21 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_28 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_35 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        BOUNDARY_42 = new com.arisystem.beans.boundarypanel.BoundaryPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         dWMultiRowsObject1.setErdObjectLocations(new com.arisystem.beans.datawizard.DWErdObjectLocation[]{new com.arisystem.beans.datawizard.DWErdObjectLocation("TODAYLUNCH_TODAY_SELECT",30,0)});
         dWMultiRowsObject1.setJoinConditions(new com.arisystem.beans.datawizard.DWJoinCondition[] {
@@ -537,15 +235,16 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"),"SELECT_DAY",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"SELECT_DAY") });
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+setBackground(new java.awt.Color(255, 255, 255));
 
 boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_1_1",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),"일",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,new java.awt.Color(255,0,0),null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_2_1",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),"월",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_3_1",new com.arisystem.beans.boundarypanel.CellInfo(2,0),new com.arisystem.beans.boundarypanel.CellInfo(2,0),"화",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_4_1",new com.arisystem.beans.boundarypanel.CellInfo(3,0),new com.arisystem.beans.boundarypanel.CellInfo(3,0),"수",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_5_1",new com.arisystem.beans.boundarypanel.CellInfo(4,0),new com.arisystem.beans.boundarypanel.CellInfo(4,0),"목",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
-    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_6_1",new com.arisystem.beans.boundarypanel.CellInfo(5,0),new com.arisystem.beans.boundarypanel.CellInfo(5,0),"금",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_7_1",new com.arisystem.beans.boundarypanel.CellInfo(6,0),new com.arisystem.beans.boundarypanel.CellInfo(6,0),"토",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,new java.awt.Color(0,84,255),null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_1_1",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),"일",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,new java.awt.Color(255,0,0),new java.awt.Color(255,153,153),null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_2_1",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),"월",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,new java.awt.Color(239,239,239),null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_3_1",new com.arisystem.beans.boundarypanel.CellInfo(2,0),new com.arisystem.beans.boundarypanel.CellInfo(2,0),"화",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,new java.awt.Color(239,239,239),null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_4_1",new com.arisystem.beans.boundarypanel.CellInfo(3,0),new com.arisystem.beans.boundarypanel.CellInfo(3,0),"수",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,new java.awt.Color(239,239,239),null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_5_1",new com.arisystem.beans.boundarypanel.CellInfo(4,0),new com.arisystem.beans.boundarypanel.CellInfo(4,0),"목",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,new java.awt.Color(239,239,239),null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
+    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_6_1",new com.arisystem.beans.boundarypanel.CellInfo(5,0),new com.arisystem.beans.boundarypanel.CellInfo(5,0),"금",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,new java.awt.Color(239,239,239),null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+    new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_7_1",new com.arisystem.beans.boundarypanel.CellInfo(6,0),new com.arisystem.beans.boundarypanel.CellInfo(6,0),"토",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,new java.awt.Color(0,84,255),new java.awt.Color(153,153,255),null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
     new com.arisystem.beans.boundarypanel.BoundaryCell("C_C_1_1",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     new com.arisystem.beans.boundarypanel.BoundaryCell("C_C_1_2",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     new com.arisystem.beans.boundarypanel.BoundaryCell("C_C_1_3",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
@@ -594,978 +293,674 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     boundaryPanel1.setRowCount(7);
     boundaryPanel1.setRowHeights(new int[] {25, 105, 105, 105, 105, 105, 105});
 
-    SUN_1.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SUN_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_1.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_16",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SUN_1.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SUN_1.setColumnCount(2);
-    SUN_1.setColumnWidths(new int[] {35, 55});
-    SUN_1.setRowHeights(new int[] {27, 78});
-    SUN_1.add(DAY_1);
-    DAY_1.setBounds(20, 20, 0, 0);
+    BOUNDARY_1.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_1.setColumnCount(2);
+    BOUNDARY_1.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_1.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_1);
+    BOUNDARY_1.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SUN_1);
-    SUN_1.setBounds(50, 150, 91, 106);
-
-    SUN_2.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SUN_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_8.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_8.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_17",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SUN_2.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SUN_2.setColumnCount(2);
-    SUN_2.setColumnWidths(new int[] {35, 55});
-    SUN_2.setRowHeights(new int[] {27, 78});
-    SUN_2.add(DAY_8);
-    DAY_8.setBounds(20, 20, 0, 0);
+    BOUNDARY_8.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_8.setColumnCount(2);
+    BOUNDARY_8.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_8.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_8);
+    BOUNDARY_8.setBounds(10, 140, 89, 104);
 
-    boundaryPanel1.add(SUN_2);
-    SUN_2.setBounds(10, 140, 89, 104);
-
-    SUN_3.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SUN_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_15.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_15.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SUN_3.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SUN_3.setColumnCount(2);
-    SUN_3.setColumnWidths(new int[] {35, 55});
-    SUN_3.setRowHeights(new int[] {27, 78});
-    SUN_3.add(DAY_15);
-    DAY_15.setBounds(20, 20, 0, 0);
+    BOUNDARY_15.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_15.setColumnCount(2);
+    BOUNDARY_15.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_15.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_15);
+    BOUNDARY_15.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SUN_3);
-    SUN_3.setBounds(50, 150, 91, 106);
-
-    SUN_4.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SUN_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_22.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_22.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_19",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SUN_4.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SUN_4.setColumnCount(2);
-    SUN_4.setColumnWidths(new int[] {35, 55});
-    SUN_4.setRowHeights(new int[] {27, 78});
-    SUN_4.add(DAY_22);
-    DAY_22.setBounds(20, 20, 0, 0);
+    BOUNDARY_22.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_22.setColumnCount(2);
+    BOUNDARY_22.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_22.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_22);
+    BOUNDARY_22.setBounds(0, 350, 89, 104);
 
-    boundaryPanel1.add(SUN_4);
-    SUN_4.setBounds(0, 350, 89, 104);
-
-    SUN_5.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SUN_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_29.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_29.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_20",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SUN_5.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SUN_5.setColumnCount(2);
-    SUN_5.setColumnWidths(new int[] {35, 55});
-    SUN_5.setRowHeights(new int[] {27, 78});
-    SUN_5.add(DAY_29);
-    DAY_29.setBounds(20, 20, 0, 0);
+    BOUNDARY_29.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_29.setColumnCount(2);
+    BOUNDARY_29.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_29.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_29);
+    BOUNDARY_29.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SUN_5);
-    SUN_5.setBounds(50, 150, 91, 106);
-
-    SUN_6.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SUN_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_36.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_36.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SUN_6.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SUN_6.setColumnCount(2);
-    SUN_6.setColumnWidths(new int[] {35, 55});
-    SUN_6.setRowHeights(new int[] {27, 78});
-    SUN_6.add(DAY_36);
-    DAY_36.setBounds(20, 20, 0, 0);
+    BOUNDARY_36.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_36.setColumnCount(2);
+    BOUNDARY_36.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_36.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_36);
+    BOUNDARY_36.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SUN_6);
-    SUN_6.setBounds(50, 150, 91, 106);
-
-    MON_1.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    MON_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_2.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    MON_1.setColumnCount(2);
-    MON_1.setColumnWidths(new int[] {40, 85});
-    MON_1.setRowCount(4);
-    MON_1.setRowHeights(new int[] {27, 26, 26, 26});
-    MON_1.add(DAY_2);
-    DAY_2.setBounds(10, 10, 0, 0);
-    MON_1.add(MON_MENU_NAME_1);
-    MON_MENU_NAME_1.setBounds(70, 40, 0, 0);
-    MON_1.add(MON_MENU_SELECT_COUNT_1);
-    MON_MENU_SELECT_COUNT_1.setBounds(50, 60, 0, 0);
-    MON_1.add(MON_MENU_RESET_COUNT_1);
-    MON_MENU_RESET_COUNT_1.setBounds(60, 80, 0, 0);
+    BOUNDARY_2.setColumnCount(2);
+    BOUNDARY_2.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_2.setRowCount(4);
+    BOUNDARY_2.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_2);
+    BOUNDARY_2.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(MON_1);
-    MON_1.setBounds(30, 30, 99, 104);
-
-    MON_2.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    MON_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_9.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_9.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    MON_2.setColumnCount(2);
-    MON_2.setColumnWidths(new int[] {40, 85});
-    MON_2.setRowCount(4);
-    MON_2.setRowHeights(new int[] {27, 26, 26, 26});
-    MON_2.add(DAY_9);
-    DAY_9.setBounds(10, 10, 0, 0);
-    MON_2.add(MON_MENU_NAME_2);
-    MON_MENU_NAME_2.setBounds(70, 40, 0, 0);
-    MON_2.add(MON_MENU_SELECT_COUNT_2);
-    MON_MENU_SELECT_COUNT_2.setBounds(50, 60, 0, 0);
-    MON_2.add(MON_MENU_RESET_COUNT_2);
-    MON_MENU_RESET_COUNT_2.setBounds(60, 80, 0, 0);
+    BOUNDARY_9.setColumnCount(2);
+    BOUNDARY_9.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_9.setRowCount(4);
+    BOUNDARY_9.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_9);
+    BOUNDARY_9.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(MON_2);
-    MON_2.setBounds(30, 30, 99, 104);
-
-    MON_3.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    MON_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_16.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_16.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    MON_3.setColumnCount(2);
-    MON_3.setColumnWidths(new int[] {40, 85});
-    MON_3.setRowCount(4);
-    MON_3.setRowHeights(new int[] {27, 26, 26, 26});
-    MON_3.add(DAY_16);
-    DAY_16.setBounds(10, 10, 0, 0);
-    MON_3.add(MON_MENU_NAME_3);
-    MON_MENU_NAME_3.setBounds(70, 40, 0, 0);
-    MON_3.add(MON_MENU_SELECT_COUNT_3);
-    MON_MENU_SELECT_COUNT_3.setBounds(50, 60, 0, 0);
-    MON_3.add(MON_MENU_RESET_COUNT_3);
-    MON_MENU_RESET_COUNT_3.setBounds(60, 80, 0, 0);
+    BOUNDARY_16.setColumnCount(2);
+    BOUNDARY_16.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_16.setRowCount(4);
+    BOUNDARY_16.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_16);
+    BOUNDARY_16.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(MON_3);
-    MON_3.setBounds(30, 30, 99, 104);
-
-    MON_4.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    MON_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_23.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_23.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    MON_4.setColumnCount(2);
-    MON_4.setColumnWidths(new int[] {40, 85});
-    MON_4.setRowCount(4);
-    MON_4.setRowHeights(new int[] {27, 26, 26, 26});
-    MON_4.add(DAY_23);
-    DAY_23.setBounds(10, 10, 0, 0);
-    MON_4.add(MON_MENU_NAME_4);
-    MON_MENU_NAME_4.setBounds(70, 40, 0, 0);
-    MON_4.add(MON_MENU_SELECT_COUNT_4);
-    MON_MENU_SELECT_COUNT_4.setBounds(50, 60, 0, 0);
-    MON_4.add(MON_MENU_RESET_COUNT_4);
-    MON_MENU_RESET_COUNT_4.setBounds(60, 80, 0, 0);
+    BOUNDARY_23.setColumnCount(2);
+    BOUNDARY_23.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_23.setRowCount(4);
+    BOUNDARY_23.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_23);
+    BOUNDARY_23.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(MON_4);
-    MON_4.setBounds(30, 30, 99, 104);
-
-    MON_5.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    MON_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_30.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_30.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    MON_5.setColumnCount(2);
-    MON_5.setColumnWidths(new int[] {40, 85});
-    MON_5.setRowCount(4);
-    MON_5.setRowHeights(new int[] {27, 26, 26, 26});
-    MON_5.add(DAY_30);
-    DAY_30.setBounds(10, 10, 0, 0);
-    MON_5.add(MON_MENU_NAME_5);
-    MON_MENU_NAME_5.setBounds(70, 40, 0, 0);
-    MON_5.add(MON_MENU_SELECT_COUNT_5);
-    MON_MENU_SELECT_COUNT_5.setBounds(50, 60, 0, 0);
-    MON_5.add(MON_MENU_RESET_COUNT_5);
-    MON_MENU_RESET_COUNT_5.setBounds(60, 80, 0, 0);
+    BOUNDARY_30.setColumnCount(2);
+    BOUNDARY_30.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_30.setRowCount(4);
+    BOUNDARY_30.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_30);
+    BOUNDARY_30.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(MON_5);
-    MON_5.setBounds(30, 30, 99, 104);
-
-    MON_6.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    MON_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_37.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_37.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    MON_6.setColumnCount(2);
-    MON_6.setColumnWidths(new int[] {40, 85});
-    MON_6.setRowCount(4);
-    MON_6.setRowHeights(new int[] {27, 26, 26, 26});
-    MON_6.add(DAY_37);
-    DAY_37.setBounds(10, 10, 0, 0);
-    MON_6.add(MON_MENU_NAME_6);
-    MON_MENU_NAME_6.setBounds(70, 40, 0, 0);
-    MON_6.add(MON_MENU_SELECT_COUNT_6);
-    MON_MENU_SELECT_COUNT_6.setBounds(50, 60, 0, 0);
-    MON_6.add(MON_MENU_RESET_COUNT_6);
-    MON_MENU_RESET_COUNT_6.setBounds(60, 80, 0, 0);
+    BOUNDARY_37.setColumnCount(2);
+    BOUNDARY_37.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_37.setRowCount(4);
+    BOUNDARY_37.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_37);
+    BOUNDARY_37.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(MON_6);
-    MON_6.setBounds(30, 30, 99, 104);
-
-    TUE_1.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    TUE_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_3.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    TUE_1.setColumnCount(2);
-    TUE_1.setColumnWidths(new int[] {40, 85});
-    TUE_1.setRowCount(4);
-    TUE_1.setRowHeights(new int[] {27, 26, 26, 26});
-    TUE_1.add(DAY_3);
-    DAY_3.setBounds(10, 10, 0, 0);
-    TUE_1.add(TUE_MENU_NAME_1);
-    TUE_MENU_NAME_1.setBounds(70, 40, 0, 0);
-    TUE_1.add(TUE_MENU_SELECT_COUNT_1);
-    TUE_MENU_SELECT_COUNT_1.setBounds(50, 60, 0, 0);
-    TUE_1.add(TUE_MENU_RESET_COUNT_1);
-    TUE_MENU_RESET_COUNT_1.setBounds(60, 80, 0, 0);
+    BOUNDARY_3.setColumnCount(2);
+    BOUNDARY_3.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_3.setRowCount(4);
+    BOUNDARY_3.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_3);
+    BOUNDARY_3.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(TUE_1);
-    TUE_1.setBounds(30, 30, 99, 104);
-
-    TUE_2.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    TUE_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_10.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_10.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    TUE_2.setColumnCount(2);
-    TUE_2.setColumnWidths(new int[] {40, 85});
-    TUE_2.setRowCount(4);
-    TUE_2.setRowHeights(new int[] {27, 26, 26, 26});
-    TUE_2.add(DAY_10);
-    DAY_10.setBounds(10, 10, 0, 0);
-    TUE_2.add(TUE_MENU_NAME_2);
-    TUE_MENU_NAME_2.setBounds(70, 40, 0, 0);
-    TUE_2.add(TUE_MENU_SELECT_COUNT_2);
-    TUE_MENU_SELECT_COUNT_2.setBounds(50, 60, 0, 0);
-    TUE_2.add(TUE_MENU_RESET_COUNT_2);
-    TUE_MENU_RESET_COUNT_2.setBounds(60, 80, 0, 0);
+    BOUNDARY_10.setColumnCount(2);
+    BOUNDARY_10.setColumnWidths(new int[] {39, 85});
+    BOUNDARY_10.setRowCount(4);
+    BOUNDARY_10.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_10);
+    BOUNDARY_10.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(TUE_2);
-    TUE_2.setBounds(30, 30, 99, 104);
-
-    TUE_3.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    TUE_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_17.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_17.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    TUE_3.setColumnCount(2);
-    TUE_3.setColumnWidths(new int[] {40, 85});
-    TUE_3.setRowCount(4);
-    TUE_3.setRowHeights(new int[] {27, 26, 26, 26});
-    TUE_3.add(DAY_17);
-    DAY_17.setBounds(10, 10, 0, 0);
-    TUE_3.add(TUE_MENU_NAME_3);
-    TUE_MENU_NAME_3.setBounds(70, 40, 0, 0);
-    TUE_3.add(TUE_MENU_SELECT_COUNT_3);
-    TUE_MENU_SELECT_COUNT_3.setBounds(50, 60, 0, 0);
-    TUE_3.add(TUE_MENU_RESET_COUNT_3);
-    TUE_MENU_RESET_COUNT_3.setBounds(60, 80, 0, 0);
+    BOUNDARY_17.setColumnCount(2);
+    BOUNDARY_17.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_17.setRowCount(4);
+    BOUNDARY_17.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_17);
+    BOUNDARY_17.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(TUE_3);
-    TUE_3.setBounds(30, 30, 99, 104);
-
-    TUE_4.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    TUE_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_24.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_24.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    TUE_4.setColumnCount(2);
-    TUE_4.setColumnWidths(new int[] {40, 85});
-    TUE_4.setRowCount(4);
-    TUE_4.setRowHeights(new int[] {27, 26, 26, 26});
-    TUE_4.add(DAY_24);
-    DAY_24.setBounds(10, 10, 0, 0);
-    TUE_4.add(TUE_MENU_NAME_4);
-    TUE_MENU_NAME_4.setBounds(70, 40, 0, 0);
-    TUE_4.add(TUE_MENU_SELECT_COUNT_4);
-    TUE_MENU_SELECT_COUNT_4.setBounds(50, 60, 0, 0);
-    TUE_4.add(TUE_MENU_RESET_COUNT_4);
-    TUE_MENU_RESET_COUNT_4.setBounds(60, 80, 0, 0);
+    BOUNDARY_24.setColumnCount(2);
+    BOUNDARY_24.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_24.setRowCount(4);
+    BOUNDARY_24.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_24);
+    BOUNDARY_24.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(TUE_4);
-    TUE_4.setBounds(30, 30, 99, 104);
-
-    TUE_5.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    TUE_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_31.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_31.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    TUE_5.setColumnCount(2);
-    TUE_5.setColumnWidths(new int[] {40, 85});
-    TUE_5.setRowCount(4);
-    TUE_5.setRowHeights(new int[] {27, 26, 26, 26});
-    TUE_5.add(DAY_31);
-    DAY_31.setBounds(10, 10, 0, 0);
-    TUE_5.add(TUE_MENU_NAME_5);
-    TUE_MENU_NAME_5.setBounds(70, 40, 0, 0);
-    TUE_5.add(TUE_MENU_SELECT_COUNT_5);
-    TUE_MENU_SELECT_COUNT_5.setBounds(50, 60, 0, 0);
-    TUE_5.add(TUE_MENU_RESET_COUNT_5);
-    TUE_MENU_RESET_COUNT_5.setBounds(60, 80, 0, 0);
+    BOUNDARY_31.setColumnCount(2);
+    BOUNDARY_31.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_31.setRowCount(4);
+    BOUNDARY_31.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_31);
+    BOUNDARY_31.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(TUE_5);
-    TUE_5.setBounds(30, 30, 99, 104);
-
-    TUE_6.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    TUE_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_38.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_38.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    TUE_6.setColumnCount(2);
-    TUE_6.setColumnWidths(new int[] {40, 85});
-    TUE_6.setRowCount(4);
-    TUE_6.setRowHeights(new int[] {27, 26, 26, 26});
-    TUE_6.add(DAY_38);
-    DAY_38.setBounds(10, 10, 0, 0);
-    TUE_6.add(TUE_MENU_NAME_6);
-    TUE_MENU_NAME_6.setBounds(70, 40, 0, 0);
-    TUE_6.add(TUE_MENU_SELECT_COUNT_6);
-    TUE_MENU_SELECT_COUNT_6.setBounds(50, 60, 0, 0);
-    TUE_6.add(TUE_MENU_RESET_COUNT_6);
-    TUE_MENU_RESET_COUNT_6.setBounds(60, 80, 0, 0);
+    BOUNDARY_38.setColumnCount(2);
+    BOUNDARY_38.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_38.setRowCount(4);
+    BOUNDARY_38.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_38);
+    BOUNDARY_38.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(TUE_6);
-    TUE_6.setBounds(30, 30, 99, 104);
-
-    WED_1.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    WED_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_4.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    WED_1.setColumnCount(2);
-    WED_1.setColumnWidths(new int[] {40, 85});
-    WED_1.setRowCount(4);
-    WED_1.setRowHeights(new int[] {27, 26, 26, 26});
-    WED_1.add(DAY_4);
-    DAY_4.setBounds(10, 10, 0, 0);
-    WED_1.add(WED_MENU_NAME_1);
-    WED_MENU_NAME_1.setBounds(70, 40, 0, 0);
-    WED_1.add(WED_MENU_SELECT_COUNT_1);
-    WED_MENU_SELECT_COUNT_1.setBounds(41, 54, 0, 30);
-    WED_1.add(WED_MENU_RESET_COUNT_1);
-    WED_MENU_RESET_COUNT_1.setBounds(60, 80, 0, 0);
+    BOUNDARY_4.setColumnCount(2);
+    BOUNDARY_4.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_4.setRowCount(4);
+    BOUNDARY_4.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_4);
+    BOUNDARY_4.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(WED_1);
-    WED_1.setBounds(30, 30, 99, 104);
-
-    WED_2.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    WED_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_11.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_11.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    WED_2.setColumnCount(2);
-    WED_2.setColumnWidths(new int[] {40, 85});
-    WED_2.setRowCount(4);
-    WED_2.setRowHeights(new int[] {27, 26, 26, 26});
-    WED_2.add(DAY_11);
-    DAY_11.setBounds(10, 10, 0, 0);
-    WED_2.add(WED_MENU_NAME_2);
-    WED_MENU_NAME_2.setBounds(70, 40, 0, 0);
-    WED_2.add(WED_MENU_SELECT_COUNT_2);
-    WED_MENU_SELECT_COUNT_2.setBounds(50, 60, 0, 0);
-    WED_2.add(WED_MENU_RESET_COUNT_2);
-    WED_MENU_RESET_COUNT_2.setBounds(60, 80, 0, 0);
+    BOUNDARY_11.setColumnCount(2);
+    BOUNDARY_11.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_11.setRowCount(4);
+    BOUNDARY_11.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_11);
+    BOUNDARY_11.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(WED_2);
-    WED_2.setBounds(30, 30, 99, 104);
-
-    WED_3.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    WED_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_18.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_18.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    WED_3.setColumnCount(2);
-    WED_3.setColumnWidths(new int[] {40, 85});
-    WED_3.setRowCount(4);
-    WED_3.setRowHeights(new int[] {27, 26, 26, 26});
-    WED_3.add(DAY_18);
-    DAY_18.setBounds(10, 10, 0, 0);
-    WED_3.add(WED_MENU_NAME_3);
-    WED_MENU_NAME_3.setBounds(70, 40, 0, 0);
-    WED_3.add(WED_MENU_SELECT_COUNT_3);
-    WED_MENU_SELECT_COUNT_3.setBounds(50, 60, 0, 0);
-    WED_3.add(WED_MENU_RESET_COUNT_3);
-    WED_MENU_RESET_COUNT_3.setBounds(60, 80, 0, 0);
+    BOUNDARY_18.setColumnCount(2);
+    BOUNDARY_18.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_18.setRowCount(4);
+    BOUNDARY_18.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_18);
+    BOUNDARY_18.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(WED_3);
-    WED_3.setBounds(30, 30, 99, 104);
-
-    WED_4.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    WED_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_25.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_25.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    WED_4.setColumnCount(2);
-    WED_4.setColumnWidths(new int[] {40, 85});
-    WED_4.setRowCount(4);
-    WED_4.setRowHeights(new int[] {27, 26, 26, 26});
-    WED_4.add(DAY_25);
-    DAY_25.setBounds(10, 10, 0, 0);
-    WED_4.add(WED_MENU_NAME_4);
-    WED_MENU_NAME_4.setBounds(70, 40, 0, 0);
-    WED_4.add(WED_MENU_SELECT_COUNT_4);
-    WED_MENU_SELECT_COUNT_4.setBounds(50, 60, 0, 0);
-    WED_4.add(WED_MENU_RESET_COUNT_4);
-    WED_MENU_RESET_COUNT_4.setBounds(60, 80, 0, 0);
+    BOUNDARY_25.setColumnCount(2);
+    BOUNDARY_25.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_25.setRowCount(4);
+    BOUNDARY_25.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_25);
+    BOUNDARY_25.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(WED_4);
-    WED_4.setBounds(30, 30, 99, 104);
-
-    WED_5.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    WED_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_32.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_32.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    WED_5.setColumnCount(2);
-    WED_5.setColumnWidths(new int[] {40, 85});
-    WED_5.setRowCount(4);
-    WED_5.setRowHeights(new int[] {27, 26, 26, 26});
-    WED_5.add(DAY_32);
-    DAY_32.setBounds(10, 10, 0, 0);
-    WED_5.add(WED_MENU_NAME_5);
-    WED_MENU_NAME_5.setBounds(70, 40, 0, 0);
-    WED_5.add(WED_MENU_SELECT_COUNT_5);
-    WED_MENU_SELECT_COUNT_5.setBounds(50, 60, 0, 0);
-    WED_5.add(WED_MENU_RESET_COUNT_5);
-    WED_MENU_RESET_COUNT_5.setBounds(60, 80, 0, 0);
+    BOUNDARY_32.setColumnCount(2);
+    BOUNDARY_32.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_32.setRowCount(4);
+    BOUNDARY_32.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_32);
+    BOUNDARY_32.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(WED_5);
-    WED_5.setBounds(30, 30, 99, 104);
-
-    WED_6.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    WED_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_39.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_39.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    WED_6.setColumnCount(2);
-    WED_6.setColumnWidths(new int[] {40, 85});
-    WED_6.setRowCount(4);
-    WED_6.setRowHeights(new int[] {27, 26, 26, 26});
-    WED_6.add(DAY_39);
-    DAY_39.setBounds(10, 10, 0, 0);
-    WED_6.add(WED_MENU_NAME_6);
-    WED_MENU_NAME_6.setBounds(70, 40, 0, 0);
-    WED_6.add(WED_MENU_SELECT_COUNT_6);
-    WED_MENU_SELECT_COUNT_6.setBounds(50, 60, 0, 0);
-    WED_6.add(WED_MENU_RESET_COUNT_6);
-    WED_MENU_RESET_COUNT_6.setBounds(60, 80, 0, 0);
+    BOUNDARY_39.setColumnCount(2);
+    BOUNDARY_39.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_39.setRowCount(4);
+    BOUNDARY_39.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_39);
+    BOUNDARY_39.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(WED_6);
-    WED_6.setBounds(30, 30, 99, 104);
-
-    THU_1.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    THU_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_5.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    THU_1.setColumnCount(2);
-    THU_1.setColumnWidths(new int[] {40, 85});
-    THU_1.setRowCount(4);
-    THU_1.setRowHeights(new int[] {27, 26, 26, 26});
-    THU_1.add(DAY_5);
-    DAY_5.setBounds(10, 10, 0, 0);
-    THU_1.add(THU_MENU_NAME_1);
-    THU_MENU_NAME_1.setBounds(70, 40, 0, 0);
-    THU_1.add(THU_MENU_SELECT_COUNT_1);
-    THU_MENU_SELECT_COUNT_1.setBounds(50, 60, 0, 0);
-    THU_1.add(THU_MENU_RESET_COUNT_1);
-    THU_MENU_RESET_COUNT_1.setBounds(60, 80, 0, 0);
+    BOUNDARY_5.setColumnCount(2);
+    BOUNDARY_5.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_5.setRowCount(4);
+    BOUNDARY_5.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_5);
+    BOUNDARY_5.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(THU_1);
-    THU_1.setBounds(30, 30, 99, 104);
-
-    THU_2.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    THU_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_12.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_12.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    THU_2.setColumnCount(2);
-    THU_2.setColumnWidths(new int[] {40, 85});
-    THU_2.setRowCount(4);
-    THU_2.setRowHeights(new int[] {27, 26, 26, 26});
-    THU_2.add(DAY_12);
-    DAY_12.setBounds(10, 10, 0, 0);
-    THU_2.add(THU_MENU_NAME_2);
-    THU_MENU_NAME_2.setBounds(70, 40, 0, 0);
-    THU_2.add(THU_MENU_SELECT_COUNT_2);
-    THU_MENU_SELECT_COUNT_2.setBounds(50, 60, 0, 0);
-    THU_2.add(THU_MENU_RESET_COUNT_2);
-    THU_MENU_RESET_COUNT_2.setBounds(60, 80, 0, 0);
+    BOUNDARY_12.setColumnCount(2);
+    BOUNDARY_12.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_12.setRowCount(4);
+    BOUNDARY_12.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_12);
+    BOUNDARY_12.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(THU_2);
-    THU_2.setBounds(30, 30, 99, 104);
-
-    THU_3.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    THU_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_19.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_19.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    THU_3.setColumnCount(2);
-    THU_3.setColumnWidths(new int[] {40, 85});
-    THU_3.setRowCount(4);
-    THU_3.setRowHeights(new int[] {27, 26, 26, 26});
-    THU_3.add(DAY_19);
-    DAY_19.setBounds(10, 10, 0, 0);
-    THU_3.add(THU_MENU_NAME_3);
-    THU_MENU_NAME_3.setBounds(70, 40, 0, 0);
-    THU_3.add(THU_MENU_SELECT_COUNT_3);
-    THU_MENU_SELECT_COUNT_3.setBounds(50, 60, 0, 0);
-    THU_3.add(THU_MENU_RESET_COUNT_3);
-    THU_MENU_RESET_COUNT_3.setBounds(60, 80, 0, 0);
+    BOUNDARY_19.setColumnCount(2);
+    BOUNDARY_19.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_19.setRowCount(4);
+    BOUNDARY_19.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_19);
+    BOUNDARY_19.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(THU_3);
-    THU_3.setBounds(30, 30, 99, 104);
-
-    THU_4.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    THU_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_26.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_26.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    THU_4.setColumnCount(2);
-    THU_4.setColumnWidths(new int[] {40, 85});
-    THU_4.setRowCount(4);
-    THU_4.setRowHeights(new int[] {27, 26, 26, 26});
-    THU_4.add(DAY_26);
-    DAY_26.setBounds(10, 10, 0, 0);
-    THU_4.add(THU_MENU_NAME_4);
-    THU_MENU_NAME_4.setBounds(70, 40, 0, 0);
-    THU_4.add(THU_MENU_SELECT_COUNT_4);
-    THU_MENU_SELECT_COUNT_4.setBounds(50, 60, 0, 0);
-    THU_4.add(THU_MENU_RESET_COUNT_4);
-    THU_MENU_RESET_COUNT_4.setBounds(60, 80, 0, 0);
+    BOUNDARY_26.setColumnCount(2);
+    BOUNDARY_26.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_26.setRowCount(4);
+    BOUNDARY_26.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_26);
+    BOUNDARY_26.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(THU_4);
-    THU_4.setBounds(30, 30, 99, 104);
-
-    THU_5.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    THU_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_33.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_33.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    THU_5.setColumnCount(2);
-    THU_5.setColumnWidths(new int[] {40, 85});
-    THU_5.setRowCount(4);
-    THU_5.setRowHeights(new int[] {27, 26, 26, 26});
-    THU_5.add(DAY_33);
-    DAY_33.setBounds(10, 10, 0, 0);
-    THU_5.add(THU_MENU_NAME_5);
-    THU_MENU_NAME_5.setBounds(70, 40, 0, 0);
-    THU_5.add(THU_MENU_SELECT_COUNT_5);
-    THU_MENU_SELECT_COUNT_5.setBounds(50, 60, 0, 0);
-    THU_5.add(THU_MENU_RESET_COUNT_5);
-    THU_MENU_RESET_COUNT_5.setBounds(60, 80, 0, 0);
+    BOUNDARY_33.setColumnCount(2);
+    BOUNDARY_33.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_33.setRowCount(4);
+    BOUNDARY_33.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_33);
+    BOUNDARY_33.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(THU_5);
-    THU_5.setBounds(30, 30, 99, 104);
-
-    THU_6.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    THU_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_40.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_40.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    THU_6.setColumnCount(2);
-    THU_6.setColumnWidths(new int[] {40, 85});
-    THU_6.setRowCount(4);
-    THU_6.setRowHeights(new int[] {27, 26, 26, 26});
-    THU_6.add(DAY_40);
-    DAY_40.setBounds(10, 10, 0, 0);
-    THU_6.add(THU_MENU_NAME_6);
-    THU_MENU_NAME_6.setBounds(70, 40, 0, 0);
-    THU_6.add(THU_MENU_SELECT_COUNT_6);
-    THU_MENU_SELECT_COUNT_6.setBounds(50, 60, 0, 0);
-    THU_6.add(THU_MENU_RESET_COUNT_6);
-    THU_MENU_RESET_COUNT_6.setBounds(60, 80, 0, 0);
+    BOUNDARY_40.setColumnCount(2);
+    BOUNDARY_40.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_40.setRowCount(4);
+    BOUNDARY_40.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_40);
+    BOUNDARY_40.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(THU_6);
-    THU_6.setBounds(30, 30, 99, 104);
-
-    FRI_1.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    FRI_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_6.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    FRI_1.setBundleName("");
-    FRI_1.setColumnCount(2);
-    FRI_1.setColumnWidths(new int[] {40, 85});
-    FRI_1.setRowCount(4);
-    FRI_1.setRowHeights(new int[] {27, 26, 26, 26});
-    FRI_1.add(DAY_6);
-    DAY_6.setBounds(10, 10, 0, 0);
-    FRI_1.add(FRI_MENU_NAME_1);
-    FRI_MENU_NAME_1.setBounds(70, 40, 0, 0);
-    FRI_1.add(FRI_MENU_SELECT_COUNT_1);
-    FRI_MENU_SELECT_COUNT_1.setBounds(50, 60, 0, 0);
-    FRI_1.add(FRI_MENU_RESET_COUNT_1);
-    FRI_MENU_RESET_COUNT_1.setBounds(60, 80, 0, 0);
+    BOUNDARY_6.setBundleName("");
+    BOUNDARY_6.setColumnCount(2);
+    BOUNDARY_6.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_6.setRowCount(4);
+    BOUNDARY_6.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_6);
+    BOUNDARY_6.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(FRI_1);
-    FRI_1.setBounds(30, 30, 99, 104);
-
-    FRI_2.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    FRI_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_13.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_13.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    FRI_2.setColumnCount(2);
-    FRI_2.setColumnWidths(new int[] {40, 85});
-    FRI_2.setRowCount(4);
-    FRI_2.setRowHeights(new int[] {27, 26, 26, 26});
-    FRI_2.add(DAY_13);
-    DAY_13.setBounds(10, 10, 0, 0);
-    FRI_2.add(FRI_MENU_NAME_2);
-    FRI_MENU_NAME_2.setBounds(70, 40, 0, 0);
-    FRI_2.add(FRI_MENU_SELECT_COUNT_2);
-    FRI_MENU_SELECT_COUNT_2.setBounds(50, 60, 0, 0);
-    FRI_2.add(FRI_MENU_RESET_COUNT_2);
-    FRI_MENU_RESET_COUNT_2.setBounds(60, 80, 0, 0);
+    BOUNDARY_13.setColumnCount(2);
+    BOUNDARY_13.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_13.setRowCount(4);
+    BOUNDARY_13.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_13);
+    BOUNDARY_13.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(FRI_2);
-    FRI_2.setBounds(30, 30, 99, 104);
-
-    FRI_3.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    FRI_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_20.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_20.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    FRI_3.setColumnCount(2);
-    FRI_3.setColumnWidths(new int[] {40, 85});
-    FRI_3.setRowCount(4);
-    FRI_3.setRowHeights(new int[] {27, 26, 26, 26});
-    FRI_3.add(DAY_20);
-    DAY_20.setBounds(10, 10, 0, 0);
-    FRI_3.add(FRI_MENU_NAME_3);
-    FRI_MENU_NAME_3.setBounds(70, 40, 0, 0);
-    FRI_3.add(FRI_MENU_SELECT_COUNT_3);
-    FRI_MENU_SELECT_COUNT_3.setBounds(50, 60, 0, 0);
-    FRI_3.add(FRI_MENU_RESET_COUNT_3);
-    FRI_MENU_RESET_COUNT_3.setBounds(60, 80, 0, 0);
+    BOUNDARY_20.setColumnCount(2);
+    BOUNDARY_20.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_20.setRowCount(4);
+    BOUNDARY_20.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_20);
+    BOUNDARY_20.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(FRI_3);
-    FRI_3.setBounds(30, 30, 99, 104);
-
-    FRI_4.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    FRI_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_27.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_27.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    FRI_4.setColumnCount(2);
-    FRI_4.setColumnWidths(new int[] {40, 85});
-    FRI_4.setRowCount(4);
-    FRI_4.setRowHeights(new int[] {27, 26, 26, 26});
-    FRI_4.add(DAY_27);
-    DAY_27.setBounds(10, 10, 0, 0);
-    FRI_4.add(FRI_MENU_NAME_4);
-    FRI_MENU_NAME_4.setBounds(70, 40, 0, 0);
-    FRI_4.add(FRI_MENU_SELECT_COUNT_4);
-    FRI_MENU_SELECT_COUNT_4.setBounds(50, 60, 0, 0);
-    FRI_4.add(FRI_MENU_RESET_COUNT_4);
-    FRI_MENU_RESET_COUNT_4.setBounds(60, 80, 0, 0);
+    BOUNDARY_27.setColumnCount(2);
+    BOUNDARY_27.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_27.setRowCount(4);
+    BOUNDARY_27.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_27);
+    BOUNDARY_27.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(FRI_4);
-    FRI_4.setBounds(30, 30, 99, 104);
-
-    FRI_5.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    FRI_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_34.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_34.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    FRI_5.setColumnCount(2);
-    FRI_5.setColumnWidths(new int[] {40, 85});
-    FRI_5.setRowCount(4);
-    FRI_5.setRowHeights(new int[] {27, 26, 26, 26});
-    FRI_5.add(DAY_34);
-    DAY_34.setBounds(10, 10, 0, 0);
-    FRI_5.add(FRI_MENU_NAME_5);
-    FRI_MENU_NAME_5.setBounds(70, 40, 0, 0);
-    FRI_5.add(FRI_MENU_SELECT_COUNT_5);
-    FRI_MENU_SELECT_COUNT_5.setBounds(50, 60, 0, 0);
-    FRI_5.add(FRI_MENU_RESET_COUNT_5);
-    FRI_MENU_RESET_COUNT_5.setBounds(60, 80, 0, 0);
+    BOUNDARY_34.setColumnCount(2);
+    BOUNDARY_34.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_34.setRowCount(4);
+    BOUNDARY_34.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_34);
+    BOUNDARY_34.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(FRI_5);
-    FRI_5.setBounds(30, 30, 99, 104);
-
-    FRI_6.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
-    FRI_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"메뉴",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"시도",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"초기화",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+    BOUNDARY_41.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
+    BOUNDARY_41.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_NAME",new com.arisystem.beans.boundarypanel.CellInfo(1,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_SELECT_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,2),new com.arisystem.beans.boundarypanel.CellInfo(1,2),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("MENU_RESET_COUNT",new com.arisystem.beans.boundarypanel.CellInfo(1,3),new com.arisystem.beans.boundarypanel.CellInfo(1,3),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
     }));
-    FRI_6.setColumnCount(2);
-    FRI_6.setColumnWidths(new int[] {40, 85});
-    FRI_6.setRowCount(4);
-    FRI_6.setRowHeights(new int[] {27, 26, 26, 26});
-    FRI_6.add(DAY_41);
-    DAY_41.setBounds(10, 10, 0, 0);
-    FRI_6.add(FRI_MENU_NAME_6);
-    FRI_MENU_NAME_6.setBounds(70, 40, 0, 0);
-    FRI_6.add(FRI_MENU_SELECT_COUNT_6);
-    FRI_MENU_SELECT_COUNT_6.setBounds(50, 60, 0, 0);
-    FRI_6.add(FRI_MENU_RESET_COUNT_6);
-    FRI_MENU_RESET_COUNT_6.setBounds(60, 80, 0, 0);
+    BOUNDARY_41.setColumnCount(2);
+    BOUNDARY_41.setColumnWidths(new int[] {40, 85});
+    BOUNDARY_41.setRowCount(4);
+    BOUNDARY_41.setRowHeights(new int[] {27, 26, 26, 26});
+    boundaryPanel1.add(BOUNDARY_41);
+    BOUNDARY_41.setBounds(30, 30, 99, 104);
 
-    boundaryPanel1.add(FRI_6);
-    FRI_6.setBounds(30, 30, 99, 104);
-
-    SAT_1.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SAT_1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_7.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_7.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_22",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SAT_1.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SAT_1.setColumnCount(2);
-    SAT_1.setColumnWidths(new int[] {35, 55});
-    SAT_1.setRowHeights(new int[] {27, 78});
-    SAT_1.add(DAY_7);
-    DAY_7.setBounds(20, 20, 0, 0);
+    BOUNDARY_7.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_7.setColumnCount(2);
+    BOUNDARY_7.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_7.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_7);
+    BOUNDARY_7.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SAT_1);
-    SAT_1.setBounds(50, 150, 91, 106);
-
-    SAT_2.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SAT_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_14.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_14.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_23",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SAT_2.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SAT_2.setColumnCount(2);
-    SAT_2.setColumnWidths(new int[] {35, 55});
-    SAT_2.setRowHeights(new int[] {27, 78});
-    SAT_2.add(DAY_14);
-    DAY_14.setBounds(20, 20, 0, 0);
+    BOUNDARY_14.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_14.setColumnCount(2);
+    BOUNDARY_14.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_14.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_14);
+    BOUNDARY_14.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SAT_2);
-    SAT_2.setBounds(50, 150, 91, 106);
-
-    SAT_3.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SAT_3.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_21.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_21.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_24",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SAT_3.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SAT_3.setColumnCount(2);
-    SAT_3.setColumnWidths(new int[] {35, 55});
-    SAT_3.setRowHeights(new int[] {27, 78});
-    SAT_3.add(DAY_21);
-    DAY_21.setBounds(20, 20, 0, 0);
+    BOUNDARY_21.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_21.setColumnCount(2);
+    BOUNDARY_21.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_21.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_21);
+    BOUNDARY_21.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SAT_3);
-    SAT_3.setBounds(50, 150, 91, 106);
-
-    SAT_4.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SAT_4.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_28.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_28.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_25",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SAT_4.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SAT_4.setColumnCount(2);
-    SAT_4.setColumnWidths(new int[] {35, 55});
-    SAT_4.setRowHeights(new int[] {27, 78});
-    SAT_4.add(DAY_28);
-    DAY_28.setBounds(20, 20, 0, 0);
+    BOUNDARY_28.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_28.setColumnCount(2);
+    BOUNDARY_28.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_28.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_28);
+    BOUNDARY_28.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SAT_4);
-    SAT_4.setBounds(50, 150, 91, 106);
-
-    SAT_5.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SAT_5.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_35.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_35.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_26",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SAT_5.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SAT_5.setColumnCount(2);
-    SAT_5.setColumnWidths(new int[] {35, 55});
-    SAT_5.setRowHeights(new int[] {27, 78});
-    SAT_5.add(DAY_35);
-    DAY_35.setBounds(20, 20, 0, 0);
+    BOUNDARY_35.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_35.setColumnCount(2);
+    BOUNDARY_35.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_35.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_35);
+    BOUNDARY_35.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SAT_5);
-    SAT_5.setBounds(50, 150, 91, 106);
-
-    SAT_6.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
-    SAT_6.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
+    BOUNDARY_42.setBoundaryLineColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_42.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
         new com.arisystem.beans.boundarypanel.BoundaryCell("WEEKEND",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(1,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_27",new com.arisystem.beans.boundarypanel.CellInfo(1,0),new com.arisystem.beans.boundarypanel.CellInfo(1,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),false,false,false,new java.awt.Insets(0,0,0,0),null),
     }));
-    SAT_6.setCellBackColor(new java.awt.Color(234, 234, 234));
-    SAT_6.setColumnCount(2);
-    SAT_6.setColumnWidths(new int[] {35, 55});
-    SAT_6.setRowHeights(new int[] {27, 78});
-    SAT_6.add(DAY_42);
-    DAY_42.setBounds(20, 20, 0, 0);
+    BOUNDARY_42.setCellBackColor(new java.awt.Color(234, 234, 234));
+    BOUNDARY_42.setColumnCount(2);
+    BOUNDARY_42.setColumnWidths(new int[] {35, 55});
+    BOUNDARY_42.setRowHeights(new int[] {27, 78});
+    boundaryPanel1.add(BOUNDARY_42);
+    BOUNDARY_42.setBounds(50, 150, 91, 106);
 
-    boundaryPanel1.add(SAT_6);
-    SAT_6.setBounds(50, 150, 91, 106);
+    jButton1.setText("조회");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -1575,11 +970,24 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
             .addContainerGap()
             .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, 18)
+            .addComponent(jButton1)
+            .addContainerGap())
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(82, Short.MAX_VALUE)
+            .addContainerGap(30, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton1))
+            .addGap(27, 27, 27)
             .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addContainerGap())
     );
@@ -1596,181 +1004,52 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel DAY_1;
-    private javax.swing.JLabel DAY_10;
-    private javax.swing.JLabel DAY_11;
-    private javax.swing.JLabel DAY_12;
-    private javax.swing.JLabel DAY_13;
-    private javax.swing.JLabel DAY_14;
-    private javax.swing.JLabel DAY_15;
-    private javax.swing.JLabel DAY_16;
-    private javax.swing.JLabel DAY_17;
-    private javax.swing.JLabel DAY_18;
-    private javax.swing.JLabel DAY_19;
-    private javax.swing.JLabel DAY_2;
-    private javax.swing.JLabel DAY_20;
-    private javax.swing.JLabel DAY_21;
-    private javax.swing.JLabel DAY_22;
-    private javax.swing.JLabel DAY_23;
-    private javax.swing.JLabel DAY_24;
-    private javax.swing.JLabel DAY_25;
-    private javax.swing.JLabel DAY_26;
-    private javax.swing.JLabel DAY_27;
-    private javax.swing.JLabel DAY_28;
-    private javax.swing.JLabel DAY_29;
-    private javax.swing.JLabel DAY_3;
-    private javax.swing.JLabel DAY_30;
-    private javax.swing.JLabel DAY_31;
-    private javax.swing.JLabel DAY_32;
-    private javax.swing.JLabel DAY_33;
-    private javax.swing.JLabel DAY_34;
-    private javax.swing.JLabel DAY_35;
-    private javax.swing.JLabel DAY_36;
-    private javax.swing.JLabel DAY_37;
-    private javax.swing.JLabel DAY_38;
-    private javax.swing.JLabel DAY_39;
-    private javax.swing.JLabel DAY_4;
-    private javax.swing.JLabel DAY_40;
-    private javax.swing.JLabel DAY_41;
-    private javax.swing.JLabel DAY_42;
-    private javax.swing.JLabel DAY_5;
-    private javax.swing.JLabel DAY_6;
-    private javax.swing.JLabel DAY_7;
-    private javax.swing.JLabel DAY_8;
-    private javax.swing.JLabel DAY_9;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel FRI_1;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel FRI_2;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel FRI_3;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel FRI_4;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel FRI_5;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel FRI_6;
-    private javax.swing.JLabel FRI_MENU_NAME_1;
-    private javax.swing.JLabel FRI_MENU_NAME_2;
-    private javax.swing.JLabel FRI_MENU_NAME_3;
-    private javax.swing.JLabel FRI_MENU_NAME_4;
-    private javax.swing.JLabel FRI_MENU_NAME_5;
-    private javax.swing.JLabel FRI_MENU_NAME_6;
-    private javax.swing.JLabel FRI_MENU_RESET_COUNT_1;
-    private javax.swing.JLabel FRI_MENU_RESET_COUNT_2;
-    private javax.swing.JLabel FRI_MENU_RESET_COUNT_3;
-    private javax.swing.JLabel FRI_MENU_RESET_COUNT_4;
-    private javax.swing.JLabel FRI_MENU_RESET_COUNT_5;
-    private javax.swing.JLabel FRI_MENU_RESET_COUNT_6;
-    private javax.swing.JLabel FRI_MENU_SELECT_COUNT_1;
-    private javax.swing.JLabel FRI_MENU_SELECT_COUNT_2;
-    private javax.swing.JLabel FRI_MENU_SELECT_COUNT_3;
-    private javax.swing.JLabel FRI_MENU_SELECT_COUNT_4;
-    private javax.swing.JLabel FRI_MENU_SELECT_COUNT_5;
-    private javax.swing.JLabel FRI_MENU_SELECT_COUNT_6;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel MON_1;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel MON_2;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel MON_3;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel MON_4;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel MON_5;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel MON_6;
-    private javax.swing.JLabel MON_MENU_NAME_1;
-    private javax.swing.JLabel MON_MENU_NAME_2;
-    private javax.swing.JLabel MON_MENU_NAME_3;
-    private javax.swing.JLabel MON_MENU_NAME_4;
-    private javax.swing.JLabel MON_MENU_NAME_5;
-    private javax.swing.JLabel MON_MENU_NAME_6;
-    private javax.swing.JLabel MON_MENU_RESET_COUNT_1;
-    private javax.swing.JLabel MON_MENU_RESET_COUNT_2;
-    private javax.swing.JLabel MON_MENU_RESET_COUNT_3;
-    private javax.swing.JLabel MON_MENU_RESET_COUNT_4;
-    private javax.swing.JLabel MON_MENU_RESET_COUNT_5;
-    private javax.swing.JLabel MON_MENU_RESET_COUNT_6;
-    private javax.swing.JLabel MON_MENU_SELECT_COUNT_1;
-    private javax.swing.JLabel MON_MENU_SELECT_COUNT_2;
-    private javax.swing.JLabel MON_MENU_SELECT_COUNT_3;
-    private javax.swing.JLabel MON_MENU_SELECT_COUNT_4;
-    private javax.swing.JLabel MON_MENU_SELECT_COUNT_5;
-    private javax.swing.JLabel MON_MENU_SELECT_COUNT_6;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SAT_1;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SAT_2;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SAT_3;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SAT_4;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SAT_5;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SAT_6;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SUN_1;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SUN_2;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SUN_3;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SUN_4;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SUN_5;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel SUN_6;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel THU_1;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel THU_2;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel THU_3;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel THU_4;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel THU_5;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel THU_6;
-    private javax.swing.JLabel THU_MENU_NAME_1;
-    private javax.swing.JLabel THU_MENU_NAME_2;
-    private javax.swing.JLabel THU_MENU_NAME_3;
-    private javax.swing.JLabel THU_MENU_NAME_4;
-    private javax.swing.JLabel THU_MENU_NAME_5;
-    private javax.swing.JLabel THU_MENU_NAME_6;
-    private javax.swing.JLabel THU_MENU_RESET_COUNT_1;
-    private javax.swing.JLabel THU_MENU_RESET_COUNT_2;
-    private javax.swing.JLabel THU_MENU_RESET_COUNT_3;
-    private javax.swing.JLabel THU_MENU_RESET_COUNT_4;
-    private javax.swing.JLabel THU_MENU_RESET_COUNT_5;
-    private javax.swing.JLabel THU_MENU_RESET_COUNT_6;
-    private javax.swing.JLabel THU_MENU_SELECT_COUNT_1;
-    private javax.swing.JLabel THU_MENU_SELECT_COUNT_2;
-    private javax.swing.JLabel THU_MENU_SELECT_COUNT_3;
-    private javax.swing.JLabel THU_MENU_SELECT_COUNT_4;
-    private javax.swing.JLabel THU_MENU_SELECT_COUNT_5;
-    private javax.swing.JLabel THU_MENU_SELECT_COUNT_6;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel TUE_1;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel TUE_2;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel TUE_3;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel TUE_4;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel TUE_5;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel TUE_6;
-    private javax.swing.JLabel TUE_MENU_NAME_1;
-    private javax.swing.JLabel TUE_MENU_NAME_2;
-    private javax.swing.JLabel TUE_MENU_NAME_3;
-    private javax.swing.JLabel TUE_MENU_NAME_4;
-    private javax.swing.JLabel TUE_MENU_NAME_5;
-    private javax.swing.JLabel TUE_MENU_NAME_6;
-    private javax.swing.JLabel TUE_MENU_RESET_COUNT_1;
-    private javax.swing.JLabel TUE_MENU_RESET_COUNT_2;
-    private javax.swing.JLabel TUE_MENU_RESET_COUNT_3;
-    private javax.swing.JLabel TUE_MENU_RESET_COUNT_4;
-    private javax.swing.JLabel TUE_MENU_RESET_COUNT_5;
-    private javax.swing.JLabel TUE_MENU_RESET_COUNT_6;
-    private javax.swing.JLabel TUE_MENU_SELECT_COUNT_1;
-    private javax.swing.JLabel TUE_MENU_SELECT_COUNT_2;
-    private javax.swing.JLabel TUE_MENU_SELECT_COUNT_3;
-    private javax.swing.JLabel TUE_MENU_SELECT_COUNT_4;
-    private javax.swing.JLabel TUE_MENU_SELECT_COUNT_5;
-    private javax.swing.JLabel TUE_MENU_SELECT_COUNT_6;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel WED_1;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel WED_2;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel WED_3;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel WED_4;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel WED_5;
-    private com.arisystem.beans.boundarypanel.BoundaryPanel WED_6;
-    private javax.swing.JLabel WED_MENU_NAME_1;
-    private javax.swing.JLabel WED_MENU_NAME_2;
-    private javax.swing.JLabel WED_MENU_NAME_3;
-    private javax.swing.JLabel WED_MENU_NAME_4;
-    private javax.swing.JLabel WED_MENU_NAME_5;
-    private javax.swing.JLabel WED_MENU_NAME_6;
-    private javax.swing.JLabel WED_MENU_RESET_COUNT_1;
-    private javax.swing.JLabel WED_MENU_RESET_COUNT_2;
-    private javax.swing.JLabel WED_MENU_RESET_COUNT_3;
-    private javax.swing.JLabel WED_MENU_RESET_COUNT_4;
-    private javax.swing.JLabel WED_MENU_RESET_COUNT_5;
-    private javax.swing.JLabel WED_MENU_RESET_COUNT_6;
-    private javax.swing.JLabel WED_MENU_SELECT_COUNT_1;
-    private javax.swing.JLabel WED_MENU_SELECT_COUNT_2;
-    private javax.swing.JLabel WED_MENU_SELECT_COUNT_3;
-    private javax.swing.JLabel WED_MENU_SELECT_COUNT_4;
-    private javax.swing.JLabel WED_MENU_SELECT_COUNT_5;
-    private javax.swing.JLabel WED_MENU_SELECT_COUNT_6;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_1;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_10;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_11;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_12;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_13;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_14;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_15;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_16;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_17;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_18;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_19;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_2;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_20;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_21;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_22;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_23;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_24;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_25;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_26;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_27;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_28;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_29;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_3;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_30;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_31;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_32;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_33;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_34;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_35;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_36;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_37;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_38;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_39;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_4;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_40;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_41;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_42;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_5;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_6;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_7;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_8;
+    private com.arisystem.beans.boundarypanel.BoundaryPanel BOUNDARY_9;
     private com.arisystem.beans.boundarypanel.BoundaryPanel boundaryPanel1;
     private com.arisystem.beans.datawizard.DWMultiRowsObject dWMultiRowsObject1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     // End of variables declaration//GEN-END:variables
 }
