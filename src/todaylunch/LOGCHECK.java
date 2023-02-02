@@ -5,7 +5,9 @@
  */
 package todaylunch;
 
-import java.awt.Color;
+import com.arisystem.beans.datawizard.DWWhereCondition;
+import com.arisystem.beans.framebuilder.FBRowSet;
+import java.util.Vector;
 
 /**
  *
@@ -24,9 +26,39 @@ public class LOGCHECK extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
+    private LOGCHECK(String SELECT_YEAR , String SELECT_MONTH , String SELECT_DAY) {
+        initComponents();
+        //where절 사용할때 필요한애들
+        Vector params = new Vector();
+        DWWhereCondition SearchSelect;
+        try {
+            System.out.println(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 00:00:00");
+            System.out.println(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 23:59:59");
+            System.out.println();
+            
+            
+            params.add(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 00:00:00");
+            params.add(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 23:59:59");
+            SearchSelect = new DWWhereCondition("LAST_START_TIME BETWEEN ? AND ?", params);
+            dWCombineTable1.setWhereContition(SearchSelect);
+            
+            dWCombineTable1.setDataSource("MariaDB_Youngria");
+            dWCombineTable1.setOrderBy("LAST_START_TIME DESC");
+            dWCombineTable1.select("http", "192.168.0.20", 8080);
+        } catch (Exception e) {
+        }
+    }
     
     public static LOGCHECK getInstance(){
         logCheck = new LOGCHECK();
+        if(! logCheck.isVisible()){
+            logCheck.setVisible(true);
+        }
+        return logCheck;
+    }
+    
+    public static LOGCHECK getInstance(String SELECT_YEAR , String SELECT_MONTH , String SELECT_DAY){
+        logCheck = new LOGCHECK(SELECT_YEAR, SELECT_MONTH, SELECT_DAY);
         if(! logCheck.isVisible()){
             logCheck.setVisible(true);
         }

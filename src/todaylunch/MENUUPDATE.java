@@ -29,7 +29,7 @@ public class MENUUPDATE extends javax.swing.JFrame {
     int deleteCount = 0;
     //체크박스 정보 저장용 temp
     ArrayList<Object> arraylist = new ArrayList<>();
-    //체크박스 delete시 위치정보 index 저장용
+    //체크박스 delete시 위치정보 index 저장용 왜냐하면 이렇게 row정보들어 넣어주고 역순으로 정렬을 해줘야 삭제시 row위치정보에 혼동이 안생긴다.
     ArrayList<Object> deleteListIndex = new ArrayList<>();
     //실제로 삭제할 Menu_No정보
     ArrayList<Object> deletelist = new ArrayList<>();

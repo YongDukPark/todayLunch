@@ -59,6 +59,7 @@ public class FORM extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -295,6 +296,15 @@ public class FORM extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem6);
 
+        jMenuItem3.setText("이전 기록");
+        jMenuItem3.setActionCommand("getCalendar");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemClickAction_Edit(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -399,6 +409,8 @@ public class FORM extends javax.swing.JFrame {
             
         } else if(evt.getActionCommand().equals("logcheck")){
             LOGCHECK.getInstance();
+        } else if(evt.getActionCommand().equals("getCalendar")){
+            CALENDAR_Type2.getInstance();
         }
     }//GEN-LAST:event_menuItemClickAction_Edit
 
@@ -453,6 +465,7 @@ public class FORM extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
