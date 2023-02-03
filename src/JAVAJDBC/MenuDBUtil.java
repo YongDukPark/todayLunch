@@ -233,7 +233,7 @@ public class MenuDBUtil{
     public int menuInsert(TODAYLUNCH_MENU_BEAN mbean){
         try {
             String sql = "Insert into TODAYLUNCH_MENU"
-                    + "(MENU_NO, MENU_NAME,MENU_STORENAME,MENU_ADDRESS,MENU_CATE,MENU_INTRODUCTION) values "
+                    + "(MENU_NO, MENU_NAME,MENU_STORENAME,MENU_CATE,MENU_ADDRESS,MENU_INTRODUCTION) values "
                     + "(NEXTVAL(TODAYLUNCH_MENU_SEQ),?,?,?,?,?)";
 
             psmt = con.prepareStatement(sql);
