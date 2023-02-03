@@ -1527,7 +1527,7 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     jLabel2.setFont(new java.awt.Font("맑은 고딕 Semilight", 1, 24)); // NOI18N
     jLabel2.setText("12월");
 
-    jLabel3.setText("※더블클릭시 Row확인");
+    jLabel3.setText("※더블클릭 log확인");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
