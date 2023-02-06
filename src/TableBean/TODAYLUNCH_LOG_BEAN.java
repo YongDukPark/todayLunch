@@ -3,8 +3,10 @@ package TableBean;
 public class TODAYLUNCH_LOG_BEAN {
     private String MENU_NO;
     private String MENU_NAME;
+    private String MENU_SELECT;
+    private String MENU_RESET_COUNT;
     private String LAST_START_TIME;
-
+    
     public TODAYLUNCH_LOG_BEAN() {
     }
 
@@ -38,5 +40,20 @@ public class TODAYLUNCH_LOG_BEAN {
         this.LAST_START_TIME = LAST_START_TIME;
     }
     
+    public String getMENU_SELECT() {
+        return MENU_SELECT;
+    }
+
+    public void setMENU_SELECT(String MENU_SELECT) {
+        this.MENU_SELECT = MENU_SELECT;
+    }
+
+    public String getMENU_RESET_COUNT() {
+        return MENU_RESET_COUNT;
+    }
+
+    public void setMENU_RESET_COUNT(String MENU_RESET_COUNT) {
+        this.MENU_RESET_COUNT = MENU_RESET_COUNT;
+    }
     
 }
