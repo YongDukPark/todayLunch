@@ -40,7 +40,6 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         addBounDary();
         //Calendar 생성
         getCalendar();
-        
     }
     
     //BoundaryPanel을 ArrayList에 담아서 이후 호출시키기 편하게 만든다.
@@ -114,7 +113,6 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
                 }
             }
             
-            //월
             SearchSelect = new DWWhereCondition("SELECT_YEAR = ? AND SELECT_MONTH = ?", params);
             dWMultiRowsObject1.setWhereContition(SearchSelect);
             
@@ -122,10 +120,13 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
             dWMultiRowsObject1.setOrderBy("SELECT_DAY");
             seseset = dWMultiRowsObject1.select("http", "192.168.0.20", 8080);
             
-            
             //요일 구하는 로직 (년,월,일) int형태로 들어간다.
-            date = LocalDate.of(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH")), 1);
-            
+            if(jComboBox1.getSelectedIndex() == 0 || jComboBox2.getSelectedIndex() == 0){
+                date = LocalDate.of(2023, 1, 1);
+            } else {
+                date = LocalDate.of(Integer.parseInt((String)jComboBox1.getSelectedItem()), Integer.parseInt((String)jComboBox2.getSelectedItem()), 1);
+            }
+            //date = LocalDate.of(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH")), 1);
             dayOfWeek = date.getDayOfWeek();
             // 시작요일 월1 일7
             startWeek = dayOfWeek.getValue();
@@ -134,21 +135,31 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
             if(startWeek == 7){
                 startWeek = 0;
             }
-            startDay = Integer.parseInt((String)seseset.getValue(0, "SELECT_DAY"))-1;
+            
+            //만약 첫Row의 일자가 1이 아닌경우를 고려하여 startDay를 지정해준다.
+            if(seseset.getRowCount() != 0){
+                startDay = Integer.parseInt((String)seseset.getValue(0, "SELECT_DAY"))-1;
+            } else {
+                startDay = 0;
+            }
             
             // 해당 월의 마지막일 구하기 (년,월,일) int 형태로 들어간다.
-            cal.set(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH"))-1, Integer.parseInt((String)seseset.getValue(0, "SELECT_DAY")));
-            
+            if(jComboBox1.getSelectedIndex() == 0 || jComboBox2.getSelectedIndex() == 0){
+                cal.set(2023, 0, 1);
+            } else {
+                cal.set(Integer.parseInt((String)jComboBox1.getSelectedItem()), Integer.parseInt((String)jComboBox2.getSelectedItem())-1, 1);
+            }
+            //cal.set(Integer.parseInt((String)seseset.getValue(0, "SELECT_YEAR")), Integer.parseInt((String)seseset.getValue(0, "SELECT_MONTH"))-1, Integer.parseInt((String)seseset.getValue(0, "SELECT_DAY")));
             
             //날짜 넣는 구간
             //i가 dayOfWeek 즉 요일첫번째부터 시작된다. 위에서 만약 7일 경우 값은 0이된다.
             for(int i = startWeek ; i < startWeek + cal.getActualMaximum(Calendar.DAY_OF_MONTH) ; i++){
+                //만약 데이터가 없으면 밑에 if문에서 오류가 발생하기에 if문에 들어가지않게 해준다.
                 if(rowCount >= seseset.getRowCount()){
                     dataCheck = false;
                 }
-                
+                //날짜를 cell에 담아주는 코드
                 arraylist.get(i).getBoundaryRenderer().getBoundaryCell("DAY").setTitleValue(setDay);
-                    
                 if(dataCheck){
                     if(arraylist.get(i+startDay).getBoundaryRenderer().getBoundaryCell("WEEKEND") == null){
                         if(seseset.getValue(rowCount, "MENU_SELECT").equals("N")){
@@ -417,7 +428,7 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
 
     BOUNDARY_2.setBoundaryLineColor(new java.awt.Color(255, 255, 255));
     BOUNDARY_2.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
-        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
+        new com.arisystem.beans.boundarypanel.BoundaryCell("DAY",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),null,com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,true,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_14",new com.arisystem.beans.boundarypanel.CellInfo(0,1),new com.arisystem.beans.boundarypanel.CellInfo(0,1),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_18",new com.arisystem.beans.boundarypanel.CellInfo(0,2),new com.arisystem.beans.boundarypanel.CellInfo(0,2),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
         new com.arisystem.beans.boundarypanel.BoundaryCell("BoundaryCell_21",new com.arisystem.beans.boundarypanel.CellInfo(0,3),new com.arisystem.beans.boundarypanel.CellInfo(0,3),"",com.arisystem.beans.boundarypanel.BoundaryCell.LEFT_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,null,null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),
@@ -1517,7 +1528,7 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     jButton1.setText("조회");
     jButton1.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
+            searchMonth(evt);
         }
     });
 
@@ -1551,21 +1562,20 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
                     .addComponent(jButton1)
-                    .addGap(50, 50, 50))))
+                    .addGap(51, 51, 51))))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel1)
+                .addComponent(jLabel2)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButton1)))
             .addGap(20, 20, 20)
             .addComponent(boundaryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(30, 30, 30))
@@ -1574,10 +1584,10 @@ boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.Boundar
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void searchMonth(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchMonth
         resetAll();
         getCalendar();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_searchMonth
     
     //마우스 클릭시 log보는곳으로 이동
     private void mouseClickBOUNDARY(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseClickBOUNDARY

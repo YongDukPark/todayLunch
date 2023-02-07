@@ -168,6 +168,7 @@ dWCombineTable1.addTableHeaderListener(new com.arisystem.beans.combinetable.Tabl
             arraylist.add(Todaylunch_Log_Bean);
         }
     }
+    //정렬시키는 코드 type2
     public void sortType1(TableHeaderEvent evt){
         //System.out.println(evt.getClickCount()); // 클릭한 횟수 불러옴
         //System.out.println(evt.getCombineCellName()); // 그 LAST_START_TIME 요런 value값 불러옴
@@ -285,7 +286,7 @@ dWCombineTable1.addTableHeaderListener(new com.arisystem.beans.combinetable.Tabl
         }
     }
     
-    //정렬시키는 코드 이방법 채택한 이유는 select를 여러번 날리지 않아도 된다.
+    //정렬시키는 코드 type2
     public void sortType2(TableHeaderEvent evt){
         //밀어버린다음에 다시 셋팅하기 ㅎ
         dWCombineTable1.removeAllRows();
