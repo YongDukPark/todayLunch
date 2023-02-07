@@ -30,6 +30,7 @@ public class MENUUPDATE extends javax.swing.JFrame {
     //체크박스 정보 저장용 temp
     ArrayList<Object> arraylist = new ArrayList<>();
     //체크박스 delete시 위치정보 index 저장용 왜냐하면 이렇게 row정보들어 넣어주고 역순으로 정렬을 해줘야 삭제시 row위치정보에 혼동이 안생긴다.
+    //이친구는 실제로 삭제하는 애가 아니고 삭제를 1차적으로 눌렀을경우 row정보를 날리기 위한 친구이다.
     ArrayList<Object> deleteListIndex = new ArrayList<>();
     //실제로 삭제할 Menu_No정보
     ArrayList<Object> deletelist = new ArrayList<>();
@@ -97,12 +98,10 @@ public class MENUUPDATE extends javax.swing.JFrame {
 
                 dWCombineTable1.setWhereContition(SearchSelect);
             }
-            
             dWCombineTable1.setDataSource("MariaDB_Youngria");
             dWCombineTable1.setOrderBy("MENU_SELECT_COUNT DESC");
             dWCombineTable1.select("http", "192.168.0.20", 8080);
             this.rowCount = dWCombineTable1.selectTotalRowCount("http", "192.168.0.20", 8080);
-            
         }catch(Exception e){
             System.err.println(e);
         } 
@@ -296,26 +295,23 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             for(int i = 0 ; i < arraylist.size() ; i++){
                 //row정보 삭제
                 dWCombineTable1.removeRow((int)deleteListIndex.get(i));
-                System.out.println("삭제할녀석 : " + arraylist.get(i));
-                System.out.println("삭제할Index : " + deleteListIndex.get(i));
                 
-                //삭제할 value정보들 담아놓는곳
+                //1. 삭제할 value정보들 담아놓는곳
+                //2. map에 담긴 객체 찾아서 없애주기 이친구는 고유번호가 없기에 이렇게 삭제시켜줘야한다.
+                //3. rowCount에서 빼야할 row갯수만큼 값 만들어주기
                 deletelist.add(arraylist.get(i));
+                map.remove("new"+deleteListIndex.get(i));
                 deleteCount++;
             }
             System.out.println(deleteCount + "개의 메뉴가 삭제되었습니다.");
             
             //rowcount 변동사항 적용시키기 삭제이후 토탈값을 알아야 전체 셀렉트를 할수있음 적용시키기 위해
-            //this.rowCount = ;
-            //System.out.println("rowcount" + dWCombineTable1.getRowCount());
             this.rowCount = rowCount-deleteCount;
-            
             
             //초기화 작업
             deleteCount = 0;
             arraylist.clear();
             deleteListIndex.clear();
-            //clearExit();
         } else if (evt.getActionCommand().equals("MENU_SAVE")) {
             //map 애들 가져와서 ArrayList에 넣을거임
             for( String key : map.keySet() ) {
@@ -324,38 +320,25 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
 
             //JDBC 형태로 진행
             //로우의 값이 없을경우 insert 만약 있으면 update진행을 changeRow의 길이만큼 반복시킨다.
-            //keyvalue값으로 진행해야겠고 HashMap 형태로 키값에는 그걸 넣고 객체 형태로 넣어야겠구나
-            //빈형태로 넣어줘야함
-            //MenuDBUtil = new MenuDBUtil();
+            //keyvalue값으로 진행해야겠고 HashMap 형태로 키값에는 그걸(MENU_NO or newIndexNumber) 넣고 객체 형태로 넣어야겠구나
             for(int i = 0 ; i < changeRow.size() ; i++){
-                System.out.println(changeRow.get(i).getMENU_NO());
-
                 if(changeRow.get(i).getMENU_NO().contains("new")){
                     MenuDBUtil.insertRow(changeRow.get(i));
                 } else {
                     MenuDBUtil.updateRow(changeRow.get(i));
                 }
             }
+            
             //삭제 로직
-//            for(int i = 0 ; i < deletelist.size() ; i++){
-//                if(deletelist.get(i) !=  null){
-//                    continue;
-//                } else {
-//                    DataJDBC.Delete_Menu((String)deletelist.get(i));
-//                }
-//            }
-            //select + 초기화작업
+            for(int i = 0 ; i < deletelist.size() ; i++){
+                if(deletelist.get(i) ==  null){
+                    continue;
+                } else {
+                    MenuDBUtil.menuDelete((String)deletelist.get(i));
+                }
+            }
             clearExit();
             refresh();
-            
-//            changeRow.clear();
-//            map.clear();
-//            
-//            //삭제 관련 초기화 작업
-//            arraylist.clear();
-//            deletelist.clear();
-//            deleteListIndex.clear();
-//            deleteCount = 0;
         } else if (evt.getSource() == btn_SearchSelect) {
             clearExit();
             refresh();
@@ -374,7 +357,7 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
                 if(String.valueOf(dWCombineTable1.getValue(i, "__ROW_STATUS__")).contains("false")){
                     if(arraylist.contains(dWCombineTable1.getValue(i, "MENU_NO"))){
                         
-                    }else {
+                    } else {
                         arraylist.add(dWCombineTable1.getValue(i, "MENU_NO"));
                         //230125 추가된 사항 인덱스 정보를 받아 지우기 위함
                         deleteListIndex.add(i);
@@ -388,16 +371,22 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
     //테이블 바디부분 정보 변경시 실행
     private void tableBodyValueChange(com.arisystem.beans.combinetable.TableBodyEvent evt) {//GEN-FIRST:event_tableBodyValueChange
         //체크박스 관련
+        //체크 취소?을 경우
         if(String.valueOf(dWCombineTable1.getValue(evt.getRowIndex(), evt.getCombineCellName())).contains("false")){
             arraylist.remove(dWCombineTable1.getValue(evt.getRowIndex(), "MENU_NO"));
             
             //230125 추가된 사항 인덱스 정보를 받아 지우기 위함
             deleteListIndex.remove((Object)evt.getRowIndex());
-        } else {
-            arraylist.add(dWCombineTable1.getValue(evt.getRowIndex(), "MENU_NO"));
-            
-            //230125 추가된 사항 인덱스 정보를 받아 지우기 위함
-            deleteListIndex.add(evt.getRowIndex());
+        } else { //체크되었을 경우  
+            //여기서 만약 안에 값이 있으면 또 넣지 않도록 한다.
+            if(!deleteListIndex.contains(evt.getRowIndex())){
+                //오류발견 newRow시 체크박스에는 체크되있는 상태이지만 체크가된게 아니다. 그러므로 여기서 벨류를 바꿀때마다 arraylist에 add가 되며
+                //혼동을 준다.
+                arraylist.add(dWCombineTable1.getValue(evt.getRowIndex(), "MENU_NO"));
+
+                //230125 추가된 사항 인덱스 정보를 받아 지우기 위함
+                deleteListIndex.add(evt.getRowIndex());
+            }
         }
         //체크박스 관련 끝
         
@@ -425,7 +414,6 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         } else {
             map.put(newRow, bean);
         }
-        System.out.println("들어간 갯수 : " + map.size());
     }//GEN-LAST:event_tableBodyValueChange
 
     public static void main(String args[]) {
