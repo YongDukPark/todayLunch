@@ -6,19 +6,13 @@
 package todaylunch;
 
 import TableBean.TODAYLUNCH_LOG_BEAN;
-import com.arisystem.beans.combinetable.CombineTableRow;
 import com.arisystem.beans.combinetable.TableHeaderEvent;
 import com.arisystem.beans.datawizard.DWWhereCondition;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-/**
- *
- * @author dydej
- */
 public class LOGCHECK extends javax.swing.JFrame {
     
     ArrayList<TODAYLUNCH_LOG_BEAN> arraylist = new ArrayList<>();
@@ -28,6 +22,7 @@ public class LOGCHECK extends javax.swing.JFrame {
     //정렬시 필요한 친구
     String getHeaderName = null;
     
+    //Index페이지에서 넘어왔을경우 들어가는 생성자
     private LOGCHECK() {
         initComponents();
         try {
@@ -35,21 +30,26 @@ public class LOGCHECK extends javax.swing.JFrame {
             dWCombineTable1.setOrderBy("LAST_START_TIME DESC");
             dWCombineTable1.select("http", "192.168.0.20", 8080);
             
+            //정렬시키기 위해 데이터 세팅
             arrayListDataSet();
         } catch (Exception e) {
         }
     }
+    public static LOGCHECK getInstance(){
+        logCheck = new LOGCHECK();
+        if(! logCheck.isVisible()){
+            logCheck.setVisible(true);
+        }
+        return logCheck;
+    }
+    
+    //캘린더 페이지에서 넘어왔을경우 들어가는 생성자 
     private LOGCHECK(String SELECT_YEAR , String SELECT_MONTH , String SELECT_DAY) {
         initComponents();
         //where절 사용할때 필요한애들
         Vector params = new Vector();
         DWWhereCondition SearchSelect;
         try {
-            System.out.println(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 00:00:00");
-            System.out.println(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 23:59:59");
-            System.out.println();
-            
-            
             params.add(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 00:00:00");
             params.add(SELECT_YEAR+"-"+SELECT_MONTH+"-"+SELECT_DAY+" 23:59:59");
             SearchSelect = new DWWhereCondition("LAST_START_TIME BETWEEN ? AND ?", params);
@@ -59,19 +59,11 @@ public class LOGCHECK extends javax.swing.JFrame {
             dWCombineTable1.setOrderBy("LAST_START_TIME DESC");
             dWCombineTable1.select("http", "192.168.0.20", 8080);
             
+            //정렬시키기 위해 데이터 세팅
             arrayListDataSet();
         } catch (Exception e) {
         }
     }
-    
-    public static LOGCHECK getInstance(){
-        logCheck = new LOGCHECK();
-        if(! logCheck.isVisible()){
-            logCheck.setVisible(true);
-        }
-        return logCheck;
-    }
-    
     public static LOGCHECK getInstance(String SELECT_YEAR , String SELECT_MONTH , String SELECT_DAY){
         logCheck = new LOGCHECK(SELECT_YEAR, SELECT_MONTH, SELECT_DAY);
         if(! logCheck.isVisible()){
@@ -146,7 +138,6 @@ dWCombineTable1.addTableHeaderListener(new com.arisystem.beans.combinetable.Tabl
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     //주목적 정렬
     //이전 type1 에서 type2로 교체한 이유
     //정렬시마다 select를 날리는 부분을 해결하기 위해 arraylist를 정렬하는 방식을 채용했다.
@@ -155,7 +146,6 @@ dWCombineTable1.addTableHeaderListener(new com.arisystem.beans.combinetable.Tabl
     private void dWCombineTable1CombineTableHeaderMouseClick(com.arisystem.beans.combinetable.TableHeaderEvent evt) {//GEN-FIRST:event_dWCombineTable1CombineTableHeaderMouseClick
         //sortType1(evt);
         sortType2(evt);
-        
     }//GEN-LAST:event_dWCombineTable1CombineTableHeaderMouseClick
     public void arrayListDataSet(){
         for(int i = 0 ; i < dWCombineTable1.getRowCount() ; i++){
@@ -168,11 +158,8 @@ dWCombineTable1.addTableHeaderListener(new com.arisystem.beans.combinetable.Tabl
             arraylist.add(Todaylunch_Log_Bean);
         }
     }
-    //정렬시키는 코드 type2
+    //정렬시키는 코드 type1
     public void sortType1(TableHeaderEvent evt){
-        //System.out.println(evt.getClickCount()); // 클릭한 횟수 불러옴
-        //System.out.println(evt.getCombineCellName()); // 그 LAST_START_TIME 요런 value값 불러옴
-        //System.out.println(dWCombineTable1.setHeaderTitleValue(evt.getCombineCellName()); // 텍스트 이름 넣은거 불러옴
         if(evt.getClickCount() > 0){
             try {
                 if(evt.getCombineCellName().equals("LAST_START_TIME")){ //로그생성시간
