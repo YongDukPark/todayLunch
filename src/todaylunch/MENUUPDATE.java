@@ -6,6 +6,7 @@
 package todaylunch;
 
 import JAVAJDBC.MenuDBUtil;
+import Material.Alert;
 import TableBean.TODAYLUNCH_MENU_BEAN;
 import com.arisystem.beans.datawizard.DWWhereCondition;
 import java.util.ArrayList;
@@ -339,6 +340,7 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             }
             clearExit();
             refresh();
+            Alert.getInstance("변경사항이 저장되었습니다.");
         } else if (evt.getSource() == btn_SearchSelect) {
             clearExit();
             refresh();

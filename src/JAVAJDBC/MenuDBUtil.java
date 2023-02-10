@@ -113,8 +113,6 @@ public class MenuDBUtil{
                 psmt = con.prepareStatement(sql2);
                 rs = psmt.executeQuery();
             }
-            //¿Ã¿¸
-            //String sql = "SELECT * FROM TODAYLUNCH_MENU";
             
             sql3 = "SELECT "
                         + "TL_MENU.* "

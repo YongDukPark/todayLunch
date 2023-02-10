@@ -8,7 +8,6 @@ public class Confirm extends javax.swing.JFrame {
     String evtCommand = null;
     Object temp = null;
     
-    
     Material_Action m_action;
     
     private static Confirm confirm;
@@ -39,17 +38,6 @@ public class Confirm extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                closeConfirm3(evt);
-            }
-        });
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                closeConfirm(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("굴림", 1, 14)); // NOI18N
         jLabel1.setText(message);
 
@@ -77,15 +65,12 @@ public class Confirm extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 32, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,24 +81,13 @@ public class Confirm extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void closeConfirm3(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_closeConfirm3
-        // TODO add your handling code here:
-        confirm.setVisible(false);
-    }//GEN-LAST:event_closeConfirm3
-
-    private void closeConfirm(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeConfirm
-        // TODO add your handling code here:
-        confirm.setVisible(false);
-    }//GEN-LAST:event_closeConfirm
-    
     
     private void jButton1ActionY(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionY
         if(evtCommand.equals("MenuSelectUpCount")){ //메뉴 확정
@@ -124,15 +98,14 @@ public class Confirm extends javax.swing.JFrame {
 
             confirm.setVisible(false);
         } else if(evtCommand.equals("todaySelectReset")){ //오늘 메뉴 다시고르기 > Y
-            //System.out.println("test");
             m_action = new Material_Action();
-            int count = m_action.todaySelectReset();
-            System.out.println(count);
+            m_action.todaySelectReset();
+            
             confirm.setVisible(false);
+            
             Alert.getInstance("이번에는 좋은 결과 나오길 바래요 :D");
         }
     }//GEN-LAST:event_jButton1ActionY
-    
     
     private void jButtonActionN(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionN
         if(evtCommand.equals("MenuSelectUpCount")){ //메뉴 확정x
@@ -142,11 +115,9 @@ public class Confirm extends javax.swing.JFrame {
 
             confirm.setVisible(false);
         } else if(evtCommand.equals("todaySelectReset")){ //오늘 메뉴 다시고르기 > N
-            //m_action = new Material_Action();
             confirm.setVisible(false);
         }
     }//GEN-LAST:event_jButtonActionN
-
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

@@ -49,13 +49,6 @@ public class FORM extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        jPanel3 = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jDialog1 = new javax.swing.JDialog();
         FirstDataCheck1 = new com.arisystem.beans.datawizard.DWMultiRowsObject();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -83,45 +76,6 @@ public class FORM extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
-
-        jCheckBoxMenuItem2.setSelected(true);
-        jCheckBoxMenuItem2.setText("jCheckBoxMenuItem2");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
 
         FirstDataCheck1.setErdObjectLocations(new com.arisystem.beans.datawizard.DWErdObjectLocation[]{new com.arisystem.beans.datawizard.DWErdObjectLocation("TODAYLUNCH_TODAY_SELECT",1,0),new com.arisystem.beans.datawizard.DWErdObjectLocation("TODAYLUNCH_MENU",443,0)});
         FirstDataCheck1.setJoinConditions(new com.arisystem.beans.datawizard.DWJoinCondition[] {
@@ -361,18 +315,16 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
 
     //상단바에 File 메뉴 눌렀을경우 실행되는 method
     private void menuItemClickAction_File(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemClickAction_File
-        
         if(evt.getActionCommand().equals("menuadd")){
             addmenu = ADD_MENU.getInstance();
         } else if(evt.getActionCommand().equals("menudelete")){
-            DELETE_MENU DELETE_MENU = new DELETE_MENU();
+            //DELETE_MENU DELETE_MENU = new DELETE_MENU();
             DELETE_MENU.getInstance();
         }
     }//GEN-LAST:event_menuItemClickAction_File
     
     //돌려돌려돌림판 누르면 Action
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
         //오늘 확정을 지었는지 확인하는 용도
         if(MenuDBUtil.checkYN().equals("Y")){
             Alert.getInstance("오늘 메뉴는 정해졌습니다 ㅎ");
@@ -408,7 +360,6 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
     
     //마우스 들어왔을경우 refresh 시키기 용도
     private void jList1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseEntered
-        // TODO add your handling code here:
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = MenuDBUtil.todayLunchList();
             public int getSize() { return strings.length; }
@@ -418,7 +369,6 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
     
     //마우스 벗어났을경우 refresh 시키기 용도
     private void jList1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseExited
-        // TODO add your handling code here:
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = MenuDBUtil.todayLunchList();
             public int getSize() { return strings.length; }
@@ -428,7 +378,6 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
 
     //상단바 두번째 Edit 클릭했을 경우 
     private void menuItemClickAction_Edit(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemClickAction_Edit
-        System.out.println(evt.getActionCommand());
         if(evt.getActionCommand().equals("todaySelectReset")){
             MenuDBUtil = new MenuDBUtil();
             if(MenuDBUtil.checkYN().equals("Y")){
@@ -475,9 +424,6 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.arisystem.beans.datawizard.DWMultiRowsObject FirstDataCheck1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -502,10 +448,6 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

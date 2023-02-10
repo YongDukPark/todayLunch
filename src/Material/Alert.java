@@ -5,10 +5,6 @@
  */
 package Material;
 
-/**
- *
- * @author dydej
- */
 public class Alert extends javax.swing.JFrame {
     String message = null;
     
@@ -33,11 +29,6 @@ public class Alert extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
-        addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                closeAlert(evt);
-            }
-        });
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Close(evt);
@@ -75,13 +66,9 @@ public class Alert extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void closeAlert(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_closeAlert
-        alert.setVisible(false);
-    }//GEN-LAST:event_closeAlert
-
+    
+    //마우스로 클릭하면 바로 닫히게 하기
     private void Close(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Close
-        // TODO add your handling code here:
         alert.setVisible(false);
     }//GEN-LAST:event_Close
 
