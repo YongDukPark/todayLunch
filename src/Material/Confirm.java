@@ -38,6 +38,8 @@ public class Confirm extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
+        setTitle("ÄÁÆß");
+
         jLabel1.setFont(new java.awt.Font("±¼¸²", 1, 14)); // NOI18N
         jLabel1.setText(message);
 

@@ -35,6 +35,8 @@ public class ADD_MENU extends javax.swing.JFrame {
         dWFCTextField5 = new com.arisystem.beans.datawizard.field.DWFCTextField();
         jButton2 = new javax.swing.JButton();
 
+        setTitle("AddMenu");
+
         jButton1.setText("√Îº“");
         jButton1.setActionCommand("cansel");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

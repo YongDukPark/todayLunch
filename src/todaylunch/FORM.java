@@ -81,7 +81,7 @@ public class FORM extends javax.swing.JFrame {
         FirstDataCheck1.setJoinConditions(new com.arisystem.beans.datawizard.DWJoinCondition[] {
             new com.arisystem.beans.datawizard.DWLeftOuterJoinCondition(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"),new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_MENU","TODAYLUNCH_MENU"),new com.arisystem.beans.datawizard.DWJoinFieldPair[]{new com.arisystem.beans.datawizard.DWJoinFieldPair("MENU_NO","MENU_NO")})});
     FirstDataCheck1.setMainTable(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"));
-    FirstDataCheck1.setOrderBy(null);
+    FirstDataCheck1.setOrderBy("null");
     FirstDataCheck1.setSelectFieldObjects(new com.arisystem.beans.datawizard.DWAliasFieldObject[]{
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"),"MENU_SELECT",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_SELECT") ,
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"),"MENU_NO",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"MENU_NO") ,
@@ -95,6 +95,7 @@ public class FORM extends javax.swing.JFrame {
 FirstDataCheck1.setWhereContition(null);
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+setTitle("ToDayLunch");
 setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
 jPanel1.setToolTipText("");
@@ -318,7 +319,6 @@ jButton1.addActionListener(new java.awt.event.ActionListener() {
         if(evt.getActionCommand().equals("menuadd")){
             addmenu = ADD_MENU.getInstance();
         } else if(evt.getActionCommand().equals("menudelete")){
-            //DELETE_MENU DELETE_MENU = new DELETE_MENU();
             DELETE_MENU.getInstance();
         }
     }//GEN-LAST:event_menuItemClickAction_File

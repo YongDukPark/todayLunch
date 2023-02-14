@@ -78,6 +78,8 @@ public class LOGCHECK extends javax.swing.JFrame {
 
         dWCombineTable1 = new com.arisystem.beans.combinetable.DWCombineTable();
 
+        setTitle("LogCheck");
+
         dWCombineTable1.setBodyRenderer(new com.arisystem.beans.combinetable.BodyRenderer( new com.arisystem.beans.combinetable.BodyCombineCell[] {
             new com.arisystem.beans.combinetable.BodyCombineCell("LAST_START_TIME", new com.arisystem.beans.combinetable.CellInfo(0,0), new com.arisystem.beans.combinetable.CellInfo(0,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "", "",null),
             new com.arisystem.beans.combinetable.BodyCombineCell("MENU_SELECT", new com.arisystem.beans.combinetable.CellInfo(3,0), new com.arisystem.beans.combinetable.CellInfo(3,0), null, com.arisystem.beans.combinetable.CombineCell.CENTER_ALIGNMENT, com.arisystem.beans.combinetable.CombineCell.HORIZONTAL,null, null, null, "", "",null),

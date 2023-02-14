@@ -539,6 +539,7 @@ public class CALENDAR extends javax.swing.JFrame {
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"),"SELECT_DAY",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"SELECT_DAY") });
 
 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+setTitle("Calendar");
 
 boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
     new com.arisystem.beans.boundarypanel.BoundaryCell("T_C_1_1",new com.arisystem.beans.boundarypanel.CellInfo(0,0),new com.arisystem.beans.boundarypanel.CellInfo(0,0),"¿œ",com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.CENTER_ALIGNMENT,com.arisystem.beans.boundarypanel.BoundaryCell.HORIZONTAL,null,new java.awt.Color(255,0,0),null,null,false,com.arisystem.beans.boundarypanel.BoundaryCell.VERTICAL,new java.awt.Color(178,178,178),true,true,false,new java.awt.Insets(0,0,0,0),null),

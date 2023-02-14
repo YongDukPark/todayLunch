@@ -279,6 +279,7 @@ public class CALENDAR_Type2 extends javax.swing.JFrame {
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"),"SELECT_MONTH",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"SELECT_MONTH") ,
         new com.arisystem.beans.datawizard.DWAliasFieldObject(new com.arisystem.beans.datawizard.DWTable("null","TODAYLUNCH_TODAY_SELECT","TODAYLUNCH_TODAY_SELECT"),"SELECT_DAY",com.arisystem.beans.datawizard.DWFieldObject.DATA_FIELD_LARGE_NORMAL,"SELECT_DAY") });
 
+setTitle("Calendar_Type2");
 setBackground(new java.awt.Color(255, 255, 255));
 
 boundaryPanel1.setBoundaryRenderer(new com.arisystem.beans.boundarypanel.BoundaryRenderer( new com.arisystem.beans.boundarypanel.BoundaryCell[] {
