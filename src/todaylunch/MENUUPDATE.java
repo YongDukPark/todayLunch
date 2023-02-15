@@ -320,10 +320,10 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
             for( String key : map.keySet() ) {
                 changeRow.add(map.get(key));
             }
-
             //JDBC 형태로 진행
             //로우의 값이 없을경우 insert 만약 있으면 update진행을 changeRow의 길이만큼 반복시킨다.
-            //keyvalue값으로 진행해야겠고 HashMap 형태로 키값에는 그걸(MENU_NO or newIndexNumber) 넣고 객체 형태로 넣어야겠구나
+            //keyvalue값으로 진행해야겠고 HashMap 형태로 키값에는 그걸(MENU_NO or newIndexNumber) 넣고 
+            //객체 형태로 넣어야겠구나
             for(int i = 0 ; i < changeRow.size() ; i++){
                 if(changeRow.get(i).getMENU_NO().contains("new")){
                     MenuDBUtil.insertRow(changeRow.get(i));
@@ -331,7 +331,6 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
                     MenuDBUtil.updateRow(changeRow.get(i));
                 }
             }
-            
             //삭제 로직
             for(int i = 0 ; i < deletelist.size() ; i++){
                 if(deletelist.get(i) ==  null){
@@ -418,6 +417,8 @@ dWCombineTable1.addTableBodyListener(new com.arisystem.beans.combinetable.TableB
         } else {
             map.put(newRow, bean);
         }
+        
+        
     }//GEN-LAST:event_tableBodyValueChange
 
     public static void main(String args[]) {
